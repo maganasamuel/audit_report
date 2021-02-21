@@ -63,7 +63,7 @@
       $('#add-adviser').modal('hide');
       $('#error').removeClass('d-none');
       $('#error').addClass('d-block');
-      $('#danger-text').text('Both fields are required to have a value.')
+      $('#danger-text').text('Both fields are required to have a value.');
     }
   });
 </script>
