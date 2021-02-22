@@ -10,12 +10,13 @@
         var html = '';
         if(data.length != 0){
           $.each(data, function(index, value){
-            html += '<tr>';
+            (data[index].status == "Terminated") ? html += '<tr style="background-color: #ffcad4">': html += '<tr>';
+            
             html += '<td class="text-center">'+ (index+1) +'</td>';
             html += '<td>'+ data[index].name +'</td>';
             html += '<td>'+ data[index].fsp_no +'</td>';
             html += '<td>'+ data[index].status +'</td>';
-            html += '<td class="td-actions text-left"><button type="button" id="delete-adviser" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'+ data[index].id +'" data-original-title="" title=""><i class="fa fa-edit pt-1"></i></button><button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title=""><i class="fa fa-trash pt-1"></i></button></td>';
+            html += '<td class="td-actions text-left"><button type="button" id="edit-adviser" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'+ data[index].id +'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-adviser"><i class="fa fa-edit pt-1"></i></button><button type="button" id="deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'+ data[index].id +'" data-toggle="modal" data-target="#modal-deactivate-adviser"><i class="fa fa-ban pt-1"></i></button></td>';
             html += '<tr>';
           });
         } else {
@@ -28,6 +29,7 @@
       }
     })
   }
+
   $(document).ready(function(){
     fetch_data();
   });
@@ -65,5 +67,87 @@
       $('#error').addClass('d-block');
       $('#danger-text').text('Both fields are required to have a value.');
     }
+  });
+
+  $(document).on('click', '#edit-adviser', function(){
+    $.ajax({
+      url: "{{ route('adviser.edit_adviser')}}",
+      dataType: "json",
+      method: "POST",
+      data: {
+        id: $(this).attr("data-id"),
+        _token: token,
+      },
+      success: function(data){
+        $('#edit_name').val(data.name);
+        $('#edit_fsp_no').val(data.fsp_no);
+        $('#update_adviser').attr('data-id', data.id);
+      }
+    })
+  });
+
+  $(document).on('click', '#update_adviser', function(){
+    var updated_name = $('#edit_name').val();
+    var updated_fsp_no = $('#edit_fsp_no').val();
+
+    if(updated_name != '' && updated_fsp_no != ''){
+      $.ajax({
+        url: "{{ route('adviser.update_adviser') }}",
+        method: "POST",
+        data: {
+          id: $(this).attr('data-id'),
+          name: updated_name,
+          fsp_no: updated_fsp_no,
+          _token: token
+        },
+        success: function(data){
+          $('#modal-edit-adviser').modal('hide');
+          $('#success').removeClass('d-none');
+          $('#success').addClass('d-block');
+          $('#success-text').text(data);
+        }
+      })
+    } else {
+      $('#edit_name').val('');
+      $('#edit_fsp_no').val('');
+      $('#modal-edit-adviser').modal('hide');
+      $('#error').removeClass('d-none');
+      $('#error').addClass('d-block');
+      $('#danger-text').text('Both fields are required to have a value.');
+    }
+  });
+
+  $(document).on('click', '#deactivate-confirmation', function(){
+    $.ajax({
+      url: "{{ route('adviser.confirm_deactivate') }}",
+      dataType: "json",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        _token: token
+      },
+      success: function(data){
+        $("#deactivate-adviser-name").text(data.name);
+        $("#deactivate-adviser").attr('data-id', data.id);
+      }
+    })
+  });
+
+  $(document).on('click', '#deactivate-adviser', function(){
+    $.ajax({
+      url: "{{ route('adviser.deactivate_adviser') }}",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        _token: token
+      },
+      success: function(data){
+        $('#modal-deactivate-adviser').modal('hide');
+        $('#success').removeClass('d-none');
+        $('#success').addClass('d-block');
+        $('#success-text').text(data);
+        fetch_data();
+      }
+    })
   });
 </script>
