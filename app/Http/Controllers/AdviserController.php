@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Adviser;
+use DataTables;
 
 class AdviserController extends Controller
 {
@@ -15,8 +16,17 @@ class AdviserController extends Controller
 
   public function fetch_data(Request $request){
     if($request->ajax()){
-      $data = DB::table('advisers')->orderBy('id', 'desc')->get();
-      echo json_encode($data);
+      $data = Adviser::latest()->get();
+      return Datatables::of($data)
+              ->addIndexColumn()
+              ->addColumn('action', function($row){
+                $actionBtn = '<button type="button" id="edit-adviser" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-adviser"><i class="fa fa-edit pt-1"></i></button>
+                  <button type="button" id="deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-adviser"><i class="fa fa-ban pt-1"></i></button>
+                ';
+                    return $actionBtn;
+                  })
+              ->rawColumns(['action'])
+              ->make(true);
     }
   }
 

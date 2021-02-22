@@ -2,32 +2,23 @@
 
 <script>
   function fetch_data(){
-    $.ajax({
-      url: "/advisercontroller/fetch_data",
-      dataType: "json",
-      success: function(data){
-
-        var html = '';
-        if(data.length != 0){
-          $.each(data, function(index, value){
-            (data[index].status == "Terminated") ? html += '<tr style="background-color: #ffcad4">': html += '<tr>';
-            
-            html += '<td class="text-center">'+ (index+1) +'</td>';
-            html += '<td>'+ data[index].name +'</td>';
-            html += '<td>'+ data[index].fsp_no +'</td>';
-            html += '<td>'+ data[index].status +'</td>';
-            html += '<td class="td-actions text-left"><button type="button" id="edit-adviser" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'+ data[index].id +'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-adviser"><i class="fa fa-edit pt-1"></i></button><button type="button" id="deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'+ data[index].id +'" data-toggle="modal" data-target="#modal-deactivate-adviser"><i class="fa fa-ban pt-1"></i></button></td>';
-            html += '<tr>';
-          });
-        } else {
-          html += '<tr>';
-          html +='<td colspan="5" class="text-center">No data found.</td>';
-          html += '</tr>';
-        }
-        
-        $('tbody').html(html);
-      }
-    })
+    $('#adviser-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('adviser.fetch_data') }}",
+        columns: [
+          { data: 'id', name: 'id'},
+          { data: 'name', name: 'name'},
+          { data: 'fsp_no', name: 'fsp_no'},
+          { data: 'status', name: 'status'},
+          {
+            data: 'action',
+            name: 'action',
+            orderable: true,
+            searchable: true
+          },
+        ]
+      });
   }
 
   $(document).ready(function(){
@@ -56,7 +47,7 @@
           $('#success').removeClass('d-none');
           $('#success').addClass('d-block');
           $('#success-text').text(data);
-          fetch_data();
+          $('#adviser-table').DataTable().ajax.reload();
         }
       })
     } else {
@@ -105,6 +96,7 @@
           $('#success').removeClass('d-none');
           $('#success').addClass('d-block');
           $('#success-text').text(data);
+          $('#adviser-table').DataTable().ajax.reload();
         }
       })
     } else {
@@ -146,7 +138,7 @@
         $('#success').removeClass('d-none');
         $('#success').addClass('d-block');
         $('#success-text').text(data);
-        fetch_data();
+        $('#adviser-table').DataTable().ajax.reload();
       }
     })
   });

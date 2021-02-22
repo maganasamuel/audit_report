@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class AdviserSeeder extends Seeder
 {
@@ -14,12 +15,23 @@ class AdviserSeeder extends Seeder
      */
     public function run()
     {
-      DB::table('advisers')->insert([
-        'name' => 'Adviser Test',
-        'fsp_no' => 1234,
-        'status' => 'Active',
-        'created_at' => now(),
-        'updated_at' => now()
-      ]);
+      // DB::table('advisers')->insert([
+      //   'name' => 'Adviser Test',
+      //   'fsp_no' => 1234,
+      //   'status' => 'Active',
+      //   'created_at' => now(),
+      //   'updated_at' => now()
+      // ]);
+        $faker = Faker::create();
+
+        $gender = $faker->randomElement(['male', 'female']);
+
+        foreach(range(1, 200) as $index){
+            DB::table('advisers')->insert([
+                'name' => $faker->name($gender),
+                'fsp_no' => $faker->randomNumber(5),
+                'status' => 'Active'
+            ]);
+        }
     }
 }

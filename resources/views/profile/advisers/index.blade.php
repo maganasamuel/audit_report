@@ -21,20 +21,20 @@
               <button id="add-adviser" data-toggle="modal" data-target="#add-adviser" class="btn btn-primary">Add an Adviser</button>
             </div>
           </div>
-          <table class="table" id="adviser-table">
-              <thead>
-                  <tr>
-                      <th class="text-center">#</th>
-                      <th>Name</th>
-                      <th>FSP Number</th>
-                      <th>Status</th>
-                      <th class="text-left">Actions</th>
-                  </tr>
-              </thead>
-              <tbody>
-                {{-- data fetched via ajax should be inside here --}}
-              </tbody>
-          </table>
+        <table class="table" id="adviser-table">
+            <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th>Name</th>
+                    <th>FSP Number</th>
+                    <th>Status</th>
+                    <th class="text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+              {{-- data fetched via ajax should be inside here --}}
+            </tbody>
+        </table>
         </div>
       </div>
         
@@ -44,7 +44,7 @@
   @include('custom-scripts.adviser-js')
   <script>
     $(document).ready( function () {
-      $('#adviser-table').DataTable();
+      
     });
   </script>
 @endsection

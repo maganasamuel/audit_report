@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('/profile/advisers/index', [AdviserController::class, 'index']);
-Route::get('/advisercontroller/fetch_data', [AdviserController::class, 'fetch_data']);
+Route::get('/advisercontroller/fetch_data', [AdviserController::class, 'fetch_data'])->name('adviser.fetch_data');
 Route::post('/adviser/new_adviser', [AdviserController::class, 'new_adviser'])->name('adviser.new_adviser');
 Route::post('/adviser/edit_adviser', [AdviserController::class, 'edit_adviser'])->name('adviser.edit_adviser');
 Route::post('/adviser/update_adviser', [AdviserController::class, 'update_adviser'])->name('adviser.update_adviser');
