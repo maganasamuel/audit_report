@@ -268,3 +268,6 @@ form .form-bottom .input-error {
 form.registration-form fieldset {
     display: none;
 }
+.assessment.container {
+    margin: 0 20px 0 20px;
+}
