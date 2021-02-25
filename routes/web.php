@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\CallController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,3 +53,7 @@ Route::post('/user/edit_user', [UserController::class, 'edit_user'])->name('user
 Route::post('/user/update_user', [UserController::class, 'update_user'])->name('user.update_user');
 Route::post('/user/confirm_user_deactivate', [UserController::class, 'confirm_user_deactivate'])->name('user.confirm_user_deactivate');
 Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])->name('user.deactivate_user');
+
+//Calls
+Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit');
+Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey');
