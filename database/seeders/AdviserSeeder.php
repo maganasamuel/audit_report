@@ -15,13 +15,6 @@ class AdviserSeeder extends Seeder
      */
     public function run()
     {
-      // DB::table('advisers')->insert([
-      //   'name' => 'Adviser Test',
-      //   'fsp_no' => 1234,
-      //   'status' => 'Active',
-      //   'created_at' => now(),
-      //   'updated_at' => now()
-      // ]);
         $faker = Faker::create();
 
         $gender = $faker->randomElement(['male', 'female']);
