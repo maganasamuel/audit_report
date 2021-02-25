@@ -21,7 +21,7 @@ class AdviserController extends Controller
               ->addIndexColumn()
               ->addColumn('action', function($row){
                 $actionBtn = '<button type="button" id="edit-adviser" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-adviser"><i class="fa fa-edit pt-1"></i></button>
-                  <button type="button" id="deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-adviser"><i class="fa fa-ban pt-1"></i></button>
+                  <button type="button" id="adviser-deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-adviser"><i class="fa fa-ban pt-1"></i></button>
                 ';
                     return $actionBtn;
                   })
@@ -63,7 +63,7 @@ class AdviserController extends Controller
     }
   }
 
-  public function confirm_deactivate(Request $request){
+  public function confirm_adviser_deactivate(Request $request){
     if($request->ajax()){
       $adviser = Adviser::find($request->id);
       return json_encode($adviser);

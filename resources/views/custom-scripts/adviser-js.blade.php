@@ -7,17 +7,34 @@
         serverSide: true,
         ajax: "{{ route('adviser.fetch_data') }}",
         columns: [
-          { data: 'id', name: 'id'},
+          { data: 'id', name: 'id',
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                $(nTd).addClass('text-center');
+             }
+          },
           { data: 'name', name: 'name'},
           { data: 'fsp_no', name: 'fsp_no'},
-          { data: 'status', name: 'status'},
+          { data: 'status', name: 'status',
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                  if(oData.status == "Terminated"){
+                    $(nTd).html('<span class="badge bg-danger text-white">Terminated</span>');
+                  } else {
+                    $(nTd).html('<span class="badge bg-success text-white">Active</span>');
+                  }
+             }
+          },
           {
             data: 'action',
             name: 'action',
             orderable: true,
             searchable: true
           },
-        ]
+        ],
+        createdRow: function(row, data, dataIndex){
+          if(data['status'] == "Terminated"){
+            $(row).css('backgroundColor', '#ffc8d3');
+          }
+         }
       });
   }
 
@@ -109,9 +126,9 @@
     }
   });
 
-  $(document).on('click', '#deactivate-confirmation', function(){
+  $(document).on('click', '#adviser-deactivate-confirmation', function(){
     $.ajax({
-      url: "{{ route('adviser.confirm_deactivate') }}",
+      url: "{{ route('adviser.confirm_adviser_deactivate') }}",
       dataType: "json",
       method: "POST",
       data: {

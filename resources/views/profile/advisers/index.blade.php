@@ -42,9 +42,4 @@
     </div>
 
   @include('custom-scripts.adviser-js')
-  <script>
-    $(document).ready( function () {
-      
-    });
-  </script>
 @endsection

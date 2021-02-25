@@ -3,7 +3,7 @@
         <div class="header-body text-center mb-7">
             <div class="row justify-content-center">
                 <div class="col-lg-5 col-md-6">
-                    <h1 class="text-white" style="font-size: 50px!important; font-weight: heavy;">{{ __('AUDIT REPORT') }}</h1>
+                    <h1 class="text-white" style="font-size: 50px!important; font-weight: heavy;">{{ __('AUDIT | SURVEY SOFTWARE') }}</h1>
                 </div>
             </div>
         </div>
