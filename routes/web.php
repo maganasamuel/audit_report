@@ -57,3 +57,4 @@ Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])
 //Calls
 Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit');
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey');
+Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit');
