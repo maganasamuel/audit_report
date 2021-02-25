@@ -30,7 +30,9 @@ class AdviserSeeder extends Seeder
             DB::table('advisers')->insert([
                 'name' => $faker->name($gender),
                 'fsp_no' => $faker->randomNumber(5),
-                'status' => 'Active'
+                'status' => 'Active',
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }
