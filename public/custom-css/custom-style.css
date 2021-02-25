@@ -225,10 +225,8 @@ button.btn.active:focus {
 
 .form-top {
     overflow: hidden;
-    padding: 0 25px 15px 25px;
-        background: linear-gradient(
-87deg
-, #172b4d 0, #1a174d 100%);
+    padding: 15px 25px 15px 25px;
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%);
     -moz-border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     border-radius: 4px 4px 0 0;
@@ -267,4 +265,7 @@ form .form-bottom .input-error {
 
 form.registration-form fieldset {
     display: none;
+}
+.assessment.container {
+    margin: 0 20px 0 20px;
 }
