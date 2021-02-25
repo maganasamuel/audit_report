@@ -16,8 +16,13 @@
           </div>
             <div class="assessment-container">
                 <div class="row">
+<<<<<<< Updated upstream
                     <div class="col-lg-12 w-100 pt-0 form-box">
                         <form role="form" class="registration-form" action="javascript:void(0);">
+=======
+                    <div class="col-lg-12 pt-0 form-box">
+                        <form role="form" class="registration-form" action="{{ route('calls.store_audit') }}">
+>>>>>>> Stashed changes
                             <fieldset>
                                 <div class="form-top">
                                 </div>
@@ -35,6 +40,9 @@
                                             <div class="form-group col-lg-6 col-md-12">
                                                 <select class="form-control" name="adviser" id="adviser" required>
                                                     <option value="" selected disabled>Select an Adviser</option>
+                                                    @foreach($advisers as $adviser)
+                                                      <option value="{{ $adviser->id }}">{{$adviser->name}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-12">
