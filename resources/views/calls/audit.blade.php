@@ -20,10 +20,10 @@
                         <form role="form" class="registration-form" action="{{ route('calls.store_audit') }}">
                             <fieldset>
                                 <div class="form-top">
-                                  <p>
-                                    INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?                                   
+                                    <p>
+                                        INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?
 
-                                  </p>
+                                    </p>
                                 </div>
                                 <div class="form-bottom">
                                     <div class="row">
@@ -66,7 +66,7 @@
 
                             <fieldset>
                                 <div class="form-top">
-                                  INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright? 
+                                    INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?
                                 </div>
                                 <div class="form-bottom">
                                     <div class="form-group">
@@ -120,8 +120,8 @@
                                             <div class="form-group col-lg-12 col-md-12">
                                                 <label>3. How would you describe the adviser's standard of service on a scale of 1-10? (10 is the highest)</label>
                                                 <select class="form-control questions" required>
-                                                @for($x = 10; $x >= 1; $x--) 
-                                                <option value='{{ $x }}'>{{ $x }}</option>
+                                                    @for($x = 10; $x >= 1; $x--)
+                                                    <option value='{{ $x }}'>{{ $x }}</option>
                                                     @endfor
                                                 </select>
                                             </div>
@@ -204,15 +204,15 @@
                                         </div>
                                         <!-- end of col -->
                                         <div class="form-group col-lg-12 col-md-12">
-                                        <label>Notes: </label>
-                                        <textarea name="notes" class="form-control questions" cols="10" rows="3"></textarea>
+                                            <label>Notes: </label>
+                                            <textarea name="notes" class="form-control questions" cols="10" rows="3"></textarea>
                                         </div>
                                     </div>
 
 
 
                                     <button type="button" class="btn btn-previous">Previous</button>
-                                    <button type="button" class="btn btn-next">Next</button>
+                                    <button type="button" id="submitAudit" class="btn">Save</button>
                                 </div>
                             </fieldset>
                         </form>
@@ -231,8 +231,25 @@
 <link type="text/css" href="{{ asset('custom-css') }}/custom-style.css?v=1.0.0" rel="stylesheet">
 @include('custom-scripts.multi-form-js')
 <script>
-  $(function(){
-  console.log($().jquery);
-  })
+    $(function() {
+        console.log($().jquery);
+
+        
+        $('#submitAudit').on('click', function(e) {
+            e.preventDefault();
+            console.log('working...');
+            let data = {};
+            
+            data.questions=[];
+            data.answers=[];
+            $('.questions').each(function(x,y){
+                data.questions.push($(this).siblings('label').html());    
+                data.answers.push($(this).val());
+
+            });
+            console.log(data);
+
+        });
+    })
 </script>
 @endsection
