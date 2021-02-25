@@ -16,15 +16,16 @@
           </div>
             <div class="assessment-container">
                 <div class="row">
-<<<<<<< Updated upstream
                     <div class="col-lg-12 w-100 pt-0 form-box">
                         <form role="form" class="registration-form" action="javascript:void(0);">
-=======
                     <div class="col-lg-12 pt-0 form-box">
                         <form role="form" class="registration-form" action="{{ route('calls.store_audit') }}">
->>>>>>> Stashed changes
                             <fieldset>
                                 <div class="form-top">
+                                  <p>
+                                    INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?                                   
+
+                                  </p>
                                 </div>
                                 <div class="form-bottom">
                                     <div class="row">
@@ -68,6 +69,7 @@
                             </fieldset>
                             <fieldset>
                                 <div class="form-top">
+                                  INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright? 
                                 </div>
                                 <div class="form-bottom">
                                     <div class="form-group">
