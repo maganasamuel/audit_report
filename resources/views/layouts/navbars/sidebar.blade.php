@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="col-6 collapse-brand">
                         <a href="{{ route('home') }}">
-                            <img src="{{ asset('argon') }}/img/brand/blue.png">
+                            <img src="">
                         </a>
                     </div>
                     <div class="col-6 collapse-close">
@@ -97,7 +97,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="{{ url('profile/clients/index') }}">
                                     {{ __('Clients') }}
                                 </a>
                             </li>

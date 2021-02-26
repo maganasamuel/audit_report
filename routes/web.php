@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
+use App\Http\Controllers\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,3 +59,7 @@ Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])
 Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit');
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey');
 Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit');
+
+//CLients
+Route::get('/profile/clients/index', [ClientController::class, 'index']);
+Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data');
