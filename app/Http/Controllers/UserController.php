@@ -18,7 +18,11 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        return view('dash');
+      return view('dash');
+    }
+
+    public function home(){
+      return view('users.home');
     }
 
     public function fetch_data(Request $request){
@@ -42,7 +46,7 @@ class UserController extends Controller
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->created_at = now();
         $user->updated_at = now();
         $user->is_admin = $request->is_admin;
