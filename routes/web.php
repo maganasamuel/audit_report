@@ -17,7 +17,20 @@ use App\Http\Controllers\ClientController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // if(!Auth::user()->is_admin == 1){
+    //      return view('/users/home');
+    // } else {
+    //   return view('home');
+    // }
+  return view('welcome');
+});
+
+Route::get('/home', function () {
+    if(Auth::user()->is_admin == 1){
+        return view('home');
+    } else {
+        return view('/users/home');
+    }
 });
 
 Auth::routes();
@@ -28,8 +41,7 @@ Auth::routes();
 
 
 Route::group(['middleware' => 'auth'], function () {
-  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-  Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+  Route::get('/home', [UserController::class, 'home'])->name('users.home');
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
@@ -40,9 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 });
 
-Route::get('/usercontroller/fetch_data', [UserController::class, 'fetch_data'])->name('user.fetch_data');
 
 Route::group(['middleware' => 'isAdmin'], function(){
+  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
   //Advisers
   Route::get('/profile/advisers/index', [AdviserController::class, 'index']);
@@ -54,8 +66,6 @@ Route::group(['middleware' => 'isAdmin'], function(){
   Route::post('/adviser/deactivate_adviser', [AdviserController::class, 'deactivate_adviser'])->name('adviser.deactivate_adviser');
 
   //Users
-  // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-  // Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
   Route::get('/usercontroller/fetch_data', [UserController::class, 'fetch_data'])->name('user.fetch_data');
   Route::post('/user/new_user', [UserController::class, 'new_user'])->name('user.new_user');
   Route::post('/user/edit_user', [UserController::class, 'edit_user'])->name('user.edit_user');
