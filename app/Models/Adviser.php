@@ -14,4 +14,8 @@ class Adviser extends Model
         'fsp_no',
         'status',
     ];
+
+    public function audits(){
+      return $this->hasMany(Audit::class);
+    }
 }

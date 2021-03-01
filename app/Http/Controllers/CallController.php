@@ -18,17 +18,20 @@ class CallController extends Controller
       if($request->ajax()){
         $client = new Client;
         $audit = new Audit;
-
+        $adviser = Adviser::find($request->adviser);
         $client->policy_holder = $request->policy_holder;
         $client->policy_no = $request->policy_no;
         $client->save();
 
-        $audit->weekOf = date('Y-m-d', strtotime($request->weekOf));
-        $audit->adviser_id = $request->adviser;
-        $audit->lead_source = $request->lead_source;
-        $audit->policy_holder_id = $client->id;
         $audit->qa = json_encode($request->qa);
+        $audit->adviser_id = $request->adviser;
         $audit->save();
+
+        $client->audits()->attach($audit->id,
+        [
+          "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
+          "lead_source" => $request->lead_source,
+        ]);
 
         $message = "Audit #". $audit->id ." has been stored.";
 
