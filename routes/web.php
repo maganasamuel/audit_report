@@ -83,6 +83,7 @@ Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name(
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home');
 
-//CLients
+//Clients
 Route::get('/profile/clients/index', [ClientController::class, 'index']);
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data');
+Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf');

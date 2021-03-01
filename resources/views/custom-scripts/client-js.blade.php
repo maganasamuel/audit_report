@@ -32,4 +32,18 @@
   $(document).ready(function(){
     fetch_data();
   });
+
+  $(document).on('click', '#view-client-pdf', function(){
+    $.ajax({
+      url: "{{ route('pdfs.view_pdf') }}",
+      data: {
+        id: $(this).attr("data-id")
+      },
+      success: function(data){
+        console.log(data);
+      }
+    })
+  });
+
+
 </script>
