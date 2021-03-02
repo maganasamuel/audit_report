@@ -87,3 +87,15 @@ Route::get('/users/home', [UserController::class, 'home'])->name('users.home');
 Route::get('/profile/clients/index', [ClientController::class, 'index']);
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data');
 Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf');
+
+//Mail
+Route::get('send-email', function(){
+$details = [
+      'title' => 'Mail from EliteInsure Ltd',
+      'body' => 'This is for testing email using smtp'
+  ];
+ 
+  \Mail::to('andre.d@eliteinsure.co.nz')->send(new \App\Mail\PdfMail($details));
+ 
+  dd("Email is Sent.");
+})->name('mails.send-mail');

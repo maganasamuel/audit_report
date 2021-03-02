@@ -29,6 +29,12 @@ class ClientController extends Controller
                     <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
                   </form>'
                   .
+                  '
+                  <form action="'.route('mails.send-mail').'" method="GET" target="_blank" class="mr-2">
+                    <input type="text" value="'. $row->id .'" name="id" hidden />
+                    <button type="submit" rel="tooltip" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
+                  </form>'
+                  .
                   '<button type="button" id="edit-client" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-client"><i class="fa fa-edit pt-1"></i></button>'
                   .
                   '<button type="button" id="client-deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-client"><i class="fa fa-ban pt-1"></i></button>'

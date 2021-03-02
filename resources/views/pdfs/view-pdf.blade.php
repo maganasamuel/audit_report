@@ -5,30 +5,54 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{{ str_replace(' ', '-', strtolower($clients->policy_holder))."-".date('d-m-Y') }}</title>
+  <style>
+    html,
+    body {
+      min-width: auto;
+      background: #EEEEEE;
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      font-size: 9pt;
+      margin: 0;
+      box-sizing: content-box;
+    }
+
+    table, thead {
+      margin: 0px;
+      /*border-spacing: 0;*/
+    }
+
+    #questions{
+      background-color: #0081b8;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
   <table cellpadding="5" cellspacing="5">
-    <thead style="background-color:#0c4664; color:#fff;" id="table-head">
+    <thead style="color:#000; " id="table-head">
       <tr>
         {{-- <th>
           <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="100px">
         </th> --}}
         {{-- <th></th> --}}
         <th colspan="2">
-          {{-- <img src="{{ public_path('assets/img/EliteInsure_Horizontal_White.png') }}" alt="" width="200px"> --}}
-          <h1 align="center">&nbsp;&nbsp;Audit Report<h1>
+            <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="300px" style="padding-right: 30px; margin-top: 20px;" />
+            <h1 style="display: flex; padding-left: 40px; font-size: 30px;">AUDIT REPORT<h1>
         </th>
       </tr>
-      <tr>
+      <tr style="background-color: #1a174d; color: #fff;">
         <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
         <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
       </tr>
-      <tr>
+      <tr style="background-color: #1a174d; color: #fff;">
         <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
         <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
       </tr>
     </thead>
+    <tr>
+      <td></td>
+    </tr>
     <tbody>
       @foreach($questions as $index => $qa)
       @if($qa == "Notes:")
@@ -39,13 +63,13 @@
         <td></td>
       </tr>
       @endif
-      <tr>
+      <tr id="questions">
         <td colspan="2" width="700px">
           <strong>{{ $qa }}</strong>
         </td>
       </tr>
       <tr>
-        <td style="padding-left: 10px;">
+        <td colspan="2" style="padding-left: 10px; background-color: #c4ccca">
           @if(empty($answers[$index]))
           N/A
           @else
@@ -60,19 +84,3 @@
 </body>
 
 </html>
-<style>
-  html,
-  body {
-    min-width: auto;
-    background: #EEEEEE;
-    font-family: 'Helvetica', 'Arial', sans-serif;
-    font-size: 9pt;
-    margin: 0;
-    box-sizing: content-box;
-  }
-
-  table {
-    margin: 10px;
-    /*border-spacing: 0;*/
-  }
-</style>
