@@ -8,7 +8,6 @@
         </button>
       </div>
       <div class="container">
-        @include('pdfs.view-pdf')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>

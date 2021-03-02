@@ -18,7 +18,10 @@
             data: 'action',
             name: 'action',
             orderable: true,
-            searchable: true
+            searchable: true,
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                $(nTd).addClass('d-flex');
+             }
           },
         ],
         createdRow: function(row, data, dataIndex){
@@ -33,17 +36,17 @@
     fetch_data();
   });
 
-  $(document).on('click', '#view-client-pdf', function(){
-    $.ajax({
-      url: "{{ route('pdfs.view_pdf') }}",
-      data: {
-        id: $(this).attr("data-id")
-      },
-      success: function(data){
-        console.log(data);
-      }
-    })
-  });
+  // $(document).on('click', '#view-client-pdf', function(){
+  //   $.ajax({
+  //     url: "",
+  //     data: {
+  //       id: $(this).attr("data-id")
+  //     },
+  //     success: function(data){
+  //       console.log(data);
+  //     }
+  //   })
+  // });
 
 
 </script>
