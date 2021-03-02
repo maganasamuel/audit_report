@@ -2,3 +2,8 @@
 {
     background: linear-gradient(87deg, #0081b8 0, #0c4664 100%) !important;
 }
+
+.bg-gradient-default{
+  background: linear-gradient(87deg, #0081b8 0, #0c4664 100%) !important;
+  /*background: linear-gradient(87deg, #152540 0, #3b34ad 100%) !important;*/
+}
