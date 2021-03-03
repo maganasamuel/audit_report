@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Adviser;
+use App\Models\Audit;
 use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -35,7 +36,7 @@ class ClientController extends Controller
                     <button type="submit" rel="tooltip" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
                   </form>'
                   .
-                  '<button type="button" id="edit-client" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#modal-edit-client"><i class="fa fa-edit pt-1"></i></button>'
+                  '<button type="button" id="edit-client" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
                   .
                   '<button type="button" id="client-deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-client"><i class="fa fa-ban pt-1"></i></button>'
                   ;
@@ -68,5 +69,48 @@ class ClientController extends Controller
 
     $pdf = PDF::loadView('pdfs.view-pdf', $data);
     return $pdf->stream($pdf_title);
+  }
+
+  public function edit_pdf(Request $request){
+    if($request->ajax()){
+      $client = Client::where(["id" => $request->id])->with('audits')->first();
+      $advisers = Adviser::all();
+      $adviser = Adviser::find($client->audits[0]->adviser_id);
+      $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
+      $qa = json_decode($client->audits[0]->qa);
+      // dd();
+      return response()->json([
+        "clients" => $client,
+        "advisers" => $advisers,
+        "adviser" => $adviser,
+        "weekOf" => $weekOf,
+        "answers" => $qa->answers
+      ]);
+    }
+  }
+
+  public function update_pdf(Request $request){
+    if($request->ajax()){
+      $client = Client::find($request->c_id);
+
+      $client->policy_holder = $request->policy_holder;
+      $client->policy_no = $request->policy_no;
+      $client->save();
+
+      $audit = Audit::find($request->au_id);
+      $audit->qa = json_encode($request->qa);
+      $audit->adviser_id = $request->ad_id;
+      $audit->save();
+
+      $client->audits()->updateExistingPivot($request->au_id, [
+        "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
+        "lead_source" => $request->lead_source
+
+      ]);
+
+      $message = "Audit #". $request->au_id ." has been updated.";
+
+      return $message;
+    }
   }
 }

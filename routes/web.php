@@ -87,7 +87,8 @@ Route::get('/users/home', [UserController::class, 'home'])->name('users.home');
 Route::get('/profile/clients/index', [ClientController::class, 'index']);
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data');
 Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf');
-
+Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf');
+Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf');
 //Mail
 Route::get('send-email', function(){
 $details = [

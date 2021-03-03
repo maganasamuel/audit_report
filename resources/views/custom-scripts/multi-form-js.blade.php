@@ -52,6 +52,7 @@
       }
     })
   });
+  
   $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 

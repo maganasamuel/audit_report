@@ -36,17 +36,103 @@
     fetch_data();
   });
 
-  // $(document).on('click', '#view-client-pdf', function(){
-  //   $.ajax({
-  //     url: "",
-  //     data: {
-  //       id: $(this).attr("data-id")
-  //     },
-  //     success: function(data){
-  //       console.log(data);
-  //     }
-  //   })
-  // });
+  $(document).on('click', '#edit-client', function(){
+    
+    $.ajax({
+      url: "{{ route('pdfs.edit_pdf') }}",
+      data: {
+        id: $(this).attr('data-id')
+      },
+      success: function(data){
+        $.each(data.advisers, function(index, adviser){
+          $('#adviser').append(new Option(adviser.name, adviser.id))
+        });
+
+        $('#week-of').val(data.weekOf);
+        $('#adviser > option').each(function(){
+          if(this.value == data.adviser.id){
+            $(`option[value=${data.adviser.id}]`).attr('selected', 'selected');
+          }
+        });
+        $('#lead_source > option').each(function(){
+          if(this.value == data.clients.audits[0].pivot.lead_source){
+            $(`option[value=${data.clients.audits[0].pivot.lead_source}]`).attr('selected', 'selected');
+          }
+        });
+
+        $('#policy_holder').val(data.clients.policy_holder);
+        $('#policy_no').val(data.clients.policy_no);
+
+        $('.questions').each(function(index, question){
+          $(this).val(data.answers[index]);
+        })
+
+        $('#updateAudit').attr('data-client', data.clients.id);
+        $('#updateAudit').attr('data-audit', data.clients.audits[0].id);
+        $('#updateAudit').attr('data-adviser', data.adviser.id);
+        
+      }
+    })
+  });
+
+  $(document).on('click', '#updateAudit', function(e){
+    e.preventDefault();
+
+    const token = $('input[name="_token"]').val();
+    var weekOf = $('#week-of').val();
+    var adviser = $('#adviser').val();
+    var lead_source = $('#lead_source').val();
+    var policy_holder = $('#policy_holder').val();
+    var policy_no = $('#policy_no').val();
+    var client_id = $(this).attr('data-client');
+    var audit_id = $(this).attr('data-audit');
+    var adviser_id = $(this).attr('data-adviser');
+
+    let qa = {};
+
+    qa.questions=[];
+    qa.answers=[];
+    $('.questions').each(function(x,y){
+      qa.questions.push($(this).siblings('label').html());    
+      qa.answers.push($(this).val());
+
+    });
+
+    $.ajax({
+      url: "{{ route('pdfs.update_pdf') }}",
+      method: "POST",
+      data: {
+        c_id: client_id,
+        au_id: audit_id,
+        ad_id: adviser_id,
+        weekOf: weekOf,
+        adviser: adviser,
+        lead_source: lead_source,
+        policy_holder: policy_holder,
+        policy_no: policy_no,
+        qa: qa,
+        _token: token
+      },
+      success: function(data){
+        $('#client-table').DataTable().ajax.reload();
+        $('#edit-client-pdf-modal').modal('hide');
+        $('#success').removeClass('d-none');
+        $('#success').addClass('d-block');
+        $('#success-text').text(data);
+        $('#adviser').val('');
+        $('#lead_source').val('');
+        $('#policy_holder').val('');
+        $('#policy_no').val('');
+
+        $('.questions').each(function(x,y){    
+          $(this).val('');
+        });
+        $('html, body').animate({
+          scrollTop: $("#navbar-main").offset().top
+        }, 1);
+      }
+    })
+  });
 
 
 </script>

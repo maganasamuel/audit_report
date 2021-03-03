@@ -11,7 +11,7 @@
       
       @include('alerts.success')
       @include('alerts.error')
-      @include('extra.view-client-pdf-modal')
+      @include('extra.edit-client-pdf-modal')
       <div class="card w-100">
         <div class="card-body">
           <div class="card-title d-flex">
