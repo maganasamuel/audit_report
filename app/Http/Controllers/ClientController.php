@@ -11,6 +11,7 @@ use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
+use Storage;
 
 class ClientController extends Controller
 {
@@ -53,7 +54,7 @@ class ClientController extends Controller
     $adviser = Adviser::find($client->audits[0]->adviser_id);
     $user = User::find($client->audits[0]->user_id);
     $qa = json_decode($client->audits[0]->qa);
-    
+
     $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
     $options = new Options();
     $options->set([
@@ -71,7 +72,11 @@ class ClientController extends Controller
       "answers" => $qa->answers
     ];
 
-    $pdf = PDF::loadView('pdfs.view-pdf', $data);
+    $path = public_path('/pdfs/' . $pdf_title);
+    $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
+    $content = $pdf->download()->getOriginalContent();
+    Storage::put($pdf_title, $pdf->output());
+    
     return $pdf->stream($pdf_title);
   }
 

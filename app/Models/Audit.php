@@ -11,7 +11,7 @@ class Audit extends Model
 
     public function clients(){
       return $this->belongsToMany(Client::class)
-                  ->withPivot('weekOf', 'lead_source')
+                  ->withPivot('weekOf', 'lead_source', 'pdf_title')
                   ->withTimestamps();
     }
 

@@ -12,7 +12,7 @@
       background: #ffff;
       font-family: 'Helvetica', 'Arial', sans-serif;
       font-size: 9pt;
-      margin: 0;
+      margin: 10px;
       box-sizing: content-box;
     }
 

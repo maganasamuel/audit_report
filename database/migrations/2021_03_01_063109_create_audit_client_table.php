@@ -16,6 +16,7 @@ class CreateAuditClientTable extends Migration
         Schema::create('audit_client', function (Blueprint $table) {
             $table->id();
             $table->date('weekOf');
+            $table->string('pdf_title')->default('default.pdf');
             $table->enum('lead_source', ['Telemarketer', 'BDM', 'Self-generated']);
             $table->foreignId('client_id');
             $table->foreignId('audit_id');

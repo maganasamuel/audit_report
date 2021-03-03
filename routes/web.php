@@ -5,6 +5,8 @@ use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
+use Illuminate\Http\Request;
+use App\Models\Client;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -90,13 +92,19 @@ Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.
 Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf');
 Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf');
 //Mail
-Route::get('send-email', function(){
-$details = [
-      'title' => 'Mail from EliteInsure Ltd',
-      'body' => 'This is for testing email using smtp'
+Route::get('send-email', function(Request $request){
+
+  $client = Client::find($request->id);
+  $pdf_title = public_path('pdfs/'.$client->audits[0]->pivot->pdf_title);
+
+  $details = [
+    'client_name' => $client->policy_holder,
+    'client_no' => $client->policy_no,
+    'pdf_title' => $pdf_title
   ];
- 
-  \Mail::to('andre.d@eliteinsure.co.nz')->send(new \App\Mail\PdfMail($details));
- 
-  dd("Email is Sent.");
+   
+  Mail::to(Auth::user()->email)->send(new \App\Mail\PdfMail($details));
+
+  return view('profile.clients.index');
+  
 })->name('mails.send-mail');
