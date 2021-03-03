@@ -15,6 +15,7 @@
 
     qa.questions=[];
     qa.answers=[];
+    
     $('.questions').each(function(x,y){
       qa.questions.push($(this).siblings('label').html());    
       qa.answers.push($(this).val());
@@ -52,6 +53,7 @@
       }
     })
   });
+
   $(document).ready(function () {
     $('.registration-form fieldset:first-child').fadeIn('slow');
 

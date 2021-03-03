@@ -124,11 +124,7 @@
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
                         <label>8. What is your understanding of the benefits of the policy? </label>
-                        <select class="form-control questions" required>
-                          <option value="" selected disabled>Select an Answer</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
+                        <textarea class="form-control questions" cols="10" rows="3"></textarea>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
                         <label>9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you received them? </label>
@@ -152,14 +148,15 @@
                           <option value="" selected disabled>Select an Answer</option>
                           <option value="yes">Yes</option>
                           <option value="no">No</option>
+                          <option value="n/a">Not Applicable</option>
                         </select>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
                         <label>12. Remedial Action Taken Or Proposed:</label>
                         <select class="form-control questions" required>
                           <option value="" selected disabled>Select an Answer</option>
-                          <option value="taken">Taken</option>
-                          <option value="proposed">Proposed</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
                         </select>
                       </div>
                     </div>

@@ -100,23 +100,14 @@
                                             <tr>
                                               <td align='left'>
                                                 <a href='#'>
-                                                  <img align='left' alt='Logo' height='33' padding='5px' src='https://swu-cs-assets.s3.amazonaws.com/OSET/oxy-logo.png' width='120' />
+                                                  <img align='left' alt='Logo' padding='5px' src='https://eliteinsure.co.nz/wp-content/uploads/2017/01/eliteinsure-logo-light-retina.png' width='200' />
                                                 </a>
                                               </td>
                                               <td align='right' style='vertical-align:bottom;' width='34px'>
-                                                <a href='#'>
-                                                  <img alt='Twitter' height='22' src='https://s3.amazonaws.com/swu-cs-assets/OSET/social/Twitter_grey.png' width='22' />
-                                                </a>
                                               </td>
                                               <td align='right' style='vertical-align:bottom;' width='34px'>
-                                                <a href='#'>
-                                                  <img alt='Facebook' height='22' src='https://swu-cs-assets.s3.amazonaws.com/OSET/social/f_grey.png' width='22' />
-                                                </a>
                                               </td>
                                               <td align='right' style='vertical-align:bottom;' width='34px'>
-                                                <a href='#'>
-                                                  <img alt='Instagram' height='22' src='https://swu-cs-assets.s3.amazonaws.com/OSET/social/instagrey.png' width='22' />
-                                                </a>
                                               </td>
                                             </tr>
                                           </table>
@@ -160,14 +151,14 @@
                     <tr>
                       <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
                         <div style='color:#4d4d4d;font-family:Oxygen, Helvetica neue, sans-serif;font-size:32px;font-weight:700;line-height:37px;text-align:center;'>
-                          Lorem ipsum dolor
+                          Hello, {{ Auth::user()->name }}
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
                         <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;line-height:21px;text-align:center;'>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed nulla nibh. Ut hendrerit pellentesque justo, semper accumsan nisl venenatis ut.
+                          Here's {{ $details['client_name'] }}'s Audit Report with Policy Number: {{ $details['client_no'] }}
                         </div>
                       </td>
                     </tr>
@@ -201,9 +192,9 @@
                       <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;' vertical-align='middle'>
                         <table border='0' cellpadding='0' cellspacing='0' role='presentation' style='border-collapse:separate;line-height:100%;'>
                           <tr>
-                            <td align='center' bgcolor='#ff6f6f' role='presentation' style='background-color:#ff6f6f;border:none;border-radius:5px;cursor:auto;padding:10px 25px;' valign='middle'>
-                              <a href='#' style='background:#ff6f6f;color:#ffffff;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;font-weight:400;line-height:21px;margin:0;text-decoration:none;text-transform:none;' target='_blank'>
-                                Button Text
+                            <td align='center' bgcolor='#ff6f6f' role='presentation' style='background-color:#0081b8;border:none;border-radius:5px;cursor:auto;padding:10px 25px;' valign='middle'>
+                              <a href='{{ $details['pdf_title'] }}' style='background:#0081b8;color:#ffffff;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;font-weight:400;line-height:21px;margin:0;text-decoration:none;text-transform:none;' target='_blank'>
+                                Download PDF
                               </a>
                             </td>
                           </tr>
@@ -239,14 +230,14 @@
                     <tr>
                       <td align='center' style='font-size:0px;padding:10px 25px;padding-bottom:5px;word-break:break-word;'>
                         <div style='color:#4d4d4d;font-family:Oxygen, Helvetica neue, sans-serif;font-size:24px;font-weight:700;line-height:30px;text-align:center;'>
-                          Lorem ipsum dolor
+                          
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td align='center' style='font-size:0px;padding:10px 25px;padding-top:0px;word-break:break-word;'>
                         <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;line-height:21px;text-align:center;'>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed nulla nibh. Ut hendrerit pellentesque justo, semper accumsan nisl venenatis ut.
+                          
                         </div>
                       </td>
                     </tr>
@@ -280,21 +271,21 @@
                             <tr>
                               <td align='center' style='font-size:0px;padding:5px 25px;word-break:break-word;'>
                                 <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;font-style:bold;font-weight:700;line-height:21px;text-align:center;'>
-                                  Awesome Inc
+                                  Eliteinsure Ltd.
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align='center' style='font-size:0px;padding:5px 25px;word-break:break-word;'>
                                 <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;font-style:bold;line-height:1;text-align:center;'>
-                                  1234 Awesome St
+                                  3G/39 Mackelvie Street, Grey Lynn
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align='center' style='font-size:0px;padding:5px 25px;word-break:break-word;'>
                                 <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;font-style:bold;line-height:1;text-align:center;'>
-                                  Wonderland
+                                  Auckland, 1021, New Zealand
                                 </div>
                               </td>
                             </tr>
