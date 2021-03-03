@@ -8,7 +8,8 @@
             <div class="col-lg-5 col-md-7">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-3 text-center">
-                        <img src="{{ asset('assets') }}/img/EliteInsure_Horizontal.png" alt="" height="50">
+                        <h1 style="font-weight: heavy;"><strong>{{ __('AUDIT | SURVEY') }}</strong></h1>
+                        <h1><strong>{{__('SOFTWARE') }}</strong></h1>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <div class="text-center text-muted mb-4">

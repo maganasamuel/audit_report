@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Adviser;
 use App\Models\Audit;
+use App\Models\User;
 use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -50,6 +51,7 @@ class ClientController extends Controller
   public function view_pdf(Request $request){
     $client = Client::find($request->id);
     $adviser = Adviser::find($client->audits[0]->adviser_id);
+    $user = User::find($client->audits[0]->user_id);
     $qa = json_decode($client->audits[0]->qa);
     
     $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
@@ -63,6 +65,8 @@ class ClientController extends Controller
     $data = [
       "clients" => $client,
       "adviser_name" => $adviser->name,
+      "caller_name" => $user->name,
+      "caller_email" => $user->email,
       "questions" => $qa->questions,
       "answers" => $qa->answers
     ];

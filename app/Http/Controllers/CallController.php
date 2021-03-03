@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Adviser;
 use App\Models\Client;
 use App\Models\Audit;
+use Auth;
 
 class CallController extends Controller
 {
@@ -25,6 +26,7 @@ class CallController extends Controller
 
         $audit->qa = json_encode($request->qa);
         $audit->adviser_id = $request->adviser;
+        $audit->user_id = Auth::user()->id;
         $audit->save();
 
         $client->audits()->attach($audit->id,

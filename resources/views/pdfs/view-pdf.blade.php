@@ -9,7 +9,7 @@
     html,
     body {
       min-width: auto;
-      background: #EEEEEE;
+      background: #ffff;
       font-family: 'Helvetica', 'Arial', sans-serif;
       font-size: 9pt;
       margin: 0;
@@ -21,6 +21,8 @@
       /*border-spacing: 0;*/
     }
 
+
+
     #questions{
       background-color: #0081b8;
       color: #fff;
@@ -29,25 +31,29 @@
 </head>
 
 <body>
-  <table cellpadding="5" cellspacing="5">
+  <table cellpadding="5">
     <thead style="color:#000; " id="table-head">
       <tr>
         {{-- <th>
           <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="100px">
         </th> --}}
         {{-- <th></th> --}}
-        <th colspan="2">
-            <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="300px" style="padding-right: 30px; margin-top: 20px;" />
-            <h1 style="display: flex; padding-left: 40px; font-size: 30px;">AUDIT REPORT<h1>
+        <th colspan="2" style="padding: 20px; background-color: #fff">
+            <img src="{{ public_path('assets/img/eliteInsure_vertical.png') }}" alt="" width="300px" style="padding-right: 30px; margin-top: 30px;" />
+            <h1 style="display: flex; padding-right: 40px; font-size: 40px; margin-bottom: -70px">AUDIT REPORT<h1>
         </th>
       </tr>
-      <tr style="background-color: #1a174d; color: #fff;">
+      <tr style="background-color: #0f6497; color: #fff;">
         <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
         <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
       </tr>
-      <tr style="background-color: #1a174d; color: #fff;">
+      <tr style="background-color: #0f6497; color: #fff;">
         <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
         <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
+      </tr>
+      <tr style="background-color: #0f6497; color: #fff;">
+        <th align="left">&nbsp;&nbsp;Caller Name: {{ $caller_name }} </th>
+        <th align="left">Caller Email Address: {{ $caller_email }}</th>
       </tr>
     </thead>
     <tr>
@@ -69,7 +75,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="2" style="padding-left: 10px; background-color: #c4ccca">
+        <td colspan="2" style="padding-left: 10px; ">
           @if(empty($answers[$index]))
           N/A
           @else

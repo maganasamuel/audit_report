@@ -18,4 +18,8 @@ class Audit extends Model
     public function advisers(){
       return $this->hasMany(Adviser::class);    
     }
+
+    public function users(){
+      return $this->belongsTo(User::class);
+    }
 }
