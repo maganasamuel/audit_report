@@ -75,7 +75,7 @@ class AdviserController extends Controller
       $adviser = Adviser::find($request->id);
       $adviser->status = "Terminated";
       $message = $adviser->name. " has been Terminated.";
-
+      
       $adviser->save();
       return $message;
     }
