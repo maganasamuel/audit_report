@@ -136,14 +136,15 @@
                             <option value="" selected disabled>Select an Answer</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
+                            <option value="n/a">Not Applicable</option>
                           </select>
                         </div>
                         <div class="form-group col-lg-12 col-md-12">
                           <label>12. Remedial Action Taken Or Proposed:</label>
                           <select class="form-control questions" required>
                             <option value="" selected disabled>Select an Answer</option>
-                            <option value="taken">Taken</option>
-                            <option value="proposed">Proposed</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
                           </select>
                         </div>
                       </div>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use DataTables;
+use Auth;
 
 class UserController extends Controller
 {
@@ -22,6 +23,12 @@ class UserController extends Controller
     }
 
     public function home(){
+      if(Auth::user()->status == "Deactivated"){
+        Auth::logout();
+        return redirect()->route('login')
+                ->with('status', "You've been terminated. Please contact administrator.")
+                ->withErrors(['username' => "You've been deactivated."]);
+      }
       return view('users.home');
     }
 

@@ -27,23 +27,23 @@ Route::get('/', function () {
   return view('welcome');
 });
 
+
+
+Auth::routes();
+
 Route::get('/home', function () {
-    if(Auth::user()->is_admin == 1){
-        return view('home');
-    } else {
-        return view('/users/home');
-    }
+  if(Auth::user()->is_admin == 1){
+      return view('home');
+  } else {
+      return view('/users/home');
+  }
 });
 
-Auth::routes();
+Route::group(['middleware' => 'isActive'], function(){
+  Route::get('/home', [App\Http\Controllers\UserController::class, 'home'])->name('users.home');
+});
 
-
-Auth::routes();
-
-
-
-Route::group(['middleware' => 'auth'], function () {
-  Route::get('/home', [UserController::class, 'home'])->name('users.home');
+Route::group(['middleware' => 'auth'], function () {  
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
@@ -55,42 +55,42 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-Route::group(['middleware' => 'isAdmin'], function(){
-  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => 'checkuser'], function(){
+  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('checkuser');
 
   //Advisers
-  Route::get('/profile/advisers/index', [AdviserController::class, 'index']);
-  Route::get('/advisercontroller/fetch_data', [AdviserController::class, 'fetch_data'])->name('adviser.fetch_data');
-  Route::post('/adviser/new_adviser', [AdviserController::class, 'new_adviser'])->name('adviser.new_adviser');
-  Route::post('/adviser/edit_adviser', [AdviserController::class, 'edit_adviser'])->name('adviser.edit_adviser');
-  Route::post('/adviser/update_adviser', [AdviserController::class, 'update_adviser'])->name('adviser.update_adviser');
-  Route::post('/adviser/confirm_adviser_deactivate', [AdviserController::class, 'confirm_adviser_deactivate'])->name('adviser.confirm_adviser_deactivate');
-  Route::post('/adviser/deactivate_adviser', [AdviserController::class, 'deactivate_adviser'])->name('adviser.deactivate_adviser');
+  Route::get('/profile/advisers/index', [AdviserController::class, 'index'])->middleware('checkuser');
+  Route::get('/advisercontroller/fetch_data', [AdviserController::class, 'fetch_data'])->name('adviser.fetch_data')->middleware('checkuser');
+  Route::post('/adviser/new_adviser', [AdviserController::class, 'new_adviser'])->name('adviser.new_adviser')->middleware('checkuser');
+  Route::post('/adviser/edit_adviser', [AdviserController::class, 'edit_adviser'])->name('adviser.edit_adviser')->middleware('checkuser');
+  Route::post('/adviser/update_adviser', [AdviserController::class, 'update_adviser'])->name('adviser.update_adviser')->middleware('checkuser');
+  Route::post('/adviser/confirm_adviser_deactivate', [AdviserController::class, 'confirm_adviser_deactivate'])->name('adviser.confirm_adviser_deactivate')->middleware('checkuser');
+  Route::post('/adviser/deactivate_adviser', [AdviserController::class, 'deactivate_adviser'])->name('adviser.deactivate_adviser')->middleware('checkuser');
 
   //Users
-  Route::get('/usercontroller/fetch_data', [UserController::class, 'fetch_data'])->name('user.fetch_data');
-  Route::post('/user/new_user', [UserController::class, 'new_user'])->name('user.new_user');
-  Route::post('/user/edit_user', [UserController::class, 'edit_user'])->name('user.edit_user');
-  Route::post('/user/update_user', [UserController::class, 'update_user'])->name('user.update_user');
-  Route::post('/user/confirm_user_deactivate', [UserController::class, 'confirm_user_deactivate'])->name('user.confirm_user_deactivate');
-  Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])->name('user.deactivate_user');
+  Route::get('/usercontroller/fetch_data', [UserController::class, 'fetch_data'])->name('user.fetch_data')->middleware('checkuser');
+  Route::post('/user/new_user', [UserController::class, 'new_user'])->name('user.new_user')->middleware('checkuser');
+  Route::post('/user/edit_user', [UserController::class, 'edit_user'])->name('user.edit_user')->middleware('checkuser');
+  Route::post('/user/update_user', [UserController::class, 'update_user'])->name('user.update_user')->middleware('checkuser');
+  Route::post('/user/confirm_user_deactivate', [UserController::class, 'confirm_user_deactivate'])->name('user.confirm_user_deactivate')->middleware('checkuser');
+  Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])->name('user.deactivate_user')->middleware('checkuser');
 });
 
 //Calls
-Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit');
-Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey');
-Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit');
+Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
+Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
+Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
 
 
 //Normal Users
-Route::get('/users/home', [UserController::class, 'home'])->name('users.home');
+Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
 
 //Clients
-Route::get('/profile/clients/index', [ClientController::class, 'index']);
-Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data');
-Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf');
-Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf');
-Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf');
+Route::get('/profile/clients/index', [ClientController::class, 'index'])->middleware('auth');
+Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data')->middleware('auth');
+Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
+Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf')->middleware('auth');
+Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf')->middleware('auth');
 //Mail
 Route::get('send-email', function(Request $request){
 
@@ -104,7 +104,7 @@ Route::get('send-email', function(Request $request){
   ];
    
   Mail::to(Auth::user()->email)->send(new \App\Mail\PdfMail($details));
-
-  return view('profile.clients.index');
   
-})->name('mails.send-mail');
+  return redirect('profile\clients\index')->with('message', 'Email has been sent successfully!');
+  
+})->name('mails.send-mail')->middleware('auth');
