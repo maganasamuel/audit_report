@@ -1,6 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
 <script>
+  var token = $('input[name="_token"]').val();
   function fetch_data(){
     $('#client-table').DataTable({
         processing: true,
@@ -78,7 +79,6 @@
   $(document).on('click', '#updateAudit', function(e){
     e.preventDefault();
 
-    const token = $('input[name="_token"]').val();
     var weekOf = $('#week-of').val();
     var adviser = $('#adviser').val();
     var lead_source = $('#lead_source').val();
@@ -134,5 +134,40 @@
     })
   });
 
+  $(document).on('click', '#client-delete-confirmation', function(){
+    $.ajax({
+      url: "{{ route('pdfs.confirm_client_delete') }}",
+      dataType: "json",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        _token: token
+      },
+      success: function(data){
+        $("#delete-client-name").text(data.policy_holder);
+        $("#delete-client").attr('data-id', data.id);
+        $("#delete-client").attr('data-audit', data.audits[0].id);
+      }
+    })
+  });
+
+  $(document).on('click', '#delete-client', function(){
+    $.ajax({
+      url: "{{ route('pdfs.delete_client') }}",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        audit_id: $(this).attr('data-audit'),
+        _token: token
+      },
+      success: function(data){
+        $('#modal-delete-client').modal('hide');
+        $('#success').removeClass('d-none');
+        $('#success').addClass('d-block');
+        $('#success-text').text(data);
+        $('#client-table').DataTable().ajax.reload();
+      }
+    })
+  });
 
 </script>

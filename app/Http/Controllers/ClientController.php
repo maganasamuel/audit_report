@@ -40,7 +40,7 @@ class ClientController extends Controller
                   .
                   '<button type="button" id="edit-client" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
                   .
-                  '<button type="button" id="client-deactivate-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-deactivate-client"><i class="fa fa-ban pt-1"></i></button>'
+                  '<button type="button" id="client-delete-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client"><i class="fa fa-ban pt-1"></i></button>'
                   ;
                     return $actionBtn;
                   })
@@ -118,6 +118,28 @@ class ClientController extends Controller
       ]);
 
       $message = "Audit #". $request->au_id ." has been updated.";
+
+      return $message;
+    }
+  }
+
+  public function confirm_client_delete(Request $request){
+    if($request->ajax()){
+      $client = Client::find($request->id);
+      $audit = $client->audits[0]->id;
+      
+      return json_encode($client, $audit);
+    }
+  }
+
+  public function delete_client(Request $request){
+    if($request->ajax()){
+      $client = Client::find($request->id);
+      $audit = Audit::find($request->audit_id);
+      $message = 'Audit #'.$audit->id.' has been deleted.';
+      $client->audits()->detach($request->id);
+      $client->delete();
+      $audit->delete();
 
       return $message;
     }

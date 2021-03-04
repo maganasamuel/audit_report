@@ -91,6 +91,8 @@ Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data
 Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
 Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf')->middleware('auth');
 Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf')->middleware('auth');
+Route::post('/pdfs/confirm_client_delete', [ClientController::class, 'confirm_client_delete'])->name('pdfs.confirm_client_delete')->middleware('auth');
+Route::post('/pdfs/delete_client', [ClientController::class, 'delete_client'])->name('pdfs.delete_client')->middleware('auth');
 //Mail
 Route::get('send-email', function(Request $request){
 
