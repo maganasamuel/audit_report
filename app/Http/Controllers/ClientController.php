@@ -33,7 +33,7 @@ class ClientController extends Controller
                   </form>'
                   .
                   '
-                  <form action="'.route('mails.send-mail').'" method="GET" target="_blank" class="mr-2">
+                  <form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
                     <input type="text" value="'. $row->id .'" name="id" hidden />
                     <button type="submit" rel="tooltip" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
                   </form>'
@@ -76,7 +76,7 @@ class ClientController extends Controller
     $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
     $content = $pdf->download()->getOriginalContent();
     Storage::put($pdf_title, $pdf->output());
-    
+
     return $pdf->stream($pdf_title);
   }
 

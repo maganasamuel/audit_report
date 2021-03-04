@@ -6,6 +6,13 @@
     <div class="container mt--8 pb-5">
         <div class="row justify-content-center">
             <div class="col-lg-5 col-md-7">
+                @if(session()->has('status'))
+                    <div class="alert alert-danger alert-with-icon" id="error">
+                        <a href="#" aria-hidden="true" class="close" data-dismiss="alert" aria-label="close" style="line-height: 0!important;">&times;</a>
+                        <span data-notify="icon" class="tim-icons icon-trophy"></span>
+                        <span id="danger-text">{{ __('Your account has been terminated. Please contact Administrator.') }}</span>
+                    </div>
+                @endif
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-3 text-center">
                         <h1 style="font-weight: heavy;"><strong>{{ __('AUDIT | SURVEY') }}</strong></h1>
