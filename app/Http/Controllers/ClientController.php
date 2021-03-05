@@ -11,6 +11,7 @@ use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
+use File;
 use Storage;
 
 class ClientController extends Controller
@@ -87,7 +88,7 @@ class ClientController extends Controller
       $adviser = Adviser::find($client->audits[0]->adviser_id);
       $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
       $qa = json_decode($client->audits[0]->qa);
-      // dd();
+      
       return response()->json([
         "clients" => $client,
         "advisers" => $advisers,
@@ -101,6 +102,13 @@ class ClientController extends Controller
   public function update_pdf(Request $request){
     if($request->ajax()){
       $client = Client::find($request->c_id);
+      
+      if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
+        File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
+        Storage::delete($client->audits[0]->pivot->pdf_title);
+      } else {
+        dd('File doesn\'t exist'); 
+      }
 
       $client->policy_holder = $request->policy_holder;
       $client->policy_no = $request->policy_no;
@@ -114,7 +122,36 @@ class ClientController extends Controller
       $client->audits()->updateExistingPivot($request->au_id, [
         "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
         "lead_source" => $request->lead_source
+      ]);
 
+      $adviser = Adviser::find($client->audits[0]->adviser_id);
+      $user = User::find($client->audits[0]->user_id);
+      $qa = json_decode($client->audits[0]->qa);
+
+      $pdf_title = $request->policy_holder.date('dmYgi', time()).'.pdf';
+      $options = new Options();
+      $options->set([
+        'defaultFont' => 'Helvetica'
+      ]);
+
+      $dompdf = new Dompdf($options);
+      
+      $data = [
+        "clients" => $client,
+        "adviser_name" => $adviser->name,
+        "caller_name" => $user->name,
+        "caller_email" => $user->email,
+        "questions" => $qa->questions,
+        "answers" => $qa->answers
+      ];
+
+      $path = public_path('/pdfs/' . $pdf_title);
+      $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
+      $content = $pdf->download()->getOriginalContent();
+      Storage::put($pdf_title, $pdf->output());
+
+      $client->audits()->updateExistingPivot($request->au_id, [
+        "pdf_title" => $pdf_title
       ]);
 
       $message = "Audit #". $request->au_id ." has been updated.";
@@ -136,6 +173,14 @@ class ClientController extends Controller
     if($request->ajax()){
       $client = Client::find($request->id);
       $audit = Audit::find($request->audit_id);
+      
+      if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
+        File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
+        Storage::delete($client->audits[0]->pivot->pdf_title);
+      } else {
+        dd('File doesn\'t exist'); 
+      }
+
       $message = 'Audit #'.$audit->id.' has been deleted.';
       $client->audits()->detach($request->id);
       $client->delete();

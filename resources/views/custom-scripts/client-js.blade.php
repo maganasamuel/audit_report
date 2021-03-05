@@ -70,7 +70,9 @@
 
         $('#updateAudit').attr('data-client', data.clients.id);
         $('#updateAudit').attr('data-audit', data.clients.audits[0].id);
-        $('#updateAudit').attr('data-adviser', data.adviser.id);
+        $('#adviser').on('change', function(){
+          $('#updateAudit').attr('data-adviser', $(this).find('option:selected').val());
+        })
         
       }
     })
