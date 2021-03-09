@@ -84,6 +84,8 @@ Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name(
 
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
+Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])->name('users.fetch_data')->middleware('auth');
+
 
 //Clients
 Route::get('/profile/clients/index', [ClientController::class, 'index'])->middleware('auth');
@@ -93,6 +95,10 @@ Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.
 Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf')->middleware('auth');
 Route::post('/pdfs/confirm_client_delete', [ClientController::class, 'confirm_client_delete'])->name('pdfs.confirm_client_delete')->middleware('auth');
 Route::post('/pdfs/delete_client', [ClientController::class, 'delete_client'])->name('pdfs.delete_client')->middleware('auth');
+
+
+
+
 //Mail
 Route::get('send-email', function(Request $request){
 
@@ -105,7 +111,9 @@ Route::get('send-email', function(Request $request){
     'pdf_title' => $pdf_title
   ];
    
-  Mail::to(Auth::user()->email)->send(new \App\Mail\PdfMail($details));
+  Mail::to(Auth::user()->email)
+      ->cc('admin@eliteinsure.co.nz')
+      ->send(new \App\Mail\PdfMail($details));
   
   return redirect('profile\clients\index')->with('message', 'Email has been sent successfully!');
   

@@ -51,7 +51,8 @@ class CallController extends Controller
 
         $options = new Options();
         $options->set([
-          'defaultFont' => 'Helvetica'
+          'defaultFont' => 'Helvetica',
+          "enable_php" => true
         ]);
 
         $dompdf = new Dompdf($options);
