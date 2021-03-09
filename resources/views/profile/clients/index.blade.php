@@ -9,7 +9,7 @@
 
     <div class="container-fluid mt--7">
       @if(session()->has('message'))
-        <div class="alert alert-success alert-with-icon" id="success">
+        <div class="alert alert-success alert-with-icon" id="successmail">
             <a href="#" aria-hidden="true" class="close" data-dismiss="alert" aria-label="close">
               &times;
             </a>

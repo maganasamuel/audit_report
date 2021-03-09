@@ -70,6 +70,7 @@
 
         $('#updateAudit').attr('data-client', data.clients.id);
         $('#updateAudit').attr('data-audit', data.clients.audits[0].id);
+        $('#updateAudit').attr('data-adviser', $('#adviser').find('option:selected').val());
         $('#adviser').on('change', function(){
           $('#updateAudit').attr('data-adviser', $(this).find('option:selected').val());
         })
@@ -118,9 +119,15 @@
       success: function(data){
         $('#client-table').DataTable().ajax.reload();
         $('#edit-client-pdf-modal').modal('hide');
-        $('#success').removeClass('d-none');
-        $('#success').addClass('d-block');
-        $('#success-text').text(data);
+        if(data == "The file doesn't exists"){
+          $('#success').removeClass('d-none');
+          $('#success').addClass('d-block');
+          $('#success-text').text(data);
+        } else {
+          $('#error').removeClass('d-none');
+          $('#error').addClass('d-block');
+          $('#danger-text').text(data);
+        }
         $('#adviser').val('');
         $('#lead_source').val('');
         $('#policy_holder').val('');
