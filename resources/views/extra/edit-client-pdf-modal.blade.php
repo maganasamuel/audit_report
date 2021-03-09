@@ -78,9 +78,9 @@
                           <label>4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place , we have noted your current pre-existing medical conditions are ___ and ___. Is there anything else apart from this not stated? </label>
                           <select class="form-control questions" required>
                             <option value="" selected disabled>Select an Answer</option>
-                            <option value="yes">Yes - Refer to Notes</option>
+                            <option value="Yes - Refer to Notes">Yes - Refer to Notes</option>
                             <option value="no">No</option>
-                            <option value="not sure">Not Sure - Refer to Notes</option>
+                            <option value="Not Sure - Refer to Notes">Not Sure - Refer to Notes</option>
                           </select>
                         </div>
                         <div class="form-group col-lg-12 col-md-12">
@@ -88,7 +88,7 @@
                           <select class="form-control questions" required>
                             <option value="" selected disabled>Select an Answer</option>
                             <option value="yes">Yes</option>
-                            <option value="no">No - Refer to Notes</option>
+                            <option value="No - Refer to Notes">No - Refer to Notes</option>
                           </select>
                         </div>
                         <div class="form-group col-lg-12 col-md-12">
@@ -107,7 +107,7 @@
                           <select class="form-control questions" required>
                             <option value="" selected disabled>Select an Answer</option>
                             <option value="yes">Yes</option>
-                            <option value="no">No - Refer to Notes</option>
+                            <option value="No - Refer to Notes">No - Refer to Notes</option>
                           </select>
                         </div>
                         <div class="form-group col-lg-12 col-md-12">
@@ -132,7 +132,7 @@
                             <option value="" selected disabled>Select an Answer</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
-                            <option value="n/a">Not Applicable</option>
+                            <option value="n/A">Not Applicable</option>
                           </select>
                         </div>
                         <div class="form-group col-lg-12 col-md-12">
