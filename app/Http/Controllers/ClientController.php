@@ -104,10 +104,11 @@ class ClientController extends Controller
       $client = Client::find($request->c_id);
       
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
-        File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
-        Storage::delete($client->audits[0]->pivot->pdf_title);
+        $old_file = $client->audits[0]->pivot->pdf_title;
       } else {
-        dd('File doesn\'t exist'); 
+        $message = "The file doesn't exists.";
+
+        return $message;
       }
 
       $client->policy_holder = $request->policy_holder;
@@ -149,6 +150,10 @@ class ClientController extends Controller
       $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
       $content = $pdf->download()->getOriginalContent();
       Storage::put($pdf_title, $pdf->output());
+
+      //Delete old file
+      File::delete(public_path('pdfs/'.$old_file));
+      Storage::delete($old_file);
 
       $client->audits()->updateExistingPivot($request->au_id, [
         "pdf_title" => $pdf_title
