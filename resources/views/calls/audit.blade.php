@@ -90,9 +90,9 @@
                         <label>4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place , we have noted your current pre-existing medical conditions are ___ and ___. Is there anything else apart from this not stated? </label>
                         <select class="form-control questions" required>
                           <option value="" selected disabled>Select an Answer</option>
-                          <option value="yes">Yes</option>
+                          <option value="yes">Yes - Refer to Notes</option>
                           <option value="no">No</option>
-                          <option value="not sure">Not Sure</option>
+                          <option value="not sure">Not Sure - Refer to Notes</option>
                         </select>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
@@ -100,7 +100,7 @@
                         <select class="form-control questions" required>
                           <option value="" selected disabled>Select an Answer</option>
                           <option value="yes">Yes</option>
-                          <option value="no">No</option>
+                          <option value="no">No - Refer to Notes</option>
                         </select>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
@@ -119,7 +119,7 @@
                         <select class="form-control questions" required>
                           <option value="" selected disabled>Select an Answer</option>
                           <option value="yes">Yes</option>
-                          <option value="no">No</option>
+                          <option value="no">No - Refer to Notes</option>
                         </select>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
@@ -136,11 +136,7 @@
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
                         <label>10. Do you have any further comments? </label>
-                        <select class="form-control questions" required>
-                          <option value="" selected disabled>Select an Answer</option>
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
+                        <textarea class="form-control questions" cols="10" rows="3" required></textarea>
                       </div>
                       <div class="form-group col-lg-12 col-md-12">
                         <label>11. If replacement( were the risks of replacing this insurance policy explained to you? </label>
