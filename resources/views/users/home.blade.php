@@ -2,9 +2,10 @@
 
 @section('content')
 @include('layouts.headers.cards')
-{{-- @include('extra.user-modal') --}}
-{{-- @include('extra.edit-user-modal') --}}
-{{-- @include('extra.deactivate-user-modal') --}}
+@include('alerts.success')
+@include('alerts.error')
+@include('extra.edit-client-pdf-modal')
+@include('extra.delete-client-pdf-modal')
 <div class="container-fluid mt--7">
   @include('alerts.success')
   @include('alerts.error')
@@ -32,7 +33,7 @@
   </div>
 
   @include('layouts.footers.auth')
-  {{-- @include('custom-scripts.user-js') --}}
+  @include('custom-scripts.normal-user-table-js')
 </div>
 @endsection
 @push('js')

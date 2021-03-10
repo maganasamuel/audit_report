@@ -5,6 +5,7 @@ use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\SpecificUserController;
 use Illuminate\Http\Request;
 use App\Models\Client;
 /*
@@ -25,7 +26,7 @@ Route::get('/', function () {
     //   return view('home');
     // }
   return view('welcome');
-});
+})->middleware('auth');
 
 
 
@@ -96,7 +97,8 @@ Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('
 Route::post('/pdfs/confirm_client_delete', [ClientController::class, 'confirm_client_delete'])->name('pdfs.confirm_client_delete')->middleware('auth');
 Route::post('/pdfs/delete_client', [ClientController::class, 'delete_client'])->name('pdfs.delete_client')->middleware('auth');
 
-
+//Specific User
+Route::get('/specificusercontroller/fetch_data', [SpecificUserController::class, 'fetch_data'])->name('normal_users.fetch_data')->middleware('auth');
 
 
 //Mail
