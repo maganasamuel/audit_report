@@ -19,7 +19,7 @@
             <div class="card-body survey">
               <div class="form-group">
                 <label>Have you had a chance to discuss this cancellation with your Adviser?</label>
-                <select id="first" class="form-control">
+                <select id="level-1" class="form-control">
                   <option value="" selected disabled>Choose an option</option>
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
@@ -32,14 +32,14 @@
         </div>
 
 
-        <div class="form-group">
+        {{-- <div class="form-group">
           <label>Did your Adviser explain the differences between your Partners Life Policy and your new replacement insurance Policy?</label>
-          <select id="level" class="form-control">
+          <select id="level-1" class="form-control">
             <option value="" selected disabled>Choose an option</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
-        </div>
+        </div> --}}
       </div>
     </div>
 
