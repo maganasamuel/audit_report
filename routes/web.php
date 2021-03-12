@@ -20,12 +20,12 @@ use App\Models\Client;
 */
 
 Route::get('/', function () {
-    // if(!Auth::user()->is_admin == 1){
-    //      return view('/users/home');
-    // } else {
-    //   return view('home');
-    // }
-  return view('welcome');
+    if(!Auth::user()->is_admin == 1){
+       return view('/users/home');
+    } else {
+      return view('dashboard');
+    }
+  // return view('home');
 })->middleware('auth');
 
 
