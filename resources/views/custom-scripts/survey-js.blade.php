@@ -293,12 +293,45 @@
                       let sa = {};
                       sa.questions = [];
                       sa.answers = [];
+                      const token = $('input[name="_token"]').val();
 
                       $('.survey-qa').each(function(x, y){
                         sa.questions.push($(this).children('label').html());
                         sa.answers.push($(this).children('label').siblings().val());
                       });
-                      console.log(sa);
+
+                      $.ajax({
+                        url: "{{ route('calls.store_survey') }}",
+                        method: "POST",
+                        data: {
+                          survey: sa,
+                          _token: token
+                        },
+                        success: function(data){
+
+                          $('#success').removeClass('d-none');
+                          $('#success').addClass('d-block');
+                          $('#success-text').text(data);
+                          ($('#level-2')) ? $('#level-2').remove() : "";
+                          ($('#level-3')) ? $('#level-3').remove() : "";
+                          ($('#level-4')) ? $('#level-4').remove() : "";
+                          ($('#level-5')) ? $('#level-5').remove() : "";
+                          ($('#level-6')) ? $('#level-6').remove() : "";
+                          ($('#level-7-yes')) ? $('#level-7-yes').remove() : "";
+                          ($('#level-7-no')) ? $('#level-7-no').remove() : "";
+                          ($('#level-7')) ? $('#level-7').remove() : "";
+                          ($('#level-8')) ? $('#level-8').remove() : "";
+                          ($('#level-6-no')) ? $('#level-6-no').remove() : "";
+                          ($('#last-question')) ? $('#last-question').remove() : "";
+                          ($('#submit-btn')) ? $('#submit-btn').remove() : "";
+                          $('.questions').each(function(x,y){    
+                            $(this).children('label').siblings().val('');
+                          });
+                          $('html, body').animate({
+                            scrollTop: $("#navbar-main").offset().top
+                          }, 1);
+                        }
+                      });
                     });
                 });
               });
@@ -366,17 +399,50 @@
                 $('#submit-btn').remove();
               }
               $('#submit-btn').on('click', function(e){
-              // console.log(e);
+                // console.log(e);
                 e.preventDefault();
                 let sa = {};
                 sa.questions = [];
                 sa.answers = [];
+                const token = $('input[name="_token"]').val();
 
                 $('.survey-qa').each(function(x, y){
                   sa.questions.push($(this).children('label').html());
                   sa.answers.push($(this).children('label').siblings().val());
                 });
-                console.log(sa);
+
+                $.ajax({
+                  url: "{{ route('calls.store_survey') }}",
+                  method: "POST",
+                  data: {
+                    survey: sa,
+                    _token: token
+                  },
+                  success: function(data){
+
+                    $('#success').removeClass('d-none');
+                    $('#success').addClass('d-block');
+                    $('#success-text').text(data);
+                    ($('#level-2')) ? $('#level-2').remove() : "";
+                    ($('#level-3')) ? $('#level-3').remove() : "";
+                    ($('#level-4')) ? $('#level-4').remove() : "";
+                    ($('#level-5')) ? $('#level-5').remove() : "";
+                    ($('#level-6')) ? $('#level-6').remove() : "";
+                    ($('#level-7-yes')) ? $('#level-7-yes').remove() : "";
+                    ($('#level-7-no')) ? $('#level-7-no').remove() : "";
+                    ($('#level-7')) ? $('#level-7').remove() : "";
+                    ($('#level-8')) ? $('#level-8').remove() : "";
+                    ($('#level-6-no')) ? $('#level-6-no').remove() : "";
+                    ($('#last-question')) ? $('#last-question').remove() : "";
+                    ($('#submit-btn')) ? $('#submit-btn').remove() : "";
+                    $('.questions').each(function(x,y){    
+                      $(this).children('label').siblings().val('');
+                    });
+                    $('html, body').animate({
+                      scrollTop: $("#navbar-main").offset().top
+                    }, 1);
+                  }
+                });
               });
           });
         });//end of level-8
@@ -411,12 +477,45 @@
               let sa = {};
               sa.questions = [];
               sa.answers = [];
+              const token = $('input[name="_token"]').val();
 
               $('.survey-qa').each(function(x, y){
                 sa.questions.push($(this).children('label').html());
                 sa.answers.push($(this).children('label').siblings().val());
               });
-              console.log(sa);
+
+              $.ajax({
+                url: "{{ route('calls.store_survey') }}",
+                method: "POST",
+                data: {
+                  survey: sa,
+                  _token: token
+                },
+                success: function(data){
+
+                  $('#success').removeClass('d-none');
+                  $('#success').addClass('d-block');
+                  $('#success-text').text(data);
+                  ($('#level-2')) ? $('#level-2').remove() : "";
+                  ($('#level-3')) ? $('#level-3').remove() : "";
+                  ($('#level-4')) ? $('#level-4').remove() : "";
+                  ($('#level-5')) ? $('#level-5').remove() : "";
+                  ($('#level-6')) ? $('#level-6').remove() : "";
+                  ($('#level-7-yes')) ? $('#level-7-yes').remove() : "";
+                  ($('#level-7-no')) ? $('#level-7-no').remove() : "";
+                  ($('#level-7')) ? $('#level-7').remove() : "";
+                  ($('#level-8')) ? $('#level-8').remove() : "";
+                  ($('#level-6-no')) ? $('#level-6-no').remove() : "";
+                  ($('#last-question')) ? $('#last-question').remove() : "";
+                  ($('#submit-btn')) ? $('#submit-btn').remove() : "";
+                  $('.questions').each(function(x,y){    
+                    $(this).children('label').siblings().val('');
+                  });
+                  $('html, body').animate({
+                    scrollTop: $("#navbar-main").offset().top
+                  }, 1);
+                }
+              });
             });
         });
       });//end of third-no
