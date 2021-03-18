@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Adviser;
 use App\Models\Client;
 use App\Models\Audit;
+use App\Models\Survey;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
@@ -80,5 +81,16 @@ class CallController extends Controller
 
     public function survey(){
       return view('calls.survey');
+    }
+
+    public function store_survey(Request $request){
+      if($request->ajax()){
+        $survey = new Survey;
+        $survey->sa = json_encode($request->survey);
+        $survey->save();
+        $message = "Successfully added a Survey";
+
+        return $message;
+      }
     }
 }
