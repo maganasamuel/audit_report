@@ -7,8 +7,9 @@
   'class' => 'col-lg-12'
   ])
 
-  <!-- Kevin 3-->
+
   <div class="container-fluid mt--7">
+    @include('alerts.success')
     <div class="card w-100">
       <div class="card-body">
         <div class="card-title">
@@ -17,7 +18,7 @@
         <div class="container-fluid">
           <div class="card card-1">
             <div class="card-body survey">
-              <div class="form-group">
+              <div class="form-group survey-qa">
                 <label>Have you had a chance to discuss this cancellation with your Adviser?</label>
                 <select id="level-1" class="form-control">
                   <option value="" selected disabled>Choose an option</option>

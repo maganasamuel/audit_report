@@ -81,6 +81,7 @@ Route::group(['middleware' => 'checkuser'], function(){
 Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
 Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
+Route::post('/calls/store_survey', [CallController::class, 'store_survey'])->name('calls.store_survey')->middleware('auth');
 
 
 //Normal Users
