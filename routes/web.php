@@ -101,7 +101,9 @@ Route::post('/pdfs/delete_client', [ClientController::class, 'delete_client'])->
 //Specific User
 Route::get('/specificusercontroller/fetch_data', [SpecificUserController::class, 'fetch_data'])->name('normal_users.fetch_data')->middleware('auth');
 
-
+//Surveys
+Route::get('/surveys', [CallController::class, 'show_survey'])->name('surveys.index')->middleware('auth');
+Route::get('/surveycontroller/fetch_data', [CallController::class, 'fetch_data'])->name('surveys.fetch_data')->middleware('auth');
 //Mail
 Route::get('send-email', function(Request $request){
 

@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('surveys.index')}}">
                         <i class="fas fa-poll-h text-orange"></i>{{ __('Survey') }}
                     </a>
                 </li>
