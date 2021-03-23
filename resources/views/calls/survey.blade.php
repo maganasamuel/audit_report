@@ -16,8 +16,33 @@
           <h3 class="mb-0">Survey</h3>
         </div>
         <div class="container-fluid">
-          <div class="card card-1">
+          <div class="card">
             <div class="card-body survey">
+              <div class="row">
+                <div class="form-group col-lg-12 col-md-12">
+                  <input type="text" class="form-control" placeholder="Week of" id="week-of" value="{{ date('d-m-Y') }}" required>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:3px;">
+                <div class="row">
+                  <div class="form-group col-lg-12 col-md-12">
+                    <select class="form-control" name="adviser" id="adviser" required>
+                      <option value="" selected disabled>Select an Adviser</option>
+                      @foreach($advisers as $adviser)
+                      <option value="{{ $adviser->id }}">{{$adviser->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-6 col-md-12">
+                  <input type="text" name="policy_holder" placeholder="Policy Holder" class="form-email form-control" id="policy_holder" required>
+                </div>
+                <div class="form-group col-lg-6 col-md-12">
+                  <input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required>
+                </div>
+              </div>
               <div class="form-group survey-qa">
                 <label>Have you had a chance to discuss this cancellation with your Adviser?</label>
                 <select id="level-1" class="form-control">

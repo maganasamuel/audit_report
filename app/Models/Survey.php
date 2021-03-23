@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Survey extends Model
 {
     use HasFactory;
+
+    public function advisers(){
+      return $this->belongsTo(Adviser::class);
+    }
 }

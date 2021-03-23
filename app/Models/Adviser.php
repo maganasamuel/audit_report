@@ -18,4 +18,8 @@ class Adviser extends Model
     public function audits(){
       return $this->hasMany(Audit::class);
     }
+
+    public function surveys(){
+      return $this->hasMany(Survey::class);
+    }
 }

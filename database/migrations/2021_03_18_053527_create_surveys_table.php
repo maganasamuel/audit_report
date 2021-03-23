@@ -16,7 +16,10 @@ class CreateSurveysTable extends Migration
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
             $table->json('sa');
+            $table->foreignId('adviser_id');
+
             $table->timestamps();
+            $table->foreign('adviser_id')->references('id')->on('advisers');
         });
     }
 
