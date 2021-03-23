@@ -7,6 +7,7 @@ use App\Models\Adviser;
 use App\Models\Client;
 use App\Models\Audit;
 use App\Models\Survey;
+use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
@@ -84,10 +85,45 @@ class CallController extends Controller
       return view('calls.survey', compact('advisers'));
     }
 
+    public function show_survey(){
+      return view('surveys.index');
+    }
+
+    public function fetch_data(Request $request){
+      if($request->ajax()){
+        $data = Survey::latest()->get();
+        return Datatables::of($data)
+              ->addIndexColumn()
+              ->addColumn('action', function($row){
+                $actionBtn = '
+                  <form action="" method="GET" target="_blank" class="mr-2">
+                    <input type="text" value="'. $row->id .'" name="id" hidden />
+                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
+                  </form>'
+                  .
+                  '
+                  <form action="" method="GET" class="mr-2">
+                    <input type="text" value="'. $row->id .'" name="id" hidden />
+                    <button type="submit" rel="tooltip" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
+                  </form>'
+                  .
+                  '<button type="button" id="edit-client" rel="tooltip" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
+                  .
+                  '<button type="button" id="client-delete-confirmation" rel="tooltip" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client"><i class="fa fa-ban pt-1"></i></button>'
+                  ;
+                    return $actionBtn;
+                  })
+              ->rawColumns(['action'])
+              ->make(true);
+      }
+    }
+
     public function store_survey(Request $request){
       if($request->ajax()){
         $survey = new Survey;
         $survey->adviser_id = $request->adviser;
+        $survey->policy_holder = $request->policy_holder;
+        $survey->policy_no = $request->policy_no;
         $survey->sa = json_encode($request->survey);
         $survey->save();
         $message = "Successfully added a Survey";
