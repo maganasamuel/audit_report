@@ -43,5 +43,5 @@
       @include('layouts.footers.auth')
     </div>
 
-  @include('custom-scripts.Surveys-js')
+  @include('custom-scripts.surveys-js')
 @endsection
