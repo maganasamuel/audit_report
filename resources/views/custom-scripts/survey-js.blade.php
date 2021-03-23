@@ -1,7 +1,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
 <script>
-  
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = dd + '-' + mm + '-' + yyyy;
+
   $('#level-1').on('change', function(){
     let choice = $(this).children('option:selected').val();
 
@@ -176,6 +182,11 @@
                           sa.questions = [];
                           sa.answers = [];
                           const token = $('input[name="_token"]').val();
+                          const dateToday = $('#week-of').val();
+                          const adviser = $('#adviser').val();
+                          const policy_holder = $('#policy_holder').val();
+                          const policy_no = $('#policy_no').val();
+
 
                           $('.survey-qa').each(function(x, y){
                             sa.questions.push($(this).children('label').html());
@@ -187,6 +198,10 @@
                             method: "POST",
                             data: {
                               survey: sa,
+                              date_today: dateToday,
+                              adviser,
+                              policy_holder,
+                              policy_no,
                               _token: token
                             },
                             success: function(data){
@@ -194,6 +209,10 @@
                               $('#success').removeClass('d-none');
                               $('#success').addClass('d-block');
                               $('#success-text').text(data);
+                              ($('#week-of')) ? $('#week-of').val(today) : "";
+                              ($('#adviser')) ? $('#adviser').val("") : "";
+                              ($('#policy_holder')) ? $('#policy_holder').val("") : "";
+                              ($('#policy_no')) ? $('#policy_no').val("") : "";
                               ($('#level-2')) ? $('#level-2').remove() : "";
                               ($('#level-3')) ? $('#level-3').remove() : "";
                               ($('#level-4')) ? $('#level-4').remove() : "";
@@ -212,6 +231,9 @@
                               $('html, body').animate({
                                 scrollTop: $("#navbar-main").offset().top
                               }, 1);
+                              setTimeout(function(){
+                                location.reload();
+                              }, 3000);
                             }
                           });
                         });
@@ -250,31 +272,30 @@
             $('#seventhlevel-yes').on('change', function(){
               ($('#submit-btn')) ? $('#submit-btn').remove() : "";
               if($(this).val()){
-                if($('#level-8')){
-                  $('#level-8').remove();
-                  ($('#last-question')) ? $('#last-question').remove() : "";
-                  $('.card-body.survey').append($(
-                    '<div class="form-group survey-qa" id="level-8"><label>Who is your new insurer?</label><input type="text" class="form-control" id="eightlevel-no"></div>').hide().fadeIn(1000)
-                  );
-                }
-              } else {
-                $('#level-8').remove();
-                ($('#last-question')) ? $('#last-question').remove() : "";
-              }
-
-
-              $('#level-8').on('change', function(){
-                ($('#submit-btn')) ? $('#submit-btn').remove() : "";
-                if($('#eightlevel-no').val()){
-                  if($('#last-question')){
+                if($('#last-question')){
                     $('#last-question').remove();
                     $('.card-body.survey').append($(
                       '<div class="form-group survey-qa" id="last-question"><label>What could we do to improve?</label><input type="text" class="form-control" id="lastquestion"></div>').hide().fadeIn(1000)
                     );
                   }
-                } else {
-                  $('#last-question').remove();
-                }
+              } else {
+                // $('#level-8').remove();
+                ($('#last-question')) ? $('#last-question').remove() : "";
+              }
+
+
+              // $('#level-8').on('change', function(){
+              //   ($('#submit-btn')) ? $('#submit-btn').remove() : "";
+              //   if($('#eightlevel-no').val()){
+              //     if($('#last-question')){
+              //       $('#last-question').remove();
+              //       $('.card-body.survey').append($(
+              //         '<div class="form-group survey-qa" id="last-question"><label>What could we do to improve?</label><input type="text" class="form-control" id="lastquestion"></div>').hide().fadeIn(1000)
+              //       );
+              //     }
+              //   } else {
+              //     $('#last-question').remove();
+              //   }
 
                 $('#last-question').on('change', function(){
                   if($('#lastquestion').val()){
@@ -294,6 +315,10 @@
                       sa.questions = [];
                       sa.answers = [];
                       const token = $('input[name="_token"]').val();
+                      const dateToday = $('#week-of').val();
+                      const adviser = $('#adviser').val();
+                      const policy_holder = $('#policy_holder').val();
+                      const policy_no = $('#policy_no').val();
 
                       $('.survey-qa').each(function(x, y){
                         sa.questions.push($(this).children('label').html());
@@ -305,6 +330,10 @@
                         method: "POST",
                         data: {
                           survey: sa,
+                          date_today: dateToday,
+                          adviser,
+                          policy_holder,
+                          policy_no,
                           _token: token
                         },
                         success: function(data){
@@ -312,6 +341,10 @@
                           $('#success').removeClass('d-none');
                           $('#success').addClass('d-block');
                           $('#success-text').text(data);
+                          ($('#week-of')) ? $('#week-of').val(today) : "";
+                          ($('#adviser')) ? $('#adviser').val("") : "";
+                          ($('#policy_holder')) ? $('#policy_holder').val("") : "";
+                          ($('#policy_no')) ? $('#policy_no').val("") : "";
                           ($('#level-2')) ? $('#level-2').remove() : "";
                           ($('#level-3')) ? $('#level-3').remove() : "";
                           ($('#level-4')) ? $('#level-4').remove() : "";
@@ -330,15 +363,16 @@
                           $('html, body').animate({
                             scrollTop: $("#navbar-main").offset().top
                           }, 1);
+                          setTimeout(function(){
+                            location.reload();
+                          }, 3000);
                         }
                       });
                     });
                 });
               });
             })
-          });
-        }
-
+          }
       });//thirdlevel-yes-right
     });//secondlevel-yes
     
@@ -405,6 +439,10 @@
                 sa.questions = [];
                 sa.answers = [];
                 const token = $('input[name="_token"]').val();
+                const dateToday = $('#week-of').val();
+                const adviser = $('#adviser').val();
+                const policy_holder = $('#policy_holder').val();
+                const policy_no = $('#policy_no').val();
 
                 $('.survey-qa').each(function(x, y){
                   sa.questions.push($(this).children('label').html());
@@ -416,6 +454,10 @@
                   method: "POST",
                   data: {
                     survey: sa,
+                    date_today: dateToday,
+                    adviser,
+                    policy_holder,
+                    policy_no,
                     _token: token
                   },
                   success: function(data){
@@ -423,6 +465,10 @@
                     $('#success').removeClass('d-none');
                     $('#success').addClass('d-block');
                     $('#success-text').text(data);
+                    ($('#week-of')) ? $('#week-of').val(today) : "";
+                    ($('#adviser')) ? $('#adviser').val("") : "";
+                    ($('#policy_holder')) ? $('#policy_holder').val("") : "";
+                    ($('#policy_no')) ? $('#policy_no').val("") : "";
                     ($('#level-2')) ? $('#level-2').remove() : "";
                     ($('#level-3')) ? $('#level-3').remove() : "";
                     ($('#level-4')) ? $('#level-4').remove() : "";
@@ -441,6 +487,9 @@
                     $('html, body').animate({
                       scrollTop: $("#navbar-main").offset().top
                     }, 1);
+                    setTimeout(function(){
+                      location.reload();
+                    }, 3000);
                   }
                 });
               });
@@ -478,6 +527,10 @@
               sa.questions = [];
               sa.answers = [];
               const token = $('input[name="_token"]').val();
+              const dateToday = $('#week-of').val();
+              const adviser = $('#adviser').val();
+              const policy_holder = $('#policy_holder').val();
+              const policy_no = $('#policy_no').val();
 
               $('.survey-qa').each(function(x, y){
                 sa.questions.push($(this).children('label').html());
@@ -489,6 +542,10 @@
                 method: "POST",
                 data: {
                   survey: sa,
+                  date_today: dateToday,
+                  adviser,
+                  policy_holder,
+                  policy_no,
                   _token: token
                 },
                 success: function(data){
@@ -496,6 +553,10 @@
                   $('#success').removeClass('d-none');
                   $('#success').addClass('d-block');
                   $('#success-text').text(data);
+                  ($('#week-of')) ? $('#week-of').val(today) : "";
+                  ($('#adviser')) ? $('#adviser').val("") : "";
+                  ($('#policy_holder')) ? $('#policy_holder').val("") : "";
+                  ($('#policy_no')) ? $('#policy_no').val("") : "";
                   ($('#level-2')) ? $('#level-2').remove() : "";
                   ($('#level-3')) ? $('#level-3').remove() : "";
                   ($('#level-4')) ? $('#level-4').remove() : "";
@@ -514,6 +575,9 @@
                   $('html, body').animate({
                     scrollTop: $("#navbar-main").offset().top
                   }, 1);
+                  setTimeout(function(){
+                    location.reload();
+                  }, 3000);
                 }
               });
             });

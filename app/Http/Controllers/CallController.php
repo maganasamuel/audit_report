@@ -80,12 +80,14 @@ class CallController extends Controller
     }
 
     public function survey(){
-      return view('calls.survey');
+      $advisers = Adviser::all();
+      return view('calls.survey', compact('advisers'));
     }
 
     public function store_survey(Request $request){
       if($request->ajax()){
         $survey = new Survey;
+        $survey->adviser_id = $request->adviser;
         $survey->sa = json_encode($request->survey);
         $survey->save();
         $message = "Successfully added a Survey";
