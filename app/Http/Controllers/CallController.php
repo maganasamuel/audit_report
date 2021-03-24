@@ -121,14 +121,31 @@ class CallController extends Controller
     public function store_survey(Request $request){
       if($request->ajax()){
         $survey = new Survey;
+        $client = Client::where('policy_holder', $request->policy_holder)->first();
+        
+        if($client != null){
+          $survey->client_id = $client->id;
+        } else {
+          $new_client = new Client;
+          $new_client->policy_holder = $request->policy_holder;
+          $new_client->policy_no = $request->policy_no;
+          $new_client->save();
+
+          $survey->client_id = $new_client->id;
+        }
         $survey->adviser_id = $request->adviser;
-        $survey->policy_holder = $request->policy_holder;
-        $survey->policy_no = $request->policy_no;
         $survey->sa = json_encode($request->survey);
         $survey->save();
         $message = "Successfully added a Survey";
 
         return $message;
+      }
+    }
+
+    public function fetch_clients(Request $request){
+      if($request->ajax()){
+        $clients = Client::all();
+        return $clients;
       }
     }
 }

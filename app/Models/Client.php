@@ -14,4 +14,8 @@ class Client extends Model
                   ->withPivot('weekOf', 'lead_source', 'pdf_title')
                   ->withTimestamps();
     }
+
+    public function surveys(){
+      return $this->hasMany(Survey::class);
+    }
 }

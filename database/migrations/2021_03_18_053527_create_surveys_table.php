@@ -17,11 +17,11 @@ class CreateSurveysTable extends Migration
             $table->id();
             $table->json('sa');
             $table->foreignId('adviser_id');
-            $table->string('policy_holder');
-            $table->string('policy_no');
+            $table->foreignId('client_id');
 
             $table->timestamps();
             $table->foreign('adviser_id')->references('id')->on('advisers');
+            $table->foreign('client_id')->references('id')->on('clients');
         });
     }
 
