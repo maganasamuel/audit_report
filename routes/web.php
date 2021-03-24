@@ -104,6 +104,8 @@ Route::get('/specificusercontroller/fetch_data', [SpecificUserController::class,
 //Surveys
 Route::get('/surveys', [CallController::class, 'show_survey'])->name('surveys.index')->middleware('auth');
 Route::get('/surveycontroller/fetch_data', [CallController::class, 'fetch_data'])->name('surveys.fetch_data')->middleware('auth');
+Route::get('/calls/fetch_clients', [CallController::class, 'fetch_clients'])->name('calls.fetch_clients')->middleware('auth');
+Route::get('/pdfs/view-survey', [ClientController::class, 'view_survey'])->name('pdfs.view_survey')->middleware('auth');
 //Mail
 Route::get('send-email', function(Request $request){
 

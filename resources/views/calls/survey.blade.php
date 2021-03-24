@@ -36,13 +36,16 @@
                 </div>
               </div>
               <div class="row">
-                <div class="form-group col-lg-6 col-md-12">
-                  <input type="text" name="policy_holder" placeholder="Policy Holder" class="form-email form-control" id="policy_holder" required>
-                </div>
-                <div class="form-group col-lg-6 col-md-12">
-                  <input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required>
+                <label class="col-lg-12">Is this a new client?</label>
+                <div class="form-group col-lg-12">
+                  <select id="client-question" class="form-control">
+                    <option value="" selected disabled>Choose an option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
                 </div>
               </div>
+              <div id="if-new-client"></div>
               <div class="form-group survey-qa">
                 <label>Have you had a chance to discuss this cancellation with your Adviser?</label>
                 <select id="level-1" class="form-control">

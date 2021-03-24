@@ -12,4 +12,8 @@ class Survey extends Model
     public function advisers(){
       return $this->belongsTo(Adviser::class);
     }
+
+    public function clients(){
+      return $this->belongsTo(Client::class);
+    }
 }
