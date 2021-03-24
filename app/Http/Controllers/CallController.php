@@ -133,6 +133,8 @@ class CallController extends Controller
 
           $survey->client_id = $new_client->id;
         }
+
+        
         $survey->adviser_id = $request->adviser;
         $survey->sa = json_encode($request->survey);
         $survey->save();

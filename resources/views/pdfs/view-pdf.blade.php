@@ -18,11 +18,12 @@
 
     table, thead {
       margin: 0px;
-      /*border-spacing: 0;*/
+      border-spacing: 0;
     }
 
     #questions{
-      background-color: #adcdea;
+      /*background-color: #adcdea;*/
+      background-color: #fff;
       color: #000;
     }
   </style>
@@ -46,15 +47,15 @@
             <h1 style="position: absolute; top: 31px; right: 300px;"> AUDIT REPORT</h1>
         </th>
       </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
+      <tr style="background-color: #adcdea; color: #000;">
         <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
         <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
       </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
+      <tr style="background-color: #adcdea; color: #000;">
         <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
         <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
       </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
+      <tr style="background-color: #adcdea; color: #000;">
         <th align="left">&nbsp;&nbsp;Caller Name: {{ $caller_name }} </th>
         <th align="left">Caller Email Address: {{ $caller_email }}</th>
       </tr>

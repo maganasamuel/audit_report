@@ -18,11 +18,12 @@
 
     table, thead {
       margin: 0px;
-      /*border-spacing: 0;*/
+      border-spacing: 0;
     }
 
     #questions{
-      background-color: #adcdea;
+      /*background-color: #adcdea;*/
+      background-color: #fff;
       color: #000;
     }
   </style>
@@ -40,24 +41,23 @@
           <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="100px">
         </th> --}}
         {{-- <th></th> --}}
-        <th colspan="2" style="padding: 0; background-color: #fff; text-align: left; position: relative;">
+        <th colspan="3" style="padding: 0; background-color: #fff; text-align: left; position: relative;">
             <img src="{{ public_path('assets/img/eliteInsure_vertical.png') }}" alt="" width="100px" style="margin-bottom: 30px;" />
             {{-- <h1 style="display: flex; padding-right: 40px; font-size: 40px; margin-bottom: -70px">AUDIT REPORT<h1> --}}
-            <h1 style="position: absolute; top: 31px; right: 300px;"> AUDIT REPORT</h1>
+            <h1 style="position: absolute; top: 31px; right: 300px;">SURVEY</h1>
         </th>
       </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
-        <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
-        <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
+      <tr style="background-color: #adcdea; color: #000;">
+        <th align="left" colspan="3">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $survey->created_at)))}}</th>
       </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
-        <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
-        <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
-      </tr>
-      <tr style="background-color: #79B0FF; color: #000;">
-        <th align="left">&nbsp;&nbsp;Caller Name: {{ $caller_name }} </th>
-        <th align="left">Caller Email Address: {{ $caller_email }}</th>
-      </tr>
+      <tr style="background-color: #adcdea; color: #000;">
+        <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser->name }} </th>
+        <th align="left" colspan="2">Policy Holder: {{ $clients->policy_holder }}</th>
+      </tr>{{-- 
+      <tr style="background-color: #adcdea; color: #000;">
+        <th align="left"> </th>
+        <th align="left"></th>
+      </tr> --}}
       <tr>
         <td></td>
       </tr>
@@ -72,7 +72,7 @@
       @endif
       <tr id="questions">
         <td colspan="2" width="700px">
-          <strong>{{ $qa }}</strong>
+          <strong>{{++$index }}. {{ $qa }}</strong>
         </td>
       </tr>
       <tr>
@@ -90,7 +90,7 @@
   </table>
   <script type="text/php">
     $pdf->page_script('
-        if ($PAGE_COUNT > 1) {
+        if (true) {
             $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
             $size = 12;
             $pageText = "Page " . $PAGE_NUM . " of " . $PAGE_COUNT;
