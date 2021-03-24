@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Adviser;
 use App\Models\Audit;
+use App\Models\Survey;
 use App\Models\User;
 use DataTables;
 use Dompdf\Dompdf;
@@ -24,31 +25,68 @@ class ClientController extends Controller
   public function fetch_data(Request $request){
     if($request->ajax()){
       $data = Client::latest()->get();
+      $survey = Survey::all();
+
+      $clients_with_survey = [];
+
+      foreach($data as $client){
+        foreach($survey as $surv){
+          if($client->id == $surv->client_id){
+            array_push($clients_with_survey, $client->id);
+          }
+        }
+      }
+
       return Datatables::of($data)
               ->addIndexColumn()
-              ->addColumn('action', function($row){
-                $actionBtn = '
-                  <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
-                    <input type="text" value="'. $row->id .'" name="id" hidden />
-                    <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
-                  </form>'
-                  .
-                  '
-                  <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
-                    <input type="text" value="'. $row->id .'" name="id" hidden />
-                    <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-warning btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
-                  </form>'
-                  .
-                  '
-                  <form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
-                    <input type="text" value="'. $row->id .'" name="id" hidden />
-                    <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
-                  </form>'
-                  .
-                  '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
-                  .
-                  '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client"><i class="fa fa-ban pt-1"></i></button>'
-                  ;
+              ->addColumn('action', function($row) use ($clients_with_survey){
+                if(!in_array($row->id, $clients_with_survey)){
+                  $actionBtn = '
+                    <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
+                    </form>'
+                    .
+                    '
+                    <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-warning btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="far fa-eye pt-1"></i></button>
+                    </form>'
+                    .
+                    '
+                    <form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
+                    </form>'
+                    .
+                    '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
+                    .
+                    '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client"><i class="fa fa-ban pt-1"></i></button>'
+                    ;
+                } else {
+                  $actionBtn = '
+                    <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
+                    </form>'
+                    .
+                    '
+                    <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-warning btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
+                    </form>'
+                    .
+                    '
+                    <form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
+                      <input type="text" value="'. $row->id .'" name="id" hidden />
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-envelope"></i></button>
+                    </form>'
+                    .
+                    '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal"><i class="fa fa-edit pt-1"></i></button>'
+                    .
+                    '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client"><i class="fa fa-ban pt-1"></i></button>'
+                    ;
+                }
                     return $actionBtn;
                   })
               ->rawColumns(['action'])
@@ -84,6 +122,31 @@ class ClientController extends Controller
     $content = $pdf->download()->getOriginalContent();
     Storage::put($pdf_title, $pdf->output());
 
+    return $pdf->stream($pdf_title);
+  }
+
+  public function view_survey(Request $request){
+    $client = Client::find($request->id);
+    $survey = Survey::where('client_id', $request->id)->first();
+    $adviser = Adviser::find($survey->adviser_id);
+    $sa = json_decode($survey->sa);
+    $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
+    $options = new Options();
+    $options->set([
+      'defaultFont' => 'Helvetica'
+    ]);
+
+    $data = [
+      "clients" => $client,
+      "survey" => $survey,
+      "adviser" => $adviser,
+      "questions" => $sa->questions,
+      "answers" => $sa->answers
+    ];
+
+    $dompdf = new Dompdf($options);
+    $path = public_path('/pdfs/' . $pdf_title);
+    $pdf = PDF::loadView('pdfs.view-survey', $data)->save($path);
     return $pdf->stream($pdf_title);
   }
 
