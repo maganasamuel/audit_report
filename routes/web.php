@@ -108,6 +108,8 @@ Route::get('/calls/fetch_clients', [CallController::class, 'fetch_clients'])->na
 Route::get('/pdfs/view-survey', [ClientController::class, 'view_survey'])->name('pdfs.view_survey')->middleware('auth');
 Route::get('/pdfs/edit_survey', [CallController::class, 'edit_pdf'])->name('pdfs.edit_survey')->middleware('auth');
 Route::post('/pdfs/update_survey', [CallController::class, 'update_pdf'])->name('pdfs.update_survey')->middleware('auth');
+Route::post('/pdfs/confirm_cancel_survey', [CallController::class, 'confirm_cancel_survey'])->name('pdfs.confirm_cancel_survey')->middleware('auth');
+Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->name('pdfs.cancel_survey')->middleware('auth');
 
 //Mail
 Route::get('send-email', function(Request $request){

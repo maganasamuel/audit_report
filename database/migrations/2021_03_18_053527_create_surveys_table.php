@@ -19,6 +19,7 @@ class CreateSurveysTable extends Migration
             $table->string('survey_pdf');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
+            $table->boolean('is_cancelled')->default(0);
             $table->foreignId('adviser_id');
             $table->foreignId('client_id');
 

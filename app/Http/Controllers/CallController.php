@@ -253,4 +253,22 @@ class CallController extends Controller
         return $message;
       }
     }
+
+    public function confirm_cancel_survey(Request $request){
+      if($request->ajax()){
+        $client = Client::find($request->id);
+        return $client;
+      }
+    }
+
+    public function cancel_survey(Request $request){
+      if($request->ajax()){
+        $client = Client::find($request->id);
+        $survey = Survey::where("client_id", $request->id)->first();
+        $survey->is_cancelled = 1;
+        $survey->save();
+        $message = "Successfully cancelled the Survey for ".$client->policy_holder.".";
+        return $message;
+      }
+    }
 }
