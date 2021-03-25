@@ -661,7 +661,7 @@
       sa.questions.push($(this).children('label').html());
       sa.answers.push($(this).children('label').siblings().val());
     });
-    console.log(sa);
+    
     $.ajax({
       url: "{{ route('pdfs.update_survey') }}",
       method: "POST",
@@ -704,5 +704,41 @@
         }, 3000);
       }
     });
+  });
+
+  $(document).on('click', '#survey-cancel-confirmation', function(){
+    $.ajax({
+      url: "{{ route('pdfs.confirm_cancel_survey') }}",
+      dataType: "json",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        _token: token
+      },
+      success: function(data){
+        $('#cancel-survey').attr('data-id', data.id);
+        $('#cancel_client_name').text(data.policy_holder);
+      }
+
+    });
+  });
+
+  $(document).on('click', '#cancel-survey', function(){
+    $.ajax({
+      url: "{{ route('pdfs.cancel_survey') }}",
+      method: "POST",
+      data: {
+        id: $(this).attr('data-id'),
+        _token: token
+      },
+      success: function(data){
+        $('#modal-cancel-survey').modal('hide');
+        $('#success').removeClass('d-none');
+        $('#success').addClass('d-block');
+        $('#success-text').text(data);
+        $('#client-table').DataTable().ajax.reload();
+      }
+
+    })
   });
 </script>
