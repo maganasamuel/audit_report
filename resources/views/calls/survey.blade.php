@@ -7,7 +7,6 @@
   'class' => 'col-lg-12'
   ])
 
-
   <div class="container-fluid mt--7">
     @include('alerts.success')
     <div class="card w-100">

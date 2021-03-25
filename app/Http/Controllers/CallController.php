@@ -11,6 +11,7 @@ use DataTables;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
+use File;
 use Storage;
 use Auth;
 
@@ -81,7 +82,7 @@ class CallController extends Controller
     }
 
     public function survey(){
-      $advisers = Adviser::all();
+      $advisers = Adviser::orderBy('name')->get();
       return view('calls.survey', compact('advisers'));
     }
 
@@ -122,9 +123,13 @@ class CallController extends Controller
       if($request->ajax()){
         $survey = new Survey;
         $client = Client::where('policy_holder', $request->policy_holder)->first();
-        
+        $adviser = Adviser::find($request->adviser);
+
+        $pdf_title = "";
         if($client != null){
           $survey->client_id = $client->id;
+          $pdf_title = 'survey'.$client->policy_holder.date('dmYgi', time()).'.pdf';
+          $survey->survey_pdf = $pdf_title;
         } else {
           $new_client = new Client;
           $new_client->policy_holder = $request->policy_holder;
@@ -132,13 +137,41 @@ class CallController extends Controller
           $new_client->save();
 
           $survey->client_id = $new_client->id;
+          $pdf_title = 'survey'.$new_client->policy_holder.date('dmYgi', time()).'.pdf';
+          
+          $survey->survey_pdf = $pdf_title;
         }
-
-        
+        $survey->created_by = Auth::user()->name;
         $survey->adviser_id = $request->adviser;
         $survey->sa = json_encode($request->survey);
         $survey->save();
         $message = "Successfully added a Survey";
+
+        $sa = json_decode($survey->sa);
+
+        $options = new Options();
+        $options->set([
+          'defaultFont' => 'Helvetica'
+        ]);
+
+        $data = [
+          "survey" => $survey,
+          "adviser" => $adviser,
+          "questions" => $sa->questions,
+          "answers" => $sa->answers,
+        ];
+
+        if($client != null){
+          $data['clients'] = $client;
+        } else {
+          $data['clients'] = $new_client;
+        }
+
+        $path = public_path('/pdfs/' . $pdf_title);
+        $pdf = PDF::loadView('pdfs.view-survey', $data)->save($path);
+
+        $content = $pdf->download()->getOriginalContent();
+        Storage::put($pdf_title, $pdf->output());
 
         return $message;
       }
@@ -148,6 +181,76 @@ class CallController extends Controller
       if($request->ajax()){
         $clients = Client::all();
         return $clients;
+      }
+    }
+
+    public function edit_pdf(Request $request){
+      if($request->ajax()){
+        $client = Client::find($request->id);
+        $survey = Survey::where("client_id", $request->id)->first();
+        $advisers = Adviser::orderBy('name')->get();
+        $adviser = Adviser::find($survey->adviser_id);
+        $sa = json_decode($survey->sa);
+
+        return response()->json([
+          "clients" => $client,
+          "sa" => $sa,
+          "adviser" => $adviser,
+          "advisers" => $advisers,
+          "survey" => $survey,
+          "survey_date" => date('d-m-Y', strtotime($survey->created_at))
+        ]);
+      }
+    }
+
+    public function update_pdf(Request $request){
+      if($request->ajax()){
+        $survey = Survey::find($request->survey_id);
+        $client = Client::find($survey->client_id);
+
+        if(File::exists(public_path('pdfs/'.$survey->survey_pdf))){
+          $old_file = $survey->survey_pdf;
+        } else {
+          $message = "The file doesn't exists.";
+          return $message;
+        }
+
+        $pdf_title = 'survey'.$client->policy_holder.date('dmYgi', time()).'.pdf';
+        $survey->updated_by = Auth::user()->name;
+        $survey->survey_pdf = $pdf_title;
+        $survey->adviser_id = $request->adviser;
+        $survey->sa = $request->sa;
+        $survey->save();
+        $message = "Successfully updated Survey.";
+        // dd($survey->sa);
+        $sa = $survey->sa;
+        $adviser = Adviser::find($request->adviser);
+        
+        $options = new Options();
+        $options->set([
+          'defaultFont' => 'Helvetica'
+        ]);
+
+        $data = [
+          "clients" => $client,
+          "survey" => $survey,
+          "adviser" => $adviser,
+          "questions" => $sa['questions'],
+          "answers" => $sa['answers'],
+        ];
+
+        $path = public_path('/pdfs/' . $pdf_title);
+        $pdf = PDF::loadView('pdfs.view-survey', $data)->save($path);
+
+        $content = $pdf->download()->getOriginalContent();
+        Storage::put($pdf_title, $pdf->output());
+
+        File::delete(public_path('pdfs/'.$old_file));
+        Storage::delete($old_file);
+
+        $message = "Survey #". $survey->id ." has been updated.";
+
+        return $message;
       }
     }
 }

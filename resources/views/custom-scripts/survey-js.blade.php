@@ -11,7 +11,7 @@
 
   $('#client-question').on('change', function(){
     let choice = $(this).children('option:selected').val();
-    
+
     if(choice == "Yes"){
       ($('#new')) ? $('#new').remove() : "";
       ($('#current')) ? $('#current').remove() : "";
@@ -25,7 +25,6 @@
         url: "{{ route('calls.fetch_clients') }}",
         success: function(data){
           data.forEach(function(client, index){
-            console.log(index);
             $('#policy_holder').append(`<option value='${client.policy_holder}' data-num='${client.policy_no}'>${client.policy_holder}</option>`);
             $('#policy_holder').on('change', function(){
               let choice = $(this).children('option:selected').val();
@@ -618,5 +617,92 @@
     });//end of second-no
     
   });//end of first
-  
+
+  $(document).on('click', '#edit-survey', function(){
+    setInterval(function(){
+      if($('#submit-btn').length != 0){
+        $('#submit-btn').remove();
+        $('#updateSurvey').addClass('d-block');
+        $('#updateSurvey').removeClass('d-none');
+      }
+    }, 1);
+
+    $.ajax({
+      url: "{{ route('pdfs.edit_survey')}}",
+      data: {
+        id: $(this).attr('data-id')
+      },
+      success: function(data){
+        $('#updateSurvey').attr('data-survey', data.survey.id);
+        $.each(data.advisers, function(i, val){
+          if(data.adviser.id == val.id){
+            $('#adviser-edit').append(`<option value=${val.id} selected>${val.name}</option>`);
+          } else {
+            $('#adviser-edit').append(`<option value=${val.id}>${val.name}</option>`);
+          }
+        });
+        $('#week-of-edit').val(data.survey_date);
+      }
+    });
+  });
+
+  $(document).on('click', '#updateSurvey', function(e){
+    e.preventDefault();
+
+    const token = $('input[name="_token"]').val();
+    var weekOf = $('#week-of-edit').val();
+    var adviser = $('#adviser-edit').val();
+    var survey_id = $(this).attr('data-survey');
+
+    let sa = {};
+    sa.questions = [];
+    sa.answers = [];
+    $('.survey-qa').each(function(x, y){
+      sa.questions.push($(this).children('label').html());
+      sa.answers.push($(this).children('label').siblings().val());
+    });
+    console.log(sa);
+    $.ajax({
+      url: "{{ route('pdfs.update_survey') }}",
+      method: "POST",
+      data: {
+        weekOf,
+        adviser,
+        sa,
+        survey_id,
+        _token: token
+      },
+      success: function(data){
+        $('#edit-survey-pdf-modal').modal('hide');
+        $('#success').removeClass('d-none');
+        $('#success').addClass('d-block');
+        $('#success-text').text(data);
+        ($('#week-of')) ? $('#week-of').val(today) : "";
+        ($('#adviser')) ? $('#adviser').val("") : "";
+        ($('#policy_holder')) ? $('#policy_holder').val("") : "";
+        ($('#policy_no')) ? $('#policy_no').val("") : "";
+        ($('#level-2')) ? $('#level-2').remove() : "";
+        ($('#level-3')) ? $('#level-3').remove() : "";
+        ($('#level-4')) ? $('#level-4').remove() : "";
+        ($('#level-5')) ? $('#level-5').remove() : "";
+        ($('#level-6')) ? $('#level-6').remove() : "";
+        ($('#level-7-yes')) ? $('#level-7-yes').remove() : "";
+        ($('#level-7-no')) ? $('#level-7-no').remove() : "";
+        ($('#level-7')) ? $('#level-7').remove() : "";
+        ($('#level-8')) ? $('#level-8').remove() : "";
+        ($('#level-6-no')) ? $('#level-6-no').remove() : "";
+        ($('#last-question')) ? $('#last-question').remove() : "";
+        ($('#submit-btn')) ? $('#submit-btn').remove() : "";
+        $('.questions').each(function(x,y){    
+          $(this).children('label').siblings().val('');
+        });
+        $('html, body').animate({
+          scrollTop: $("#navbar-main").offset().top
+        }, 1);
+        setTimeout(function(){
+          location.reload();
+        }, 3000);
+      }
+    });
+  });
 </script>
