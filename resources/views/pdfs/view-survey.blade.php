@@ -48,7 +48,12 @@
         </th>
       </tr>
       <tr style="background-color: #adcdea; color: #000;">
-        <th align="left" colspan="3">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $survey->created_at)))}}</th>
+        <th align="left" colspan="">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $survey->updated_at)))}}</th>
+        <th align="left" colspan="2">Created by: {{ $survey->created_by }}</th>
+      </tr>
+      <tr style="background-color: #adcdea; color: #000;">
+        <th align="left" colspan="">&nbsp;&nbsp;Updated by: {{ $survey->updated_by }}</th>
+        <th align="left" colspan="2">Time Updated: {{ date("H:i A", strtotime(str_replace('/', '-', $survey->updated_at)))}}</th>
       </tr>
       <tr style="background-color: #adcdea; color: #000;">
         <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser->name }} </th>
@@ -62,6 +67,7 @@
         <td></td>
       </tr>
       @foreach($questions as $index => $qa)
+      <?php $count =  $index ?>
       @if($qa == "Notes:")
       <tr>
         <td></td>
@@ -72,13 +78,13 @@
       @endif
       <tr id="questions">
         <td colspan="2" width="700px">
-          <strong>{{++$index }}. {{ $qa }}</strong>
+          <strong>{{ ++$count }}. {{ $qa }}</strong>
         </td>
       </tr>
       <tr>
         <td colspan="2" style="padding-left: 10px; ">
           @if(empty($answers[$index]))
-          N/A
+            <strong>N/A</strong>
           @else
             <h4> - {{ ucfirst($answers[$index]) }}</h4>
           @endif

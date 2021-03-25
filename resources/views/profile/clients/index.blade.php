@@ -20,7 +20,9 @@
       @include('alerts.success')
       @include('alerts.error')
       @include('extra.edit-client-pdf-modal')
+      @include('extra.edit-survey-pdf-modal')
       @include('extra.delete-client-pdf-modal')
+      @include('extra.cancel-survey-pdf-modal')
       <div class="card w-100">
         <div class="card-body">
           <div class="card-title d-flex">

@@ -21,7 +21,7 @@
             orderable: true,
             searchable: true,
             "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                $(nTd).addClass('d-flex');
+                $(nTd).addClass('d-block');
              }
           },
         ],
