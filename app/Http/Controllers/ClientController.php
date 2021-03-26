@@ -48,6 +48,7 @@ class ClientController extends Controller
           }
         }
       }
+      
       $actionBtn = "";
       return Datatables::of($data)
               ->addIndexColumn()
@@ -107,15 +108,15 @@ class ClientController extends Controller
                     '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
 
-                    foreach($survey as $surv){
-                      if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
-                        $actionBtn .= 
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
-                      } else if($surv->client_id == $row->id && $surv->is_cancelled != 0){
-                        $actionBtn .= 
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Reactivate Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-reactivate-survey"><i class="fas fa-sync-alt pt-1"></i></button></div>';
-                      }
-                    }
+                    // foreach($survey as $surv){
+                    //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
+                    //     $actionBtn .= 
+                    //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
+                    //   } else if($surv->client_id == $row->id && $surv->is_cancelled != 0){
+                    //     $actionBtn .= 
+                    //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Reactivate Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-reactivate-survey"><i class="fas fa-sync-alt pt-1"></i></button></div>';
+                    //   }
+                    // }
                 }
 
                 

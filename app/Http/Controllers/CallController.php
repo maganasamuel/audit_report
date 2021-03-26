@@ -265,8 +265,16 @@ class CallController extends Controller
       if($request->ajax()){
         $client = Client::find($request->id);
         $survey = Survey::where("client_id", $request->id)->first();
-        $survey->is_cancelled = 1;
-        $survey->save();
+        
+        if(File::exists(public_path('pdfs/'.$survey->survey_pdf))){
+          File::delete(public_path('pdfs/'.$survey->survey_pdf));
+          Storage::delete($survey->survey_pdf);
+        } else {
+          dd('File doesn\'t exist'); 
+        }
+
+        $survey->delete();
+        
         $message = "Successfully cancelled the Survey for ".$client->policy_holder.".";
         return $message;
       }
