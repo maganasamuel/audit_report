@@ -48,7 +48,7 @@ class ClientController extends Controller
           }
         }
       }
-      
+
       $actionBtn = "";
       return Datatables::of($data)
               ->addIndexColumn()
@@ -97,6 +97,9 @@ class ClientController extends Controller
                     .
                     '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
+
+                    $actionBtn .= 
+                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
                 } else {
                   $actionBtn .=
                   '<div class="d-flex my-2">
@@ -107,6 +110,8 @@ class ClientController extends Controller
                     .
                     '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
+                    $actionBtn .= 
+                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
 
                     // foreach($survey as $surv){
                     //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
