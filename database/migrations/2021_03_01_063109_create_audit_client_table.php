@@ -22,8 +22,8 @@ class CreateAuditClientTable extends Migration
             $table->foreignId('audit_id');
             $table->timestamps();
 
-            $table->foreign('client_id')->references('id')->on('clients');
-            $table->foreign('audit_id')->references('id')->on('audits');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('audit_id')->references('id')->on('audits')->onDelete('cascade');
         });
     }
 
