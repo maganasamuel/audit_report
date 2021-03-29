@@ -288,6 +288,7 @@ class ClientController extends Controller
     if($request->ajax()){
       $client = Client::find($request->id);
       $audit = Audit::find($request->audit_id);
+      $audit_report = DB::table('audit_client')->get();
       
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
         File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
@@ -298,8 +299,8 @@ class ClientController extends Controller
 
       $message = 'Audit #'.$audit->id.' has been deleted.';
       $client->audits()->detach($request->id);
-      $client->delete();
       $audit->delete();
+      $client->delete();
 
       return $message;
     }

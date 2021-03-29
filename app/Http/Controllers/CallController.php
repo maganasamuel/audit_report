@@ -18,7 +18,7 @@ use Auth;
 class CallController extends Controller
 {
     public function audit(){
-      $advisers = Adviser::all();
+      $advisers = Adviser::orderBy('name')->get();
       return view('calls.audit', compact('advisers'));
     }
 
@@ -265,7 +265,7 @@ class CallController extends Controller
       if($request->ajax()){
         $client = Client::find($request->id);
         $survey = Survey::where("client_id", $request->id)->first();
-        
+
         if(File::exists(public_path('pdfs/'.$survey->survey_pdf))){
           File::delete(public_path('pdfs/'.$survey->survey_pdf));
           Storage::delete($survey->survey_pdf);
