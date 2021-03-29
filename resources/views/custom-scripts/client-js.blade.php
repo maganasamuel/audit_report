@@ -37,6 +37,8 @@
     fetch_data();
   });
 
+  
+
   $(document).on('click', '#edit-client', function(){
     
     $.ajax({
