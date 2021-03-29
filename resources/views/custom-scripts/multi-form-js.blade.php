@@ -1,6 +1,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
   console.log($().jquery);
+  $('#client-question').on('change', function(){
+    let choice = $(this).children('option:selected').val();
+
+    if(choice == "Yes"){
+      ($('#new')) ? $('#new').remove() : "";
+      ($('#current')) ? $('#current').remove() : "";
+
+      $('#if-new-client').append($('<div class="row" id="new"><div class="form-group col-lg-6 col-md-12"><input type="text" name="policy_holder" placeholder="Policy Holder" class="form-email form-control" id="policy_holder" required></div><div class="form-group col-lg-6 col-md-12"><input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required></div></div>').hide().fadeIn(500));
+    } else {
+      ($('#new')) ? $('#new').remove() : "";
+      ($('#current')) ? $('#current').remove() : "";
+      $('#if-new-client').append($('<div class="row" id="current"><div class="form-group col-lg-6 col-md-12"><select id="policy_holder" name="policy_holder" class="form-control"><option value="" selected disabled>Choose an option</option></select></div><div class="form-group col-lg-6 col-md-12"><input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required disabled></div></div>').hide().fadeIn(500));
+      $.ajax({
+        url: "{{ route('calls.fetch_clients') }}",
+        success: function(data){
+          data.forEach(function(client, index){
+            $('#policy_holder').append(`<option value='${client.policy_holder}' data-num='${client.policy_no}'>${client.policy_holder}</option>`);
+            $('#policy_holder').on('change', function(){
+              let choice = $(this).children('option:selected').val();
+              if(choice == client.policy_holder){
+                $('#policy_no').val(client.policy_no);
+              }
+            });
+          });
+        }
+      });
+    }
+  });
+  
   $('#submitAudit').on('click', function(e) {
     e.preventDefault();
 
