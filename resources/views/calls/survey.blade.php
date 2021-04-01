@@ -77,6 +77,6 @@
 
 
 
-  <link type="text/css" href="{{ asset('custom-css') }}/survey-custom-style.css?v=1.0.0" rel="stylesheet">
+  <link type="text/css" href="{{ asset('custom-css') }}/custom-style.css?v=1.0.0" rel="stylesheet">
   @include('custom-scripts.survey-js')
   @endsection
