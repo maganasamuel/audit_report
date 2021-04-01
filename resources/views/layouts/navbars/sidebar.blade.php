@@ -116,7 +116,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('reports.index') }}">
                         <i class="fas fa-flag text-blue"></i></i> {{ __('Report') }}
                     </a>
                 </li>

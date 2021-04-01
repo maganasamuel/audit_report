@@ -8,7 +8,10 @@
 
   today = dd + '-' + mm + '-' + yyyy;
 
-
+  $(document).ready(function(){
+    $('#adviser').select2();
+  });
+  
   $('#client-question').on('change', function(){
     let choice = $(this).children('option:selected').val();
 

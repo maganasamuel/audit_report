@@ -5,6 +5,7 @@ use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SpecificUserController;
 use Illuminate\Http\Request;
 use App\Models\Client;
@@ -111,7 +112,12 @@ Route::post('/pdfs/update_survey', [CallController::class, 'update_pdf'])->name(
 Route::post('/pdfs/confirm_cancel_survey', [CallController::class, 'confirm_cancel_survey'])->name('pdfs.confirm_cancel_survey')->middleware('auth');
 Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->name('pdfs.cancel_survey')->middleware('auth');
 
-//Mail
+
+//Reports
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('auth');
+Route::post('/fetch_advisers', [ReportController::class, 'fetch_adviser'])->name('reports.fetch_adviser')->middleware('auth');
+Route::post('/reports/pdf', [ReportController::class, 'view_pdf'])->name('reports.pdf')->middleware('auth');
+//Mail 
 Route::get('send-email', function(Request $request){
 
   $client = Client::find($request->id);
