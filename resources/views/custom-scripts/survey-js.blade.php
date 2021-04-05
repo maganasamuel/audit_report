@@ -10,6 +10,7 @@
 
   $(document).ready(function(){
     $('#adviser').select2();
+    $('#old_policy_holder').select2();
   });
   
   $('#client-question').on('change', function(){
@@ -38,6 +39,7 @@
           });
         }
       });
+      $('#policy_holder').select2();
     }
   });
 
@@ -201,7 +203,7 @@
                         if($('#submit-btn')){
                           $('#submit-btn').remove();
                             $('.card-body.survey').append($(
-                              '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn">Submit</button></div>').hide().fadeIn(1000)
+                              '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
                             );
                           }
                         } else {
@@ -210,6 +212,9 @@
 
                         $('#submit-btn').on('click', function(e){
                           // console.log(e);
+                          $('#submit-btn').find('i').removeClass('d-inline-block');
+                          $('#submit-btn').find('i').addClass('d-none');
+                          $('#submit-btn').prop('disabled', true);
                           e.preventDefault();
                           let sa = {};
                           sa.questions = [];
@@ -238,7 +243,9 @@
                               _token: token
                             },
                             success: function(data){
-
+                              $('#submit-btn').find('i').removeClass('d-none');
+                              $('#submit-btn').find('i').addClass('d-inline-block');
+                              $('#submit-btn').prop('disabled', false);
                               $('#success').removeClass('d-none');
                               $('#success').addClass('d-block');
                               $('#success-text').text(data);
@@ -335,7 +342,7 @@
                     if($('#submit-btn')){
                       $('#submit-btn').remove();
                         $('.card-body.survey').append($(
-                          '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn">Submit</button></div>').hide().fadeIn(1000)
+                          '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
                         );
                       }
                     } else {
@@ -343,6 +350,9 @@
                     }
                     $('#submit-btn').on('click', function(e){
                       // console.log(e);
+                      $('#submit-btn').find('i').removeClass('d-inline-block');
+                      $('#submit-btn').find('i').addClass('d-none');
+                      $('#submit-btn').prop('disabled', true);
                       e.preventDefault();
                       let sa = {};
                       sa.questions = [];
@@ -370,7 +380,9 @@
                           _token: token
                         },
                         success: function(data){
-
+                          $('#submit-btn').find('i').removeClass('d-none');
+                          $('#submit-btn').find('i').addClass('d-inline-block');
+                          $('#submit-btn').prop('disabled', false);
                           $('#success').removeClass('d-none');
                           $('#success').addClass('d-block');
                           $('#success-text').text(data);
@@ -459,7 +471,7 @@
               if($('#submit-btn')){
                 $('#submit-btn').remove();
                   $('.card-body.survey').append($(
-                    '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn">Submit</button></div>').hide().fadeIn(1000)
+                    '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
                   );
                 }
               } else {
@@ -467,6 +479,9 @@
               }
               $('#submit-btn').on('click', function(e){
                 // console.log(e);
+                $('#submit-btn').find('i').removeClass('d-inline-block');
+                $('#submit-btn').find('i').addClass('d-none');
+                $('#submit-btn').prop('disabled', true);
                 e.preventDefault();
                 let sa = {};
                 sa.questions = [];
@@ -494,7 +509,9 @@
                     _token: token
                   },
                   success: function(data){
-
+                    $('#submit-btn').find('i').removeClass('d-none');
+                    $('#submit-btn').find('i').addClass('d-inline-block');
+                    $('#submit-btn').prop('disabled', false);
                     $('#success').removeClass('d-none');
                     $('#success').addClass('d-block');
                     $('#success-text').text(data);
@@ -547,7 +564,7 @@
             if($('#submit-btn')){
               $('#submit-btn').remove();
                 $('.card-body.survey').append($(
-                  '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn">Submit</button></div>').hide().fadeIn(1000)
+                  '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
                 );
               }
             } else {
@@ -555,6 +572,9 @@
             }
             $('#submit-btn').on('click', function(e){
               // console.log(e);
+              $('#submit-btn').find('i').removeClass('d-inline-block');
+              $('#submit-btn').find('i').addClass('d-none');
+              $('#submit-btn').prop('disabled', true);
               e.preventDefault();
               let sa = {};
               sa.questions = [];
@@ -582,7 +602,9 @@
                   _token: token
                 },
                 success: function(data){
-
+                  $('#submit-btn').find('i').removeClass('d-none');
+                  $('#submit-btn').find('i').addClass('d-inline-block');
+                  $('#submit-btn').prop('disabled', false);
                   $('#success').removeClass('d-none');
                   $('#success').addClass('d-block');
                   $('#success-text').text(data);
@@ -651,7 +673,9 @@
 
   $(document).on('click', '#updateSurvey', function(e){
     e.preventDefault();
-
+    $('#updateSurvey').find('i').removeClass('d-inline-block');
+    $('#updateSurvey').find('i').addClass('d-none');
+    $('#updateSurvey').prop('disabled', true);
     const token = $('input[name="_token"]').val();
     var weekOf = $('#week-of-edit').val();
     var adviser = $('#adviser-edit').val();
@@ -676,6 +700,9 @@
         _token: token
       },
       success: function(data){
+        $('#updateSurvey').find('i').removeClass('d-none');
+        $('#updateSurvey').find('i').addClass('d-inline-block');
+        $('#updateSurvey').prop('disabled', false);
         $('#edit-survey-pdf-modal').modal('hide');
         $('#success').removeClass('d-none');
         $('#success').addClass('d-block');

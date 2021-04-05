@@ -75,8 +75,7 @@
     @include('layouts.footers.auth')
   </div>
 
-
-
+  
   <link type="text/css" href="{{ asset('custom-css') }}/custom-style.css?v=1.0.0" rel="stylesheet">
   @include('custom-scripts.survey-js')
   @endsection

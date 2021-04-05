@@ -41,7 +41,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="add" class="btn btn-primary">Add Adviser</button>
+        <button type="button" id="add" class="btn btn-primary"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Add Adviser</button>
       </div>
       </form>
     </div>

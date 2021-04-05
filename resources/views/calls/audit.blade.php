@@ -165,7 +165,7 @@
                       <textarea name="notes" class="form-control questions" cols="10" rows="3"></textarea>
                     </div>
                   </div>
-                  <button type="button" id="submitAudit" class="btn">Save</button>
+                  <button type="button" id="submitAudit" class="btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Save</button>
                 </div>
               </form>
             </div>
@@ -179,12 +179,9 @@
   </div>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+  
   <script>
-    $('#adviser').selectize({
-          sortField: 'text'
-      });
+    
   </script>
   <link type="text/css" href="{{ asset('custom-css') }}/custom-style.css?v=1.0.0" rel="stylesheet">
   @include('custom-scripts.multi-form-js')
