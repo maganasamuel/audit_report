@@ -3,6 +3,7 @@
 
 <script>
   console.log($().jquery);
+
   $('#client-question').on('change', function(){
     let choice = $(this).children('option:selected').val();
 
@@ -37,6 +38,9 @@
   
   $('#submitAudit').on('click', function(e) {
     e.preventDefault();
+    $('#submitAudit').find('i').removeClass('d-none');
+    $('#submitAudit').find('i').addClass('d-inline-block');
+    $(this).prop('disabled', true);
 
     const token = $('input[name="_token"]').val();
     var weekOf = $('#week-of').val();
@@ -72,6 +76,9 @@
         _token: token
       },
       success: function(data){
+        $('#submitAudit').find('i').removeClass('d-inline-block');
+        $('#submitAudit').find('i').addClass('d-none');
+        $('#submitAudit').prop('disabled', false);
         $('#success').removeClass('d-none');
         $('#success').addClass('d-block');
         $('#success-text').text(data);

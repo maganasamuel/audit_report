@@ -45,6 +45,9 @@
   var token = $('input[name="_token"]').val();
 
   $(document).on('click', '#add', function(){
+    $('#add').find('i').removeClass('d-none');
+    $('#add').find('i').addClass('d-inline-block');
+    $(this).prop('disabled', true);
     var name = $('#name').val();
     var fsp_no = $('#fsp_no').val();
     
@@ -60,6 +63,9 @@
         success: function(data){
           $('#name').val('');
           $('#fsp_no').val('');
+          $('#add').prop('disabled', false);
+          $('#add').find('i').removeClass('d-inline-block');
+          $('#add').find('i').addClass('d-none');
           $('#add-adviser').modal('hide');
           $('#success').removeClass('d-none');
           $('#success').addClass('d-block');
@@ -95,6 +101,9 @@
   });
 
   $(document).on('click', '#update_adviser', function(){
+    $('#update_adviser').find('i').removeClass('d-none');
+    $('#update_adviser').find('i').addClass('d-inline-block');
+    $(this).prop('disabled', true);
     var updated_name = $('#edit_name').val();
     var updated_fsp_no = $('#edit_fsp_no').val();
 
@@ -109,6 +118,9 @@
           _token: token
         },
         success: function(data){
+          $('#update_adviser').prop('disabled', false);
+          $('#update_adviser').find('i').removeClass('d-inline-block');
+          $('#update_adviser').find('i').addClass('d-none');
           $('#modal-edit-adviser').modal('hide');
           $('#success').removeClass('d-none');
           $('#success').addClass('d-block');
@@ -143,6 +155,10 @@
   });
 
   $(document).on('click', '#deactivate-adviser', function(){
+    $('#deactivate-adviser').find('i').removeClass('d-none');
+    $('#deactivate-adviser').find('i').addClass('d-inline-block');
+    $(this).prop('disabled', true);
+
     $.ajax({
       url: "{{ route('adviser.deactivate_adviser') }}",
       method: "POST",
@@ -151,6 +167,9 @@
         _token: token
       },
       success: function(data){
+        $('#deactivate-adviser').find('i').removeClass('d-none');
+        $('#deactivate-adviser').find('i').addClass('d-inline-block');
+        $('#deactivate-adviser').prop('disabled', true);
         $('#modal-deactivate-adviser').modal('hide');
         $('#success').removeClass('d-none');
         $('#success').addClass('d-block');
