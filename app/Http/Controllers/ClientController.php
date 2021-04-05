@@ -92,26 +92,26 @@ class ClientController extends Controller
                     '<div class="d-flex my-2">
                     <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
                       <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="fas fa-poll-h pt-1"></i></button>
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="fas fa-poll-h pt-1"></i></button>
                     </form>'
                     .
-                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-primary btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
+                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
 
                     $actionBtn .= 
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
+                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
                 } else {
                   $actionBtn .=
                   '<div class="d-flex my-2">
                     <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
                       <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-primary btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="fas fa-poll-h pt-1"></i></button>
+                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="fas fa-poll-h pt-1"></i></button>
                     </form>'
                     .
-                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-primary btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
+                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
                     $actionBtn .= 
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
+                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
 
                     // foreach($survey as $surv){
                     //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
