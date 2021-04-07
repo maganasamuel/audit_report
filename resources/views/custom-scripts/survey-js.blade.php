@@ -20,11 +20,11 @@
       ($('#new')) ? $('#new').remove() : "";
       ($('#current')) ? $('#current').remove() : "";
 
-      $('#if-new-client').append($('<div class="row" id="new"><div class="form-group col-lg-6 col-md-12"><input type="text" name="policy_holder" placeholder="Policy Holder" class="form-email form-control" id="policy_holder" required></div><div class="form-group col-lg-6 col-md-12"><input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required></div></div>').hide().fadeIn(500));
+      $('#if-new-client').append($('<div class="row" id="new"><div class="form-group col-lg-6 col-md-12"><input type="text" name="policy_holder" placeholder="Policy Holder" class="form-email form-control" id="policy_holder" required></div><div class="form-group col-lg-6 col-md-12"><input type="text" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required></div></div>').hide().fadeIn(500));
     } else {
       ($('#new')) ? $('#new').remove() : "";
       ($('#current')) ? $('#current').remove() : "";
-      $('#if-new-client').append($('<div class="row" id="current"><div class="form-group col-lg-6 col-md-12"><select id="policy_holder" name="policy_holder" class="form-control"><option value="" selected disabled>Choose an option</option></select></div><div class="form-group col-lg-6 col-md-12"><input type="number" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required disabled></div></div>').hide().fadeIn(500));
+      $('#if-new-client').append($('<div class="row" id="current"><div class="form-group col-lg-6 col-md-12"><select id="policy_holder" name="policy_holder" class="form-control"><option value="" selected disabled>Choose an option</option></select></div><div class="form-group col-lg-6 col-md-12"><input type="text" name="policy_no" id="policy_no" placeholder="Policy No" class="form-control" required disabled></div></div>').hide().fadeIn(500));
       $.ajax({
         url: "{{ route('calls.fetch_clients') }}",
         success: function(data){
@@ -203,7 +203,7 @@
                         if($('#submit-btn')){
                           $('#submit-btn').remove();
                             $('.card-body.survey').append($(
-                              '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
+                              '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Submit</button></div>').hide().fadeIn(1000)
                             );
                           }
                         } else {
@@ -342,7 +342,7 @@
                     if($('#submit-btn')){
                       $('#submit-btn').remove();
                         $('.card-body.survey').append($(
-                          '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
+                          '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Submit</button></div>').hide().fadeIn(1000)
                         );
                       }
                     } else {
@@ -471,7 +471,7 @@
               if($('#submit-btn')){
                 $('#submit-btn').remove();
                   $('.card-body.survey').append($(
-                    '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
+                    '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Submit</button></div>').hide().fadeIn(1000)
                   );
                 }
               } else {
@@ -564,7 +564,7 @@
             if($('#submit-btn')){
               $('#submit-btn').remove();
                 $('.card-body.survey').append($(
-                  '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;">Submit</button></div>').hide().fadeIn(1000)
+                  '<div class="form-group text-center"><button type="button" class="btn btn-success" id="submit-btn"><i class="fa fa-circle-o-notch fa-spin d-none m-1" style="font-size: 10px;"></i>Submit</button></div>').hide().fadeIn(1000)
                 );
               }
             } else {

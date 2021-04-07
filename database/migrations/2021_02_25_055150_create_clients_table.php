@@ -16,7 +16,7 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('policy_holder');
-            $table->integer('policy_no');
+            $table->string('policy_no');
             $table->timestamps();
         });
     }
