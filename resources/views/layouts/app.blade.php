@@ -22,7 +22,9 @@
         <link type="text/css" href="{{ asset('argon') }}/css/custom.css?v=1.0.0" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
         <!-- Javascripts -->
+
         
+        @livewireStyles
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
@@ -48,7 +50,8 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
 
-        
+        @livewireScripts
+
         @stack('js')
         
         <!-- Argon JS -->

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdviserController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
@@ -79,11 +80,16 @@ Route::group(['middleware' => 'checkuser'], function(){
 });
 
 //Calls
-Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
+// Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
 Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
 Route::post('/calls/store_survey', [CallController::class, 'store_survey'])->name('calls.store_survey')->middleware('auth');
 
+Route::middleware(['auth'])->prefix('calls')->group(function() {
+
+  Route::get('audit', [AuditController::class, 'create'])->name('calls.audit');
+
+});
 
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
