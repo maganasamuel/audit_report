@@ -9,6 +9,8 @@ class Client extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function audits(){
       return $this->belongsToMany(Audit::class)
                   ->withPivot('weekOf', 'lead_source', 'pdf_title')
