@@ -11,8 +11,6 @@ use App\Models\Survey;
 use App\Models\User;
 use DataTables;
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use PDF;
 use File;
 use Storage;
@@ -29,7 +27,7 @@ class ClientController extends Controller
       $data = Client::latest()->get();
       $survey = Survey::all();
       $audit_client = DB::select('select client_id from audit_client');
-      
+
       $clients_with_survey = [];
       $clients_with_audit = [];
 
@@ -84,7 +82,7 @@ class ClientController extends Controller
                     '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-info btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal" ><i class="fa fa-edit pt-1"></i></button>'
                     .
                     '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-info btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client" ><i class="fa fa-ban pt-1"></i></button></div>'
-                    ;                
+                    ;
                 }
 
                 if(!in_array($row->id, $clients_with_survey)){
@@ -98,7 +96,7 @@ class ClientController extends Controller
                     '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
 
-                    $actionBtn .= 
+                    $actionBtn .=
                           '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
                 } else {
                   $actionBtn .=
@@ -110,21 +108,21 @@ class ClientController extends Controller
                     .
                     '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
                     ;
-                    $actionBtn .= 
+                    $actionBtn .=
                           '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
 
                     // foreach($survey as $surv){
-                    //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
-                    //     $actionBtn .= 
+                    //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){
+                    //     $actionBtn .=
                     //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
                     //   } else if($surv->client_id == $row->id && $surv->is_cancelled != 0){
-                    //     $actionBtn .= 
+                    //     $actionBtn .=
                     //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Reactivate Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-reactivate-survey"><i class="fas fa-sync-alt pt-1"></i></button></div>';
                     //   }
                     // }
                 }
 
-                
+
 
                 return $actionBtn;
               })
@@ -140,13 +138,7 @@ class ClientController extends Controller
     $qa = json_decode($client->audits[0]->qa);
 
     $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
-    $options = new Options();
-    $options->set([
-      'defaultFont' => 'Helvetica'
-    ]);
 
-    $dompdf = new Dompdf($options);
-    
     $data = [
       "clients" => $client,
       "adviser_name" => $adviser->name,
@@ -156,9 +148,8 @@ class ClientController extends Controller
       "answers" => $qa->answers
     ];
 
-    $path = public_path('/pdfs/' . $pdf_title);
-    $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
-    $content = $pdf->download()->getOriginalContent();
+    $pdf = PDF::loadView('pdfs.view-pdf', $data);
+
     Storage::put($pdf_title, $pdf->output());
 
     return $pdf->stream($pdf_title);
@@ -198,7 +189,7 @@ class ClientController extends Controller
       $adviser = Adviser::find($client->audits[0]->adviser_id);
       $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
       $qa = json_decode($client->audits[0]->qa);
-      
+
       return response()->json([
         "clients" => $client,
         "advisers" => $advisers,
@@ -212,7 +203,7 @@ class ClientController extends Controller
   public function update_pdf(Request $request){
     if($request->ajax()){
       $client = Client::find($request->c_id);
-      
+
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
         $old_file = $client->audits[0]->pivot->pdf_title;
       } else {
@@ -246,7 +237,7 @@ class ClientController extends Controller
       ]);
 
       $dompdf = new Dompdf($options);
-      
+
       $data = [
         "clients" => $client,
         "adviser_name" => $adviser->name,
@@ -279,7 +270,7 @@ class ClientController extends Controller
     if($request->ajax()){
       $client = Client::find($request->id);
       $audit = $client->audits[0]->id;
-      
+
       return json_encode($client, $audit);
     }
   }
@@ -289,12 +280,12 @@ class ClientController extends Controller
       $client = Client::find($request->id);
       $audit = Audit::find($request->audit_id);
       $audit_report = DB::table('audit_client')->get();
-      
+
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
         File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
         Storage::delete($client->audits[0]->pivot->pdf_title);
       } else {
-        dd('File doesn\'t exist'); 
+        dd('File doesn\'t exist');
       }
 
       $message = 'Audit #'.$audit->id.' has been deleted.';
