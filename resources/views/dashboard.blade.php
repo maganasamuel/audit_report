@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.headers.cards')
+{{--@include('layouts.headers.cards')--}}
 @include('extra.user-modal')
 @include('extra.edit-user-modal')
 @include('extra.deactivate-user-modal')
