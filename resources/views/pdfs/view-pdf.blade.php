@@ -1,108 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ str_replace(' ', '-', strtolower($clients->policy_holder))."-".date('d-m-Y') }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="/css/pdf.css" />
+
   <style>
-    html,
     body {
-      min-width: auto;
-      background: #ffff;
-      font-family: 'Helvetica', 'Arial', sans-serif;
+      font-family: 'helvetica';
       font-size: 9pt;
-      margin: 10px;
-      box-sizing: content-box;
     }
 
-    table, thead {
-      margin: 0px;
-      border-spacing: 0;
-    }
-
-    #questions{
-      /*background-color: #adcdea;*/
+    #questions {
       background-color: #fff;
       color: #000;
     }
+
   </style>
 </head>
 
 <body>
-  <table cellpadding="5">
-    <thead></thead>
-    <tr>
-      <td></td>
-    </tr>
-    <tbody>
+  <htmlpageheader name="page-header">
+    <table class="header">
       <tr>
-        {{-- <th>
-          <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="100px">
-        </th> --}}
-        {{-- <th></th> --}}
-        <th colspan="2" style="padding: 0; background-color: #fff; text-align: left; position: relative;">
-            <img src="{{ public_path('assets/img/eliteInsure_vertical.png') }}" alt="" width="100px" style="margin-bottom: 30px;" />
-            {{-- <h1 style="display: flex; padding-right: 40px; font-size: 40px; margin-bottom: -70px">AUDIT REPORT<h1> --}}
-            <h1 style="position: absolute; top: 31px; right: 300px;"> AUDIT REPORT</h1>
+        <td class="header-left-box">
+          &nbsp;
+        </td>
+        <td class="header-image"><img
+            src="{{ asset('assets/img/logo-only.png') }}"
+            height="0.76in" /></td>
+        <td class="header-title">AUDIT REPORT</td>
+        <td class="header-right-box">
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </htmlpageheader>
+  <htmlpagefooter name="page-footer">
+    <table class="table-footer">
+      <tr>
+        <td class="footer-logo">
+          <img src="{{ asset('assets/img/EliteInsure_Horizontal.png') }}"
+            width="2.12in" />
+        </td>
+        <td class="footer-page">
+          <a
+            href="{{ config('services.company.url') }}"
+            class="footer-link"
+            target="_blank">{{ config('services.company.web') }}</a>&nbsp;|&nbsp;Page
+          {PAGENO}
+        </td>
+      </tr>
+    </table>
+  </htmlpagefooter>
+
+  <div class="margin">
+    <table class="w-full" style="background-color: #adcdea;">
+      <tr>
+        <th class="p-2 text-left w-half border-b border-white">&nbsp;&nbsp;Date:
+          {{ date('jS F Y', strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf))) }}
+        </th>
+        <th class="p-2 text-left w-half border-b border-white">Lead Source:
+          {{ $clients->audits[0]->pivot->lead_source }}</th>
+      </tr>
+      <tr>
+        <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
+        <th class="p-2 text-left border-b border-white">Policy Holder: {{ $clients->policy_holder }}
         </th>
       </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
-        <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
-      </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
-        <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
-      </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Caller Name: {{ $caller_name }} </th>
-        <th align="left">Caller Email Address: {{ $caller_email }}</th>
-      </tr>
       <tr>
-        <td></td>
+        <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Caller Name: {{ $caller_name }}
+        </th>
+        <th class="p-2 text-left border-b border-white">Caller Email Address: {{ $caller_email }}</th>
       </tr>
-      @foreach($questions as $index => $qa)
-      @if($qa == "Notes:")
-      <tr>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-      @endif
-      <tr id="questions">
-        <td colspan="2" width="700px">
-          <strong>{{ $qa }}</strong>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2" style="padding-left: 10px; ">
-          @if(empty($answers[$index]))
-          N/A
-          @else
-            <h4> - {{ ucfirst($answers[$index]) }}</h4>
-          @endif
-        </td>
-      </tr>
-      @endforeach
+    </table>
+    <br>
 
-    </tbody>
-  </table>
-  <script type="text/php">
-    $pdf->page_script('
-        if ($PAGE_COUNT > 1) {
-            $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-            $size = 12;
-            $pageText = "Page " . $PAGE_NUM . " of " . $PAGE_COUNT;
-            $y = 820;
-            $x = 260;
-            $pdf->text($x, $y, $pageText, $font, $size);
-        } 
-    ');
-  </script>
+    @foreach ($questions as $key => $question)
+      <div style="page-break-inside: avoid;">
+        @if ($question == 'Notes:')
+          <p>&nbsp;</p>
+        @endif
+
+        <p id="questions" class="text-justify">
+          {{ $question }}</p>
+        <ul tyle="disc" class="font-bold">
+          <li>{{ empty($answers[$key]) ? 'N/A' : ucfirst($answers[$key]) }}
+          </li>
+        </ul>
+      </div>
+    @endforeach
+  </div>
 </body>
 
 </html>
-
-
