@@ -9,8 +9,10 @@
 
   <!-- Kevin 3-->
   <div class="container-fluid mt--7">
-    @include('alerts.success')
-    <div class="card w-100 rounded-0">
+    @if(session()->has('message'))
+      @include('alerts.success')
+    @endif
+    <div class="card w-100 rounded-0 p-4">
       <div class="card-body">
         <div class="card-title">
           <h3 class="mb-0">Audit Report</h3>
