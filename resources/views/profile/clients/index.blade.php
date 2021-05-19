@@ -23,29 +23,14 @@
       @include('extra.edit-survey-pdf-modal')
       @include('extra.delete-client-pdf-modal')
       @include('extra.cancel-survey-pdf-modal')
-      <div class="card w-100">
+      <div class="card rounded-0">
         <div class="card-body">
-          <div class="card-title d-flex">
-            
-          </div>
-        <table class="table" id="client-table">
-            <thead>
-                <tr>
-                    <th class="text-center">#</th>
-                    <th>Policy Holder</th>
-                    <th>Policy Number</th>
-                    <th class="text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-              {{-- data fetched via ajax should be inside here --}}
-            </tbody>
-        </table>
+          @livewire('clients-table')
         </div>
       </div>
         
       @include('layouts.footers.auth')
     </div>
 
-  @include('custom-scripts.client-js')
+  {{--@include('custom-scripts.client-js')--}}
 @endsection
