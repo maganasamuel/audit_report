@@ -26,88 +26,89 @@
             /** Define the header rules **/
             header {
                 position: fixed;
-                top: 12px;
-                left: 12px;
+                top: 16px;
+                left: 0cm;
                 right: 0cm;
                 height: 3cm;
+
             }
 
             /** Define the footer rules **/
             footer {
+     
                 position: fixed; 
-                bottom: 0cm; 
-                left: 0cm; 
-                right: 0cm;
+                bottom: 0; 
+                left: 0; 
+                right: 0;
                 height: 2cm;
+                margin: 0 24px;
+              
+            }
+
+            .title {
+
+              color: 2e74b6;
+              font-size: 28px;
+              text-align: center;
+            }
+
+            .footer-div {
+
+              display: flex;
+              justify-content: space-between;
+              align-self: center;
+              flex-direction: row;
+            }
+
+            main p{
+
+              font-size: 14px;
             }
         </style>
     </head>
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <img src="{{public_path('assets/img/logo-only.png') }}" height="100%"/>
+            <img style="min-width:100%; object-fit:fill;" src="{{public_path('assets/img/headers_auditinsure.png') }}" width="100%" height="65%"/>
         </header>
 
         <footer>
-            <img src="{{public_path('assets/img/EliteInsure_Horizontal.png') }}" height="100%"/>
-            <p>{{ __('www.eliteinsure.co.nz') }}</p>
+            
+          
+            <img style="object-fit: fill; " src="{{public_path('assets/img/EliteInsure_Horizontal.png') }}" height="50%"/>
+            <p style="color:2e74b6; text-align: right; margin-bottom: 24px;" >{{ __('www.eliteinsure.co.nz') }}</p>
+            </div>
+         
         </footer>
 
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
-            <div class="row mb-4">
-              <div class="col-lg-6">
-                  
-                  {{--<img src="{{url('assets/img/EliteInsure_Horizontal.png') }}" alt="EliteInsure Logo" class="img-thumbnail">--}}
-
-                 
-              </div>
-              <div class="col-lg-6 text-right">
-                <div>
-                  <h1 class="display-5 lead text-uppercase">{{ __('Audit Report') }}</h1>
-                  <p style="font-size: 12px;">{{ $audit->pivot->pdf_title }}</p>
-                </div>
-
-                <div >
-                  <p style="font-size: 12px;">{{ __('Date') }} :</p>
-                  <p style="font-size: 12px;">{{ $audit->pivot->weekOf }}</p>
-                </div>
-                
-              </div>
-            </div>
-
-            <div class="row">
-
-              <div class="col-lg-4 text-left">
             
-                  <p style="font-size: 12px;">Policy Holder: {{ $client->policy_holder }}</p>
-                  <p style="font-size: 12px;">Policy Number: {{ $client->policy_no}}</p>
-         
-              </div>
-              <div class="col-lg-4 text-center">
-
-                  <p style="font-size: 12px;">Adiviser: {{ $audit->adviser->name}}</p>
-                  <p style="font-size: 12px;">Lead Source: {{ $lead_source}}</p>
+            <div style="background-color:2e74b6; height: 2px;"></div>
             
-              </div>
-              <div class="col-lg-4 text-right">
-          
-                  <p style="font-size: 12px;">Caller Name: {{ $audit->caller->name}}</p>
-                  <p style="font-size: 12px;">Caller Email Address: {{ $audit->caller->email}}</p>
-              
-              </div>
+            <h1  class="title">{{ __('Audit Report') }}</h1>
+            <div>
+              <p>{{ $audit->pivot->pdf_title }}</p>
+      
+              <p>{{ __('Date') }} : {{ $audit->pivot->weekOf }}</p>
 
-            </div>
+              <p>Policy Holder: {{ $client->policy_holder }}</p>
+              <p>Policy Number: {{ $client->policy_no}}</p>
+      
 
-            <div class="row">
-              <div class="col-lg-12">
-                @foreach($questions as $key => $question)
-                  <h6 class="font-weight-normal">{{ $key + 1}} . {{ $question['question'] }}</h6>
-                  <p class="font-italic" style="font-size: 12px; margin-left: 4;">{{ $question['answer'] }}</p>
-                @endforeach
-              </div>
-              
+              <p>Adiviser: {{ $audit->adviser->name}}</p>
+              <p>Lead Source: {{ $lead_source}}</p>
+        
+
+              <p>Caller Name: {{ $audit->caller->name}}</p>
+              <p>Caller Email Address: {{ $audit->caller->email}}</p>
             </div>
+            <div style="background-color:2e74b6; height: 2px;"></div>
+
+              @foreach($questions as $key => $question)
+                <p style="font-size:16px;">{{ $key + 1}} . {{ $question['question'] }}</p>
+                <p style="margin-left: 4; text-transform:capitalize;">{{ $question['answer'] }}</p>
+              @endforeach
         </main>
     </body>
 </html>
