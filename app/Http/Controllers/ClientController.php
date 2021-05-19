@@ -11,8 +11,6 @@ use App\Models\Survey;
 use App\Models\User;
 use DataTables;
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use PDF;
 use File;
 use Storage;
@@ -146,7 +144,7 @@ class ClientController extends Controller
   //                   // }
   //               }
 
-                
+
 
   //               return $actionBtn;
   //             })
@@ -162,13 +160,7 @@ class ClientController extends Controller
     $qa = json_decode($client->audits[0]->qa);
 
     $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
-    $options = new Options();
-    $options->set([
-      'defaultFont' => 'Helvetica'
-    ]);
 
-    $dompdf = new Dompdf($options);
-    
     $data = [
       "clients" => $client,
       "adviser_name" => $adviser->name,
@@ -178,9 +170,8 @@ class ClientController extends Controller
       "answers" => $qa->answers
     ];
 
-    $path = public_path('/pdfs/' . $pdf_title);
-    $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
-    $content = $pdf->download()->getOriginalContent();
+    $pdf = PDF::loadView('pdfs.view-pdf', $data);
+
     Storage::put($pdf_title, $pdf->output());
 
     return $pdf->stream($pdf_title);
@@ -220,7 +211,7 @@ class ClientController extends Controller
       $adviser = Adviser::find($client->audits[0]->adviser_id);
       $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
       $qa = json_decode($client->audits[0]->qa);
-      
+
       return response()->json([
         "clients" => $client,
         "advisers" => $advisers,
@@ -234,7 +225,7 @@ class ClientController extends Controller
   public function update_pdf(Request $request){
     if($request->ajax()){
       $client = Client::find($request->c_id);
-      
+
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
         $old_file = $client->audits[0]->pivot->pdf_title;
       } else {
@@ -268,7 +259,7 @@ class ClientController extends Controller
       ]);
 
       $dompdf = new Dompdf($options);
-      
+
       $data = [
         "clients" => $client,
         "adviser_name" => $adviser->name,
@@ -301,7 +292,7 @@ class ClientController extends Controller
     if($request->ajax()){
       $client = Client::find($request->id);
       $audit = $client->audits[0]->id;
-      
+
       return json_encode($client, $audit);
     }
   }
@@ -311,12 +302,12 @@ class ClientController extends Controller
       $client = Client::find($request->id);
       $audit = Audit::find($request->audit_id);
       $audit_report = DB::table('audit_client')->get();
-      
+
       if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
         File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
         Storage::delete($client->audits[0]->pivot->pdf_title);
       } else {
-        dd('File doesn\'t exist'); 
+        dd('File doesn\'t exist');
       }
 
       $message = 'Audit #'.$audit->id.' has been deleted.';
