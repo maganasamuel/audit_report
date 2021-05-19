@@ -43,7 +43,7 @@
                             wire:ignore 
                             
                         >
-                            <a href="/pdfs/view-pdf?id={{$audit->id}}" class="btn btn-success btn-sm" title="View audit">
+                            <a href="/profile/clients/{{$client->id}}/audits/{{$audit->id}}/pdf" class="btn btn-success btn-sm" title="View audit">
                                 <i class="fa fa-eye"></i>
                             </a>
                           

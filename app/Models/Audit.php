@@ -21,7 +21,17 @@ class Audit extends Model
       return $this->hasMany(Adviser::class);    
     }
 
+    public function adviser()
+    {
+      return $this->belongsTo(Adviser::class);
+    }
+
     public function users(){
       return $this->belongsTo(User::class);
+    }
+
+    public function caller() {
+
+      return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

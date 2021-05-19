@@ -1,100 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Audit Report | PDF</title>
 
-  <link rel="stylesheet" href="/css/pdf.css" />
+        <style>
+            /** 
+                Set the margins of the page to 0, so the footer and the header
+                can be of the full height and width !
+             **/
+            @page {
+                margin: 0cm 0cm;
+            }
 
-  <style>
-    body {
-      font-family: 'helvetica';
-      font-size: 9pt;
-    }
+            /** Define now the real margins of every page in the PDF **/
+            body {
+                margin-top: 3cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                margin-bottom: 2cm;
+            }
 
-    #questions {
-      background-color: #fff;
-      color: #000;
-    }
+            /** Define the header rules **/
+            header {
+                position: fixed;
+                top: 12px;
+                left: 12px;
+                right: 0cm;
+                height: 3cm;
+            }
 
-  </style>
-</head>
+            /** Define the footer rules **/
+            footer {
+                position: fixed; 
+                bottom: 0cm; 
+                left: 0cm; 
+                right: 0cm;
+                height: 2cm;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Define header and footer blocks before your content -->
+        <header>
+            <img src="{{public_path('assets/img/logo-only.png') }}" height="100%"/>
+        </header>
 
-<body>
-  <htmlpageheader name="page-header">
-    <table class="header">
-      <tr>
-        <td class="header-left-box">
-          &nbsp;
-        </td>
-        <td class="header-image"><img
-            src="{{ asset('assets/img/logo-only.png') }}"
-            height="0.76in" /></td>
-        <td class="header-title">AUDIT REPORT</td>
-        <td class="header-right-box">
-          &nbsp;
-        </td>
-      </tr>
-    </table>
-  </htmlpageheader>
-  <htmlpagefooter name="page-footer">
-    <table class="table-footer">
-      <tr>
-        <td class="footer-logo">
-          <img src="{{ asset('assets/img/EliteInsure_Horizontal.png') }}"
-            width="2.12in" />
-        </td>
-        <td class="footer-page">
-          <a
-            href="{{ config('services.company.url') }}"
-            class="footer-link"
-            target="_blank">{{ config('services.company.web') }}</a>&nbsp;|&nbsp;Page
-          {PAGENO}
-        </td>
-      </tr>
-    </table>
-  </htmlpagefooter>
+        <footer>
+            <img src="{{public_path('assets/img/EliteInsure_Horizontal.png') }}" height="100%"/>
+            <p>{{ __('www.eliteinsure.co.nz') }}</p>
+        </footer>
 
-  <div class="margin">
-    <table class="w-full" style="background-color: #adcdea;">
-      <tr>
-        <th class="p-2 text-left w-half border-b border-white">&nbsp;&nbsp;Date:
-          {{ date('jS F Y', strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf))) }}
-        </th>
-        <th class="p-2 text-left w-half border-b border-white">Lead Source:
-          {{ $clients->audits[0]->pivot->lead_source }}</th>
-      </tr>
-      <tr>
-        <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
-        <th class="p-2 text-left border-b border-white">Policy Holder: {{ $clients->policy_holder }}
-        </th>
-      </tr>
-      <tr>
-        <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Caller Name: {{ $caller_name }}
-        </th>
-        <th class="p-2 text-left border-b border-white">Caller Email Address: {{ $caller_email }}</th>
-      </tr>
-    </table>
-    <br>
+        <!-- Wrap the content of your PDF inside a main tag -->
+        <main>
+            <div class="row mb-4">
+              <div class="col-lg-6">
+                  
+                  {{--<img src="{{url('assets/img/EliteInsure_Horizontal.png') }}" alt="EliteInsure Logo" class="img-thumbnail">--}}
 
-    @foreach ($questions as $key => $question)
-      <div style="page-break-inside: avoid;">
-        @if ($question == 'Notes:')
-          <p>&nbsp;</p>
-        @endif
+                 
+              </div>
+              <div class="col-lg-6 text-right">
+                <div>
+                  <h1 class="display-5 lead text-uppercase">{{ __('Audit Report') }}</h1>
+                  <p style="font-size: 12px;">{{ $audit->pivot->pdf_title }}</p>
+                </div>
 
-        <p id="questions" class="text-justify">
-          {{ $question }}</p>
-        <ul tyle="disc" class="font-bold">
-          <li>{{ empty($answers[$key]) ? 'N/A' : ucfirst($answers[$key]) }}
-          </li>
-        </ul>
-      </div>
-    @endforeach
-  </div>
-</body>
+                <div >
+                  <p style="font-size: 12px;">{{ __('Date') }} :</p>
+                  <p style="font-size: 12px;">{{ $audit->pivot->weekOf }}</p>
+                </div>
+                
+              </div>
+            </div>
 
+            <div class="row">
+
+              <div class="col-lg-4 text-left">
+            
+                  <p style="font-size: 12px;">Policy Holder: {{ $client->policy_holder }}</p>
+                  <p style="font-size: 12px;">Policy Number: {{ $client->policy_no}}</p>
+         
+              </div>
+              <div class="col-lg-4 text-center">
+
+                  <p style="font-size: 12px;">Adiviser: {{ $audit->adviser->name}}</p>
+                  <p style="font-size: 12px;">Lead Source: {{ $lead_source}}</p>
+            
+              </div>
+              <div class="col-lg-4 text-right">
+          
+                  <p style="font-size: 12px;">Caller Name: {{ $audit->caller->name}}</p>
+                  <p style="font-size: 12px;">Caller Email Address: {{ $audit->caller->email}}</p>
+              
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                @foreach($questions as $key => $question)
+                  <h6 class="font-weight-normal">{{ $key + 1}} . {{ $question['question'] }}</h6>
+                  <p class="font-italic" style="font-size: 12px; margin-left: 4;">{{ $question['answer'] }}</p>
+                @endforeach
+              </div>
+              
+            </div>
+        </main>
+    </body>
 </html>
