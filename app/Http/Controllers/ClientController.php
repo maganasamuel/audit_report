@@ -19,9 +19,23 @@ use Storage;
 
 class ClientController extends Controller
 {
+  /**
+   * 
+   * Display clients page
+   *
+   * @return Illuminate\Http\Response
+   */
   public function index(){
 
     return view('profile.clients.index');
+  }
+
+  public function show(Client $client)
+  {
+    return view('profile.clients.show',[
+
+      'client' => $client
+    ]);
   }
 
   /**

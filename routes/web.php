@@ -97,7 +97,9 @@ Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])-
 
 
 //Clients
-Route::get('/profile/clients/index', [ClientController::class, 'index'])->middleware('auth');
+Route::get('/profile/clients', [ClientController::class, 'index'])->middleware('auth');
+Route::get('/profile/clients/{client}', [ClientController::class, 'show'])->middleware('auth');
+
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data')->middleware('auth');
 Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
 Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf')->middleware('auth');

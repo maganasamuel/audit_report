@@ -19,12 +19,12 @@
                 <tr>
 
                     <th>#</th>
-                    <th><a wire:click.prevent="sortBy('policy_holder)" href="#" role="button">
-                    	Policy Holder
+                    <th><a wire:click.prevent="sortBy('pdf_title)" href="#" role="button">
+                    	PDF Title
                     	
                     </a></th>
-                    <th><a wire:click.prevent="sortBy('policy_no')" href="#" role="button">
-                    	Policy Number
+                    <th><a wire:click.prevent="sortBy('weekOf')" href="#" role="button">
+                    	Week Of
                     
                     </a></th>
                     <th class="text-right">Actions</th>
@@ -33,28 +33,28 @@
             </thead>
 
             <tbody>
-                @foreach($clients as $key => $client)
-                    <tr wire:key="{{ $client->id }}">
+                @foreach($audits as $key => $audit)
+                    <tr wire:key="{{ $audit->id }}">
                        
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $client->policy_holder }}</td>
-                        <td>{{ $client->policy_no }}</td>
+                        <td>{{ $audit->pivot->pdf_title }}</td>
+                        <td>{{ $audit->pivot->weekOf }}</td>
                         <td class="text-right" 
                             wire:ignore 
                             
                         >
-                            <a href="{{$client->path()}}" class="btn btn-success btn-sm" title="View Client">
+                            <a href="/pdfs/view-pdf?id={{$audit->id}}" class="btn btn-success btn-sm" title="View audit">
                                 <i class="fa fa-eye"></i>
                             </a>
                           
                             <!-- <a href="" class="btn btn-primary btn-sm" title="Send Audit">
                                 <i class="far fa-envelope"></i> 
                             </a>  -->
-                            <a href="" class="btn btn-info btn-sm" title="Edit Client">
+                            <a href="" class="btn btn-info btn-sm" title="Edit audit">
                                 <i class="far fa-edit"></i>
                             </a> 
 
-                            <a href="" class="btn btn-danger btn-sm" title="Delete Client">
+                            <a href="" class="btn btn-danger btn-sm" title="Delete audit">
 
                                 <i class="far fa-trash-alt"></i>
                             </a> 
@@ -69,16 +69,16 @@
         <div class="d-flex justify-content-between d-flex-items-center pt-2">
             <div class="px-4 text-muted">
 
-            	@if($clients->firstItem() > 0)
+            	@if($audits->firstItem() > 0)
 	                <small>
-	                	Showing {{ $clients->firstItem() }} to {{ $clients->lastItem() }} out of {{$clients->total() }}
+	                	Showing {{ $audits->firstItem() }} to {{ $audits->lastItem() }} out of {{$audits->total() }}
 	                </small>
 	            @else
-	            	<small>Cannot find client</small>
+	            	<small>Cannot find audit</small>
 	            @endif
             </div>
             <div class="px-4">
-                {{ $clients->links() }}
+                {{ $audits->links() }}
             </div>
         </div>
     </div>
