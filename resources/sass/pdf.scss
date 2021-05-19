@@ -1,0 +1,142 @@
+@page {
+  margin-header: 11pt;
+  margin-footer: 0;
+
+  margin-left: 0;
+  margin-right: 0;
+
+  header: page-header;
+  footer: page-footer;
+
+  /* margin-top: 1.125in;
+  margin-bottom: 0.625in; */
+
+  margin-top: 1.5in;
+  margin-bottom: 0.625in;
+}
+
+.margin {
+  height: 100%;
+  margin-left: 0.77in;
+  margin-right: 0.77in;
+  /* border: 1px dashed black; */
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+.header {
+  width: 100%;
+}
+
+.header-image {
+  padding-left: 5.5pt;
+  padding-bottom: 0;
+}
+
+.header-title {
+  font-family: 'calibri';
+  font-size: 18pt;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+  color: #44546a;
+  padding-left: 5.5pt;
+  padding-right: 5.5pt;
+  padding-bottom: 0;
+  vertical-align: bottom;
+}
+
+.header-left-box {
+  width: 0.68in;
+  height: 0.65in;
+  background-color: #44546a;
+  vertical-align: bottom;
+  padding: 0;
+}
+
+.header-right-box {
+  width: 0.68in;
+  height: 0.65in;
+  background-color: #2e74b6;
+  vertical-align: bottom;
+  padding: 0;
+}
+
+.table-footer {
+  width: 100%;
+  margin-left: 0.25in;
+  margin-right: 0.25in;
+  margin-bottom: 1em;
+}
+
+.footer-logo {
+  width: 50%;
+}
+
+.footer-page {
+  width: 50%;
+  text-align: right;
+  font-family: 'calibri';
+  font-size: 11pt;
+  color: #5b9bd5;
+  vertical-align: bottom;
+}
+
+.footer-link {
+  text-align: right;
+  font-family: 'calibri';
+  font-size: 11pt;
+  color: #5b9bd5;
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.p {
+  padding: 0.25em;
+}
+
+.p-2 {
+  padding: 0.5em;
+}
+
+.border-b {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.border-white {
+  border-color: white;
+}
+
+.ml-4 {
+  margin-left: 1em;
+}
+
+.ml-8 {
+  margin-left: 2em;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.font-bold {
+  font-weight: bold;
+}

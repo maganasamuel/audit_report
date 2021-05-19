@@ -178,6 +178,8 @@ return [
 
         Yajra\DataTables\DataTablesServiceProvider::class,
 
+        \niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+
     ],
 
     /*
@@ -232,6 +234,8 @@ return [
 
 
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+
+        'PDF' => \niklasravnsborg\LaravelPdf\Facades\Pdf::class
     ],
 
 ];
