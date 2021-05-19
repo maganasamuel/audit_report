@@ -6,6 +6,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SpecificUserController;
 use Illuminate\Http\Request;
@@ -100,8 +101,13 @@ Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])-
 Route::get('/profile/clients', [ClientController::class, 'index'])->middleware('auth');
 Route::get('/profile/clients/{client}', [ClientController::class, 'show'])->middleware('auth');
 
+//PDFs
+Route::get('/profile/clients/{client}/audits/{audit}/pdf', [PDFController::class, 'show'])->middleware('auth');
+
+
+
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data')->middleware('auth');
-Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
+// Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
 Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf')->middleware('auth');
 Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf')->middleware('auth');
 Route::post('/pdfs/confirm_client_delete', [ClientController::class, 'confirm_client_delete'])->name('pdfs.confirm_client_delete')->middleware('auth');

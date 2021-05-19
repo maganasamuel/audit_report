@@ -28,6 +28,13 @@ class ClientController extends Controller
     return view('profile.clients.index');
   }
 
+  /**
+   * 
+   * Display client
+   *
+   * @param Client $client
+   * @return Illuminate\Http\Response
+   */
   public function show(Client $client)
   {
     return view('profile.clients.show',[
@@ -172,7 +179,7 @@ class ClientController extends Controller
 
     $pdf = PDF::loadView('pdfs.view-pdf', $data);
 
-    Storage::put($pdf_title, $pdf->output());
+    // Storage::put($pdf_title, $pdf->output());
 
     return $pdf->stream($pdf_title);
   }

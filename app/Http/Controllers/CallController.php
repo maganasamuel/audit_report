@@ -22,69 +22,69 @@ class CallController extends Controller
       return view('calls.audit', compact('advisers'));
     }
 
-    public function store_audit(Request $request){
-      if($request->ajax()){
-        $audit = new Audit;
-        $adviser = Adviser::find($request->adviser);
+    // public function store_audit(Request $request){
+    //   if($request->ajax()){
+    //     $audit = new Audit;
+    //     $adviser = Adviser::find($request->adviser);
 
-        if($request->policy_holder != null){
-          $client = new Client;
-          $client->policy_holder = $request->policy_holder;
-          $client->policy_no = $request->policy_no;
-          $client->save();
-        } else {
-          $client = Client::find($request->old_policy_holder);
-        }
+    //     if($request->policy_holder != null){
+    //       $client = new Client;
+    //       $client->policy_holder = $request->policy_holder;
+    //       $client->policy_no = $request->policy_no;
+    //       $client->save();
+    //     } else {
+    //       $client = Client::find($request->old_policy_holder);
+    //     }
 
-        $audit->qa = json_encode($request->qa);
-        $audit->adviser_id = $request->adviser;
-        $audit->user_id = Auth::user()->id;
-        $audit->save();
+    //     $audit->qa = json_encode($request->qa);
+    //     $audit->adviser_id = $request->adviser;
+    //     $audit->user_id = Auth::user()->id;
+    //     $audit->save();
         
-        $client->audits()->attach($audit->id,
-        [
-          "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
-          "lead_source" => $request->lead_source,
-        ]);
+    //     $client->audits()->attach($audit->id,
+    //     [
+    //       "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
+    //       "lead_source" => $request->lead_source,
+    //     ]);
 
-        $qa = json_decode($client->audits[0]->qa);
-        $clients = Client::find($client->id);
+    //     $qa = json_decode($client->audits[0]->qa);
+    //     $clients = Client::find($client->id);
 
-        $pdf_title = $clients->policy_holder.date('dmYgi', time()).'.pdf';
+    //     $pdf_title = $clients->policy_holder.date('dmYgi', time()).'.pdf';
 
-        $client->audits()->updateExistingPivot($audit->id,
-        [
-          "pdf_title" => $pdf_title
-        ]);
+    //     $client->audits()->updateExistingPivot($audit->id,
+    //     [
+    //       "pdf_title" => $pdf_title
+    //     ]);
 
-        $options = new Options();
-        $options->set([
-          'defaultFont' => 'Helvetica',
-          "enable_php" => true
-        ]);
+    //     $options = new Options();
+    //     $options->set([
+    //       'defaultFont' => 'Helvetica',
+    //       "enable_php" => true
+    //     ]);
 
-        $dompdf = new Dompdf($options);
+    //     $dompdf = new Dompdf($options);
         
-        $data = [
-          "clients" => $clients,
-          "adviser_name" => $adviser->name,
-          "caller_name" => Auth::user()->name,
-          "caller_email" => Auth::user()->email,
-          "questions" => $qa->questions,
-          "answers" => $qa->answers
-        ];
+    //     $data = [
+    //       "clients" => $clients,
+    //       "adviser_name" => $adviser->name,
+    //       "caller_name" => Auth::user()->name,
+    //       "caller_email" => Auth::user()->email,
+    //       "questions" => $qa->questions,
+    //       "answers" => $qa->answers
+    //     ];
 
-        $path = public_path('/pdfs/' . $pdf_title);
-        $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
+    //     $path = public_path('/pdfs/' . $pdf_title);
+    //     $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
 
-        $content = $pdf->download()->getOriginalContent();
-        Storage::put($pdf_title, $pdf->output());
+    //     $content = $pdf->download()->getOriginalContent();
+    //     Storage::put($pdf_title, $pdf->output());
 
-        $message = "Audit #". $audit->id ." has been stored.";
+    //     $message = "Audit #". $audit->id ." has been stored.";
 
-        return $message;
-      }
-    }
+    //     return $message;
+    //   }
+    // }
 
     public function survey(){
       $advisers = Adviser::orderBy('name')->get();
