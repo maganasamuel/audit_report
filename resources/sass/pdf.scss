@@ -15,6 +15,10 @@
   margin-bottom: 0.625in;
 }
 
+@page :first {
+  header: page-header-first;
+}
+
 .margin {
   height: 100%;
   margin-left: 0.77in;
@@ -129,6 +133,14 @@ table {
   margin-left: 2em;
 }
 
+.mt-4 {
+  margin-top: 1em;
+}
+
+.mb-8 {
+  margin-bottom: 2em;
+}
+
 .text-left {
   text-align: left;
 }
@@ -139,4 +151,8 @@ table {
 
 .font-bold {
   font-weight: bold;
+}
+
+.list-none {
+  list-style-type: none;
 }

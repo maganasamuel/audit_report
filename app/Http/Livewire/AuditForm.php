@@ -66,18 +66,18 @@ class AuditForm extends Component
         $this->validateOnly($propertyName);
 
     }
-    
+
 
 
     /**
-     * 
+     *
      * Will start the page
      *
      * @return void
      */
     public function mount()
     {
-  
+
         $this->advisers = Adviser::orderBy('name')->get();
 
     }
@@ -98,7 +98,7 @@ class AuditForm extends Component
 
     public function onSubmit()
     {
-      
+
         $this->validate();
 
 
@@ -108,7 +108,7 @@ class AuditForm extends Component
 
     public function store()
     {
-        
+
         $client = Client::firstOrCreate(
 
             ['policy_holder' => $this->answers['policy_holder']],
@@ -126,17 +126,17 @@ class AuditForm extends Component
         $client->audits()->attach($audit->id,[
             'weekOf' => Carbon::now()->startOfWeek()->format('Y-m-d'),
             'lead_source' => $this->answers['lead_source'],
-            'pdf_title' => $client->policy_holder.date('dmYgi', time()).'.pdf'
+            'pdf_title' => $client->policy_holder.date('-dmYgi', time()).'.pdf'
         ]);
 
         session()->flash('message', 'Successfully created audit.');
-        
+
         return redirect()->to('/calls/audit');
     }
 
     public function save()
     {
-    
+
         $this->audit->update([
 
             'adviser_id' => $this->adviser_id,
@@ -145,12 +145,12 @@ class AuditForm extends Component
         ]);
 
         session()->flash('message', 'Successfully Updated Audit.');
-        
+
         $this->emit('auditUpdate');
     }
 
     /**
-     * 
+     *
      * Will render the page
      *
      * @return \Illuminate\Http\Response
