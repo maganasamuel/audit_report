@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'company' => [
+        'web' => env('COMPANY_WEB', 'www.eliteinsure.co.nz'),
+        'url' => env('COMPANY_URL', 'https://eliteinsure.co.nz'),
+    ],
+
 ];

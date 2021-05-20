@@ -9,6 +9,8 @@ class Audit extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function clients(){
       return $this->belongsToMany(Client::class)
                   ->withPivot('weekOf', 'lead_source', 'pdf_title')
@@ -19,7 +21,17 @@ class Audit extends Model
       return $this->hasMany(Adviser::class);    
     }
 
+    public function adviser()
+    {
+      return $this->belongsTo(Adviser::class);
+    }
+
     public function users(){
       return $this->belongsTo(User::class);
+    }
+
+    public function caller() {
+
+      return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

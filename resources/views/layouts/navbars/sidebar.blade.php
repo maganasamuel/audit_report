@@ -86,7 +86,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('profile/clients/index') }}">
+                                    <a class="nav-link" href="{{ url('profile/clients') }}">
                                         {{ __('Clients') }}
                                     </a>
                                 </li>

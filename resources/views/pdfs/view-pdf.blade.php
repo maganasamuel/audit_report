@@ -3,106 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{{ str_replace(' ', '-', strtolower($clients->policy_holder))."-".date('d-m-Y') }}</title>
-  <style>
-    html,
-    body {
-      min-width: auto;
-      background: #ffff;
-      font-family: 'Helvetica', 'Arial', sans-serif;
-      font-size: 9pt;
-      margin: 10px;
-      box-sizing: content-box;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Report | PDF</title>
 
-    table, thead {
-      margin: 0px;
-      border-spacing: 0;
-    }
+        <style>
+            /** 
+                Set the margins of the page to 0, so the footer and the header
+                can be of the full height and width !
+             **/
+            @page {
+                margin: 0cm 0cm;
+            }
 
-    #questions{
-      /*background-color: #adcdea;*/
-      background-color: #fff;
-      color: #000;
-    }
-  </style>
-</head>
+            /** Define now the real margins of every page in the PDF **/
+            body {
+                margin-top: 3cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                margin-bottom: 2cm;
+            }
 
-<body>
-  <table cellpadding="5">
-    <thead></thead>
-    <tr>
-      <td></td>
-    </tr>
-    <tbody>
-      <tr>
-        {{-- <th>
-          <img src="{{ public_path('assets/img/EliteInsure_Horizontal.png') }}" alt="" width="100px">
-        </th> --}}
-        {{-- <th></th> --}}
-        <th colspan="2" style="padding: 0; background-color: #fff; text-align: left; position: relative;">
-            <img src="{{ public_path('assets/img/eliteInsure_vertical.png') }}" alt="" width="100px" style="margin-bottom: 30px;" />
-            {{-- <h1 style="display: flex; padding-right: 40px; font-size: 40px; margin-bottom: -70px">AUDIT REPORT<h1> --}}
-            <h1 style="position: absolute; top: 31px; right: 300px;"> AUDIT REPORT</h1>
-        </th>
-      </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Date: {{date("jS F Y", strtotime(str_replace('/', '-', $clients->audits[0]->pivot->weekOf)))}}</th>
-        <th align="left">Lead Source: {{ $clients->audits[0]->pivot->lead_source }}</th>
-      </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Adviser: {{ $adviser_name }} </th>
-        <th align="left">Policy Holder: {{ $clients->policy_holder }}</th>
-      </tr>
-      <tr style="background-color: #adcdea; color: #000;">
-        <th align="left">&nbsp;&nbsp;Caller Name: {{ $caller_name }} </th>
-        <th align="left">Caller Email Address: {{ $caller_email }}</th>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-      @foreach($questions as $index => $qa)
-      @if($qa == "Notes:")
-      <tr>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-      @endif
-      <tr id="questions">
-        <td colspan="2" width="700px">
-          <strong>{{ $qa }}</strong>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2" style="padding-left: 10px; ">
-          @if(empty($answers[$index]))
-          N/A
-          @else
-            <h4> - {{ ucfirst($answers[$index]) }}</h4>
-          @endif
-        </td>
-      </tr>
-      @endforeach
+            /** Define the header rules **/
+            header {
+                position: fixed;
+                top: 16px;
+                left: 0cm;
+                right: 0cm;
+                height: 3cm;
 
-    </tbody>
-  </table>
-  <script type="text/php">
-    $pdf->page_script('
-        if ($PAGE_COUNT > 1) {
-            $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-            $size = 12;
-            $pageText = "Page " . $PAGE_NUM . " of " . $PAGE_COUNT;
-            $y = 820;
-            $x = 260;
-            $pdf->text($x, $y, $pageText, $font, $size);
-        } 
-    ');
-  </script>
-</body>
+            }
 
+            /** Define the footer rules **/
+            footer {
+     
+                position: fixed; 
+                bottom: 0; 
+                left: 0; 
+                right: 0;
+                height: 2cm;
+                margin: 0 24px;
+              
+            }
+
+            .title {
+
+              color: 2e74b6;
+              font-size: 28px;
+              text-align: center;
+            }
+
+            .footer-div {
+
+              display: flex;
+              justify-content: space-between;
+              align-self: center;
+              flex-direction: row;
+            }
+
+            main p{
+
+              font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Define header and footer blocks before your content -->
+        <header>
+            <img style="min-width:100%; object-fit:fill;" src="{{public_path('assets/img/headers_auditinsure.png') }}" width="100%" height="65%"/>
+        </header>
+
+        <footer>
+            
+          
+            <img style="object-fit: fill; " src="{{public_path('assets/img/EliteInsure_Horizontal.png') }}" height="50%"/>
+            <p style="color:2e74b6; text-align: right; margin-bottom: 24px;" >{{ __('www.eliteinsure.co.nz') }}</p>
+            </div>
+         
+        </footer>
+
+        <!-- Wrap the content of your PDF inside a main tag -->
+        <main>
+            
+            <div style="background-color:2e74b6; height: 2px;"></div>
+            
+            <h1  class="title">{{ __('Audit Report') }}</h1>
+            <div>
+              <p>{{ $audit->pivot->pdf_title }}</p>
+      
+              <p>{{ __('Date') }} : {{ $audit->pivot->weekOf }}</p>
+
+              <p>Policy Holder: {{ $client->policy_holder }}</p>
+              <p>Policy Number: {{ $client->policy_no}}</p>
+      
+
+              <p>Adiviser: {{ $audit->adviser->name}}</p>
+              <p>Lead Source: {{ $lead_source}}</p>
+        
+
+              <p>Caller Name: {{ $audit->caller->name}}</p>
+              <p>Caller Email Address: {{ $audit->caller->email}}</p>
+            </div>
+            <div style="background-color:2e74b6; height: 2px;"></div>
+
+              @foreach($questions as $key => $question)
+                <p style="font-size:16px;">{{ $key + 1}} . {{ $question['question'] }}</p>
+                <p style="margin-left: 4; text-transform:capitalize;">{{ $question['answer'] }}</p>
+              @endforeach
+        </main>
+    </body>
 </html>
-
-

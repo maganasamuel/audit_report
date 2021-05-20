@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdviserController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SpecificUserController;
 use Illuminate\Http\Request;
@@ -79,11 +81,16 @@ Route::group(['middleware' => 'checkuser'], function(){
 });
 
 //Calls
-Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
+// Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
 Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
 Route::post('/calls/store_survey', [CallController::class, 'store_survey'])->name('calls.store_survey')->middleware('auth');
 
+Route::middleware(['auth'])->prefix('calls')->group(function() {
+
+  Route::get('audit', [AuditController::class, 'create'])->name('calls.audit');
+
+});
 
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
@@ -91,9 +98,16 @@ Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])-
 
 
 //Clients
-Route::get('/profile/clients/index', [ClientController::class, 'index'])->middleware('auth');
+Route::get('/profile/clients', [ClientController::class, 'index'])->middleware('auth');
+Route::get('/profile/clients/{client}', [ClientController::class, 'show'])->middleware('auth');
+
+//PDFs
+Route::get('/profile/clients/{client}/audits/{audit}/pdf', [PDFController::class, 'show'])->middleware('auth');
+
+
+
 Route::get('/clientcontroller/fetch_data', [ClientController::class, 'fetch_data'])->name('client.fetch_data')->middleware('auth');
-Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
+// Route::get('/pdfs/view-pdf', [ClientController::class, 'view_pdf'])->name('pdfs.view_pdf')->middleware('auth');
 Route::get('/pdfs/edit-pdf', [ClientController::class, 'edit_pdf'])->name('pdfs.edit_pdf')->middleware('auth');
 Route::post('/pdfs/update-pdf', [ClientController::class, 'update_pdf'])->name('pdfs.update_pdf')->middleware('auth');
 Route::post('/pdfs/confirm_client_delete', [ClientController::class, 'confirm_client_delete'])->name('pdfs.confirm_client_delete')->middleware('auth');
