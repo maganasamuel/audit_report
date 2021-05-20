@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Adviser;
 use App\Models\Audit;
 use App\Models\Client;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class CreateAuditForm extends Component
@@ -107,9 +108,17 @@ class CreateAuditForm extends Component
 
         ]);
 
+        $client->audits()->attach($audit->id,[
+            'weekOf' => Carbon::now()->startOfWeek()->format('Y-m-d'),
+            'lead_source' => $this->lead_source,
+            'pdf_title' => $client->policy_holder.date('dmYgi', time()).'.pdf'
+        ]);
+
         session()->flash('message', 'Successfully created audit.');
         
         return redirect()->to('/calls/audit');
+
+
     }
 
     /**

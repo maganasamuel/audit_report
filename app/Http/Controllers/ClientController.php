@@ -17,119 +17,148 @@ use Storage;
 
 class ClientController extends Controller
 {
+  /**
+   * 
+   * Display clients page
+   *
+   * @return Illuminate\Http\Response
+   */
   public function index(){
-    $clients = Client::all();
-    return view('profile.clients.index', compact('clients'));
+
+    return view('profile.clients.index');
   }
 
-  public function fetch_data(Request $request){
-    if($request->ajax()){
-      $data = Client::latest()->get();
-      $survey = Survey::all();
-      $audit_client = DB::select('select client_id from audit_client');
+  /**
+   * 
+   * Display client
+   *
+   * @param Client $client
+   * @return Illuminate\Http\Response
+   */
+  public function show(Client $client)
+  {
+    return view('profile.clients.show',[
 
-      $clients_with_survey = [];
-      $clients_with_audit = [];
-
-      foreach($data as $client){
-        foreach($survey as $surv){
-          if($client->id == $surv->client_id){
-            array_push($clients_with_survey, $client->id);
-          }
-        }
-      }
-
-      foreach($data as $client){
-        foreach($audit_client as $ac){
-          if($client->id == $ac->client_id){
-            array_push($clients_with_audit, $client->id);
-          }
-        }
-      }
-
-      $actionBtn = "";
-      return Datatables::of($data)
-              ->addIndexColumn()
-              ->addColumn('action', function($row) use ($clients_with_survey, $clients_with_audit, $actionBtn, $survey){
-                if(!in_array($row->id, $clients_with_audit)){
-                  $actionBtn .= '<div class="d-flex my-2">
-                    <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="far fa-eye pt-1"></i></button>
-                    </form>'
-                    .
-                    '<form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="far fa-envelope"></i></button>
-                    </form>'
-                    .
-                    '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-info btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal" disabled><i class="fa fa-edit pt-1"></i></button>'
-                    .
-                    '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-info btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client" disabled><i class="fa fa-ban pt-1"></i></button></div>'
-                    ;
-                } else {
-                  $actionBtn .= '<div class="d-flex my-2">
-                    <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
-                    </form>'
-                    .
-                    '<form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" ><i class="far fa-envelope"></i></button>
-                    </form>'
-                    .
-                    '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-info btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal" ><i class="fa fa-edit pt-1"></i></button>'
-                    .
-                    '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-info btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client" ><i class="fa fa-ban pt-1"></i></button></div>'
-                    ;
-                }
-
-                if(!in_array($row->id, $clients_with_survey)){
-                    $actionBtn .=
-                    '<div class="d-flex my-2">
-                    <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="fas fa-poll-h pt-1"></i></button>
-                    </form>'
-                    .
-                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
-                    ;
-
-                    $actionBtn .=
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
-                } else {
-                  $actionBtn .=
-                  '<div class="d-flex my-2">
-                    <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
-                      <input type="text" value="'. $row->id .'" name="id" hidden />
-                      <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="fas fa-poll-h pt-1"></i></button>
-                    </form>'
-                    .
-                    '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
-                    ;
-                    $actionBtn .=
-                          '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
-
-                    // foreach($survey as $surv){
-                    //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){
-                    //     $actionBtn .=
-                    //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
-                    //   } else if($surv->client_id == $row->id && $surv->is_cancelled != 0){
-                    //     $actionBtn .=
-                    //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Reactivate Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-reactivate-survey"><i class="fas fa-sync-alt pt-1"></i></button></div>';
-                    //   }
-                    // }
-                }
-
-
-
-                return $actionBtn;
-              })
-              ->rawColumns(['action'])
-              ->make(true);
-    }
+      'client' => $client
+    ]);
   }
+
+  /**
+   * 
+   * Codes of Andre
+   * Will be deleting this once discuss with samuel
+   *
+   * @param Request $request
+   * @return void
+   */
+  // public function fetch_data(Request $request){
+  //   if($request->ajax()){
+  //     $data = Client::latest()->get();
+  //     $survey = Survey::all();
+  //     $audit_client = DB::select('select client_id from audit_client');
+      
+  //     $clients_with_survey = [];
+  //     $clients_with_audit = [];
+
+  //     foreach($data as $client){
+  //       foreach($survey as $surv){
+  //         if($client->id == $surv->client_id){
+  //           array_push($clients_with_survey, $client->id);
+  //         }
+  //       }
+  //     }
+
+  //     foreach($data as $client){
+  //       foreach($audit_client as $ac){
+  //         if($client->id == $ac->client_id){
+  //           array_push($clients_with_audit, $client->id);
+  //         }
+  //       }
+  //     }
+
+  //     $actionBtn = "";
+  //     return Datatables::of($data)
+  //             ->addIndexColumn()
+  //             ->addColumn('action', function($row) use ($clients_with_survey, $clients_with_audit, $actionBtn, $survey){
+  //               if(!in_array($row->id, $clients_with_audit)){
+  //                 $actionBtn .= '<div class="d-flex my-2">
+  //                   <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="far fa-eye pt-1"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="far fa-envelope"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-info btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal" disabled><i class="fa fa-edit pt-1"></i></button>'
+  //                   .
+  //                   '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-info btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client" disabled><i class="fa fa-ban pt-1"></i></button></div>'
+  //                   ;
+  //               } else {
+  //                 $actionBtn .= '<div class="d-flex my-2">
+  //                   <form action="'.route('pdfs.view_pdf').'" method="GET" target="_blank" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="far fa-eye pt-1"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<form action="'.route('mails.send-mail').'" method="GET" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Audit" class="btn btn-info btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" ><i class="far fa-envelope"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<button type="button" id="edit-client" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Audit" class="btn btn-info btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-client-pdf-modal" ><i class="fa fa-edit pt-1"></i></button>'
+  //                   .
+  //                   '<button type="button" id="client-delete-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Audit" class="btn btn-info btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-delete-client" ><i class="fa fa-ban pt-1"></i></button></div>'
+  //                   ;                
+  //               }
+
+  //               if(!in_array($row->id, $clients_with_survey)){
+  //                   $actionBtn .=
+  //                   '<div class="d-flex my-2">
+  //                   <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'" disabled><i class="fas fa-poll-h pt-1"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" disabled><i class="fas fa-pencil-alt pt-1"></i></button>'
+  //                   ;
+
+  //                   $actionBtn .= 
+  //                         '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey" disabled><i class="fa fa-ban pt-1"></i></button></div>';
+  //               } else {
+  //                 $actionBtn .=
+  //                 '<div class="d-flex my-2">
+  //                   <form action="'.route('pdfs.view_survey').'" method="GET" target="_blank" class="mr-2">
+  //                     <input type="text" value="'. $row->id .'" name="id" hidden />
+  //                     <button type="submit" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="View Survey" class="btn btn-success btn-icon btn-sm" data-original-title="" title="" data-id="'. $row->id .'"><i class="fas fa-poll-h pt-1"></i></button>
+  //                   </form>'
+  //                   .
+  //                   '<button type="button" id="edit-survey" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Survey" class="btn btn-success btn-icon btn-sm" data-id="'. $row->id .'" data-original-title="" title="" data-toggle="modal" data-target="#edit-survey-pdf-modal" ><i class="fas fa-pencil-alt pt-1"></i></button>'
+  //                   ;
+  //                   $actionBtn .= 
+  //                         '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Survey" class="btn btn-success btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
+
+  //                   // foreach($survey as $surv){
+  //                   //   if($surv->client_id == $row->id && $surv->is_cancelled != 1){ 
+  //                   //     $actionBtn .= 
+  //                   //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel Survey" class="btn btn-danger btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-cancel-survey"><i class="fa fa-ban pt-1"></i></button></div>';
+  //                   //   } else if($surv->client_id == $row->id && $surv->is_cancelled != 0){
+  //                   //     $actionBtn .= 
+  //                   //       '<button type="button" id="survey-cancel-confirmation" rel="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Reactivate Survey" class="btn btn-primary btn-icon btn-sm " data-original-title="" title="" data-id="'. $row->id .'" data-toggle="modal" data-target="#modal-reactivate-survey"><i class="fas fa-sync-alt pt-1"></i></button></div>';
+  //                   //   }
+  //                   // }
+  //               }
+
+
+
+  //               return $actionBtn;
+  //             })
+  //             ->rawColumns(['action'])
+  //             ->make(true);
+  //   }
+  // }
 
   public function view_pdf(Request $request){
     $client = Client::find($request->id);
@@ -150,7 +179,7 @@ class ClientController extends Controller
 
     $pdf = PDF::loadView('pdfs.view-pdf', $data);
 
-    Storage::put($pdf_title, $pdf->output());
+    // Storage::put($pdf_title, $pdf->output());
 
     return $pdf->stream($pdf_title);
   }
