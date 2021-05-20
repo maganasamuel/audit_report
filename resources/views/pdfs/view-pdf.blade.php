@@ -107,7 +107,9 @@
 
               @foreach($questions as $key => $question)
                 <p style="font-size:16px;">{{ $key + 1}} . {{ $question['question'] }}</p>
+                @isset($question['answer'])
                 <p style="margin-left: 4; text-transform:capitalize;">{{ $question['answer'] }}</p>
+                @endisset
               @endforeach
         </main>
     </body>

@@ -2,7 +2,7 @@
 
 @section('content')
     @include('users.partials.header', [
-        'title' => __("Client Details | $client->policy_no"),
+        'title' => __("Policy No: | $client->policy_no"),
         'description' => __("This is the Client Audit's Table. You can see different information of the audits taken by client on this table. You can add, update or delete as well."),
         'class' => 'col-lg-7'
     ])   
