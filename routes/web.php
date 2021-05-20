@@ -80,29 +80,33 @@ Route::group(['middleware' => 'checkuser'], function(){
   Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])->name('user.deactivate_user')->middleware('checkuser');
 });
 
-//Calls
-// Route::get('/calls/audit', [CallController::class, 'audit'])->name('calls.audit')->middleware('auth');
+//Edited by Jearson
+
+Route::middleware(['auth'])->group(function() {
+  //Calls
+  Route::get('/calls/audit', [AuditController::class, 'create'])->name('calls.audit');
+
+  //PDFs
+  Route::get('/profile/clients/{client}/audits/{audit}/pdf', [PDFController::class, 'show']);
+
+  //Clients
+  Route::get('/profile/clients', [ClientController::class, 'index']);
+  Route::get('/profile/clients/{client}', [ClientController::class, 'show']);
+  
+});
+
+/** End here */
+
 Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
 Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
 Route::post('/calls/store_survey', [CallController::class, 'store_survey'])->name('calls.store_survey')->middleware('auth');
 
-Route::middleware(['auth'])->prefix('calls')->group(function() {
-
-  Route::get('audit', [AuditController::class, 'create'])->name('calls.audit');
-
-});
 
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
 Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])->name('users.fetch_data')->middleware('auth');
 
 
-//Clients
-Route::get('/profile/clients', [ClientController::class, 'index'])->middleware('auth');
-Route::get('/profile/clients/{client}', [ClientController::class, 'show'])->middleware('auth');
-
-//PDFs
-Route::get('/profile/clients/{client}/audits/{audit}/pdf', [PDFController::class, 'show'])->middleware('auth');
 
 
 
@@ -131,6 +135,7 @@ Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->na
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('auth');
 Route::post('/fetch_advisers', [ReportController::class, 'fetch_adviser'])->name('reports.fetch_adviser')->middleware('auth');
 Route::post('/reports/pdf', [ReportController::class, 'view_pdf'])->name('reports.pdf')->middleware('auth');
+
 //Mail 
 Route::get('send-email', function(Request $request){
 

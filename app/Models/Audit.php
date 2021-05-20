@@ -11,6 +11,7 @@ class Audit extends Model
 
     protected $guarded = [];
 
+
     public function clients(){
       return $this->belongsToMany(Client::class)
                   ->withPivot('weekOf', 'lead_source', 'pdf_title')

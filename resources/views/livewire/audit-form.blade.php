@@ -1,20 +1,9 @@
 <div>
     <form wire:submit.prevent="onSubmit">
 
-        @if (session()->has('message'))
-
-            <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-    
-                <span class="alert-text"><strong>Success!</strong> {{ session('message') }}</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
         <div class="form-top mb-4">
             <p>
-            INTRODUCTION: Mr/ Mrs Policyholder, my name is_____________. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?
+            INTRODUCTION: Mr/ Mrs Policyholder, my name is <span class="text-uppercase"><ins>{{auth()->user()->name}}</ins></span>. I am the Client Relationship manager with EliteInsure Ltd.. The reason for my SPECIAL call is to inspect the standard of service provided by our adviser, ( mention name), and also to ensure that high quality of service and advise was given to you. It should take approx 5 mins. Would that be alright?
 
             </p>
         </div>
@@ -45,7 +34,7 @@
                     @enderror
                 </div>
                 <div class="form-group col-lg-6 col-md-12">
-                    <select class="form-control" name="lead_source" id="lead_source" wire:model.lazy="lead_source">
+                    <select class="form-control" name="lead_source" id="lead_source" wire:model.lazy="answers.lead_source">
                         <option value="" selected disabled>Select a Lead Source</option>
                         
                         <option value="Telemarketer">Telemarketer</option>
@@ -53,7 +42,7 @@
                         <option value="Self-generated">Self-generated</option>
                     </select>
 
-                    @error('lead_source')
+                    @error('answers.lead_source')
                         <span class="invalid-feedback" style="display: block;" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -63,19 +52,20 @@
                         
             <div class="form-group">
                 <label class="text-sm">Is this a new client?</label>
-                <select id="client-question" class="form-control" wire:model.lazy="is_new_client">
+                <select id="client-question" class="form-control" wire:model.lazy="answers.is_new_client">
                     <option value="" selected disabled>Choose an option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
 
-                @error('is_new_client')
+                @error('answers.is_new_client')
                     <span class="invalid-feedback" style="display: block;" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
             </div>
 
+       
             
             <div class="row">
                
@@ -160,9 +150,9 @@
                 <label class="text-sm">Is there anything else apart from this not stated? </label>
                 <select class="form-control questions" wire:model.lazy="answers.medical_agreement">
                     <option value="" selected disabled>Select an Answer</option>
-                    <option value="yes">Yes - Refer to Notes</option>
+                    <option value="yes - refer to notes">Yes - Refer to Notes</option>
                     <option value="no">No</option>
-                    <option value="not-sure">Not Sure - Refer to Notes</option>
+                    <option value="not sure - refer to notes">Not Sure - Refer to Notes</option>
                 </select>
 
                 @error('answers.medical_agreement')
@@ -177,7 +167,7 @@
                 <select class="form-control" wire:model.lazy="answers.bank_account_agreement">
                     <option value="" selected disabled>Select an Answer</option>
                     <option value="yes">Yes</option>
-                    <option value="no">No - Refer to Notes</option>
+                    <option value="no - refer to notes">No - Refer to Notes</option>
                 </select>
 
                 @error('answers.bank_account_agreement')
@@ -222,7 +212,7 @@
                 <select class="form-control" wire:model.lazy="answers.confirm_occupation">
                     <option value="" selected disabled>Select an Answer</option>
                     <option value="yes">Yes</option>
-                    <option value="no">No - Refer to Notes</option>
+                    <option value="no - refer to notes">No - Refer to Notes</option>
                 </select>
                 @error('answers.confirm_occupation')
                     <span class="invalid-feedback" style="display: block;" role="alert">
@@ -303,7 +293,7 @@
         </div>
 
         <div class="form-group mt-4">
-            <button type="submit" class="btn btn-primary"><i class="fa fa-circle-o-notch fa-spin d-none m-1"></i>Submit</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $audit ? 'Save' : 'Submit' }}</button>
         </div>
        
     </form>

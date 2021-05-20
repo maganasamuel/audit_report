@@ -160,169 +160,162 @@ class ClientController extends Controller
   //   }
   // }
 
-  public function view_pdf(Request $request){
-    $client = Client::find($request->id);
-    $adviser = Adviser::find($client->audits[0]->adviser_id);
-    $user = User::find($client->audits[0]->user_id);
-    $qa = json_decode($client->audits[0]->qa);
+  // public function view_pdf(Request $request){
+  //   $client = Client::find($request->id);
+  //   $adviser = Adviser::find($client->audits[0]->adviser_id);
+  //   $user = User::find($client->audits[0]->user_id);
+  //   $qa = json_decode($client->audits[0]->qa);
 
-    $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
+  //   $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
 
-    $data = [
-      "clients" => $client,
-      "adviser_name" => $adviser->name,
-      "caller_name" => $user->name,
-      "caller_email" => $user->email,
-      "questions" => $qa->questions,
-      "answers" => $qa->answers
-    ];
+  //   $data = [
+  //     "clients" => $client,
+  //     "adviser_name" => $adviser->name,
+  //     "caller_name" => $user->name,
+  //     "caller_email" => $user->email,
+  //     "questions" => $qa->questions,
+  //     "answers" => $qa->answers
+  //   ];
 
-    $pdf = PDF::loadView('pdfs.view-pdf', $data);
+  //   $pdf = PDF::loadView('pdfs.view-pdf', $data);
 
-    // Storage::put($pdf_title, $pdf->output());
+  //   // Storage::put($pdf_title, $pdf->output());
 
-    return $pdf->stream($pdf_title);
-  }
+  //   return $pdf->stream($pdf_title);
+  // }
 
-  public function view_survey(Request $request){
-    $client = Client::find($request->id);
-    $survey = Survey::where('client_id', $request->id)->first();
-    // dd($survey);
-    $adviser = Adviser::find($survey->adviser_id);
-    $sa = json_decode($survey->sa);
-    $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
+  // public function view_survey(Request $request){
+  //   $client = Client::find($request->id);
+  //   $survey = Survey::where('client_id', $request->id)->first();
+  //   // dd($survey);
+  //   $adviser = Adviser::find($survey->adviser_id);
+  //   $sa = json_decode($survey->sa);
+  //   $pdf_title = $client->policy_holder.date('dmYgi', time()).'.pdf';
 
-    $options = new Options();
-    $options->set([
-      'defaultFont' => 'Helvetica'
-    ]);
+  //   $options = new Options();
+  //   $options->set([
+  //     'defaultFont' => 'Helvetica'
+  //   ]);
 
-    $data = [
-      "clients" => $client,
-      "survey" => $survey,
-      "adviser" => $adviser,
-      "questions" => $sa->questions,
-      "answers" => $sa->answers
-    ];
+  //   $data = [
+  //     "clients" => $client,
+  //     "survey" => $survey,
+  //     "adviser" => $adviser,
+  //     "questions" => $sa->questions,
+  //     "answers" => $sa->answers
+  //   ];
 
-    $dompdf = new Dompdf($options);
-    $path = public_path('/pdfs/' . $pdf_title);
-    $pdf = PDF::loadView('pdfs.view-survey', $data)->save($path);
-    return $pdf->stream($pdf_title);
-  }
+  //   $dompdf = new Dompdf($options);
+  //   $path = public_path('/pdfs/' . $pdf_title);
+  //   $pdf = PDF::loadView('pdfs.view-survey', $data)->save($path);
+  //   return $pdf->stream($pdf_title);
+  // }
 
-  public function edit_pdf(Request $request){
-    if($request->ajax()){
-      $client = Client::where(["id" => $request->id])->with('audits')->first();
-      $advisers = Adviser::orderBy('name')->get();
-      $adviser = Adviser::find($client->audits[0]->adviser_id);
-      $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
-      $qa = json_decode($client->audits[0]->qa);
+  // public function edit_pdf(Request $request){
+  //   if($request->ajax()){
+  //     $client = Client::where(["id" => $request->id])->with('audits')->first();
+  //     $advisers = Adviser::orderBy('name')->get();
+  //     $adviser = Adviser::find($client->audits[0]->adviser_id);
+  //     $weekOf = date("d-m-Y", strtotime($client->audits[0]->pivot->weekOf));
+  //     $qa = json_decode($client->audits[0]->qa);
 
-      return response()->json([
-        "clients" => $client,
-        "advisers" => $advisers,
-        "adviser" => $adviser,
-        "weekOf" => $weekOf,
-        "answers" => $qa->answers
-      ]);
-    }
-  }
+  //     return response()->json([
+  //       "clients" => $client,
+  //       "advisers" => $advisers,
+  //       "adviser" => $adviser,
+  //       "weekOf" => $weekOf,
+  //       "answers" => $qa->answers
+  //     ]);
+  //   }
+  // }
 
-  public function update_pdf(Request $request){
-    if($request->ajax()){
-      $client = Client::find($request->c_id);
+  // public function update_pdf(Request $request){
+  //   if($request->ajax()){
+  //     $client = Client::find($request->c_id);
 
-      if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
-        $old_file = $client->audits[0]->pivot->pdf_title;
-      } else {
-        $message = "The file doesn't exists.";
+  //     if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
+  //       $old_file = $client->audits[0]->pivot->pdf_title;
+  //     } else {
+  //       $message = "The file doesn't exists.";
 
-        return $message;
-      }
+  //       return $message;
+  //     }
 
-      $client->policy_holder = $request->policy_holder;
-      $client->policy_no = $request->policy_no;
-      $client->save();
+  //     $client->policy_holder = $request->policy_holder;
+  //     $client->policy_no = $request->policy_no;
+  //     $client->save();
 
-      $audit = Audit::find($request->au_id);
-      $audit->qa = json_encode($request->qa);
-      $audit->adviser_id = $request->ad_id;
-      $audit->save();
+  //     $audit = Audit::find($request->au_id);
+  //     $audit->qa = json_encode($request->qa);
+  //     $audit->adviser_id = $request->ad_id;
+  //     $audit->save();
 
-      $client->audits()->updateExistingPivot($request->au_id, [
-        "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
-        "lead_source" => $request->lead_source
-      ]);
+  //     $client->audits()->updateExistingPivot($request->au_id, [
+  //       "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
+  //       "lead_source" => $request->lead_source
+  //     ]);
 
-      $adviser = Adviser::find($client->audits[0]->adviser_id);
-      $user = User::find($client->audits[0]->user_id);
-      $qa = json_decode($client->audits[0]->qa);
+  //     $adviser = Adviser::find($client->audits[0]->adviser_id);
+  //     $user = User::find($client->audits[0]->user_id);
+  //     $qa = json_decode($client->audits[0]->qa);
 
-      $pdf_title = $request->policy_holder.date('dmYgi', time()).'.pdf';
-      $options = new Options();
-      $options->set([
-        'defaultFont' => 'Helvetica'
-      ]);
+  //     $pdf_title = $request->policy_holder.date('dmYgi', time()).'.pdf';
+  //     $options = new Options();
+  //     $options->set([
+  //       'defaultFont' => 'Helvetica'
+  //     ]);
 
-      $dompdf = new Dompdf($options);
+  //     $dompdf = new Dompdf($options);
 
-      $data = [
-        "clients" => $client,
-        "adviser_name" => $adviser->name,
-        "caller_name" => $user->name,
-        "caller_email" => $user->email,
-        "questions" => $qa->questions,
-        "answers" => $qa->answers
-      ];
+  //     $data = [
+  //       "clients" => $client,
+  //       "adviser_name" => $adviser->name,
+  //       "caller_name" => $user->name,
+  //       "caller_email" => $user->email,
+  //       "questions" => $qa->questions,
+  //       "answers" => $qa->answers
+  //     ];
 
-      $path = public_path('/pdfs/' . $pdf_title);
-      $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
-      $content = $pdf->download()->getOriginalContent();
-      Storage::put($pdf_title, $pdf->output());
+  //     $path = public_path('/pdfs/' . $pdf_title);
+  //     $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
+  //     $content = $pdf->download()->getOriginalContent();
+  //     Storage::put($pdf_title, $pdf->output());
 
-      //Delete old file
-      File::delete(public_path('pdfs/'.$old_file));
-      Storage::delete($old_file);
+  //     //Delete old file
+  //     File::delete(public_path('pdfs/'.$old_file));
+  //     Storage::delete($old_file);
 
-      $client->audits()->updateExistingPivot($request->au_id, [
-        "pdf_title" => $pdf_title
-      ]);
+  //     $client->audits()->updateExistingPivot($request->au_id, [
+  //       "pdf_title" => $pdf_title
+  //     ]);
 
-      $message = "Audit #". $request->au_id ." has been updated.";
+  //     $message = "Audit #". $request->au_id ." has been updated.";
 
-      return $message;
-    }
-  }
+  //     return $message;
+  //   }
+  // }
 
-  public function confirm_client_delete(Request $request){
-    if($request->ajax()){
-      $client = Client::find($request->id);
-      $audit = $client->audits[0]->id;
+ 
 
-      return json_encode($client, $audit);
-    }
-  }
+  // public function delete_client(Request $request){
+  //   if($request->ajax()){
+  //     $client = Client::find($request->id);
+  //     $audit = Audit::find($request->audit_id);
+  //     $audit_report = DB::table('audit_client')->get();
 
-  public function delete_client(Request $request){
-    if($request->ajax()){
-      $client = Client::find($request->id);
-      $audit = Audit::find($request->audit_id);
-      $audit_report = DB::table('audit_client')->get();
+  //     if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
+  //       File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
+  //       Storage::delete($client->audits[0]->pivot->pdf_title);
+  //     } else {
+  //       dd('File doesn\'t exist');
+  //     }
 
-      if(File::exists(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title))){
-        File::delete(public_path('pdfs/'.$client->audits[0]->pivot->pdf_title));
-        Storage::delete($client->audits[0]->pivot->pdf_title);
-      } else {
-        dd('File doesn\'t exist');
-      }
+  //     $message = 'Audit #'.$audit->id.' has been deleted.';
+  //     $client->audits()->detach($request->id);
+  //     $audit->delete();
+  //     $client->delete();
 
-      $message = 'Audit #'.$audit->id.' has been deleted.';
-      $client->audits()->detach($request->id);
-      $audit->delete();
-      $client->delete();
-
-      return $message;
-    }
-  }
+  //     return $message;
+  //   }
+  // }
 }
