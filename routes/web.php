@@ -135,6 +135,7 @@ Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->na
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('auth');
 Route::post('/fetch_advisers', [ReportController::class, 'fetch_adviser'])->name('reports.fetch_adviser')->middleware('auth');
 Route::post('/reports/pdf', [ReportController::class, 'view_pdf'])->name('reports.pdf')->middleware('auth');
+
 //Mail 
 Route::get('send-email', function(Request $request){
 
