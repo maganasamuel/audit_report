@@ -11,8 +11,8 @@
 
   <style>
     body {
-      font-family: 'helvetica';
-      font-size: 9pt;
+      font-family: 'calibri';
+      font-size: 11pt;
     }
 
     #questions {
@@ -49,7 +49,7 @@
         <td class="header-image"><img
             src="{{ asset('assets/img/logo-only.png') }}"
             height="0.76in" /></td>
-        <td class="header-title"></td>
+        <td class="header-title">&nbsp;</td>
         <td class="header-right-box">
           &nbsp;
         </td>
@@ -118,7 +118,6 @@
             </ol>
           </li>
         </ol>
-
       </div>
     @endforeach
   </div>
