@@ -19,16 +19,44 @@ class ClientsTable extends Component
 
 	public $sortAsc = true;
 
+    public $client;
+
+    public $updateMode = false;
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-   public function sortBy($field)
+    public function sortBy($field)
 	{
 
         $this->sortAsc === $field ? $this->sortAsc = !$this->sortAsc : $this->sortField = $field;
 	}
+
+    public function onEdit(Client $client)
+    {   
+        $this->client = $client;
+
+        $this->updateMode = true;
+
+        $this->emit('clientClicked', $client->id);
+    }
+
+    public function onDelete(Client $client)
+    {
+        $this->client = $client;
+    }
+
+
+    public function confirmDelete()
+    {
+        $this->client->delete();
+
+        session()->flash('message', 'Successfully deleted client.');
+
+        $this->emit('onConfirmDelete');
+    }
 
 
     public function render()

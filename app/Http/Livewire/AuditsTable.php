@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Audit;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -20,6 +21,10 @@ class AuditsTable extends Component
 
     public $client;
 
+    public $updateMode = false;
+
+    public $audit;
+
     public function mount($client)
     {
         $this->client = $client;
@@ -30,11 +35,36 @@ class AuditsTable extends Component
         $this->resetPage();
     }
 
-   public function sortBy($field)
+    public function sortBy($field)
 	{
 
         $this->sortAsc === $field ? $this->sortAsc = !$this->sortAsc : $this->sortField = $field;
 	}
+
+
+    public function onEdit(Audit $audit)
+    {   
+        $this->audit = $audit;
+
+        $this->updateMode = true;
+
+        $this->emit('auditClicked', $audit->id);
+    }
+
+    public function onDelete(Audit $audit)
+    {
+        $this->audit = $audit;
+    }
+
+
+    public function confirmDelete()
+    {
+        $this->audit->delete();
+
+        session()->flash('message', 'Successfully deleted audit.');
+
+        $this->emit('onConfirmDelete');
+    }
 
 
     public function render()

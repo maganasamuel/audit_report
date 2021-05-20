@@ -8,23 +8,39 @@ use App\Models\Client;
 use Carbon\Carbon;
 use Livewire\Component;
 
-class CreateAuditForm extends Component
+class AuditForm extends Component
 {
     public $advisers;
     public $adviser_id;
-    public $lead_source;
-    public $is_new_client;
 
-    public $answers = [];
+    public $answers = [
+
+        'adviser_scale' => 10,
+        'received_copy' => 'yes',
+        'with_policy' => 'yes',
+        'confirm_adviser' => 'yes',
+        'medical_agreement' => 'yes',
+        'bank_account_agreement' => 'yes',
+        'replace_policy' => 'no',
+        'confirm_occupation' => '',
+        'received_copy' => 'yes',
+        'replacement_is_discussed' => 'yes',
+        'is_action_taken' => 'yes',
+        'is_new_client' => 'yes',
+        'lead_source' => 'Telemarketer'
+    ];
+
+    public $audit;
+
+    protected $listeners = ['auditClicked'];
 
     protected $rules = [
 
         'adviser_id' => 'required',
-        'is_new_client' => 'required',
+        'answers.is_new_client' => 'required',
         'answers.policy_holder' => 'required',
         'answers.policy_no' => 'required',
-        'lead_source' => 'required',
-        'is_new_client' => 'required',
+        'answers.lead_source' => 'required',
         'answers.with_policy' => 'required',
         'answers.confirm_adviser' => 'required',
         'answers.bank_account_agreement' => 'required',
@@ -48,7 +64,9 @@ class CreateAuditForm extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
+
     }
+    
 
 
     /**
@@ -59,41 +77,38 @@ class CreateAuditForm extends Component
      */
     public function mount()
     {
+  
         $this->advisers = Adviser::orderBy('name')->get();
 
-        $this->is_new_client = 'yes';
+    }
 
-        $this->lead_source = '';
+    public function auditClicked(Audit $audit)
+    {
+        $this->audit = $audit;
 
-        $this->answers['adviser_scale'] = 10;
+        if($this->audit) {
 
-        $this->answers['received_copy'] = 'yes';
+            $this->answers = json_decode($this->audit->qa, true);
+            $this->adviser_id = $this->audit->adviser_id;
 
-        $this->answers['with_policy'] = 'yes';
-
-        $this->answers['confirm_adviser'] = 'yes';
-
-        $this->answers['medical_agreement'] = 'yes';
-
-        $this->answers['bank_account_agreement'] = 'yes';
-
-        $this->answers['replace_policy'] = 'no';
-
-        $this->answers['confirm_occupation'] = '';
-
-        $this->answers['received_copy'] = 'yes';
-
-        $this->answers['replacement_is_discussed'] = 'yes';
-
-        $this->answers['is_action_taken'] = 'yes';
+        }
 
     }
+
 
     public function onSubmit()
     {
       
         $this->validate();
 
+
+        $this->audit ? $this->save() : $this->store();
+
+    }
+
+    public function store()
+    {
+        
         $client = Client::firstOrCreate(
 
             ['policy_holder' => $this->answers['policy_holder']],
@@ -110,15 +125,28 @@ class CreateAuditForm extends Component
 
         $client->audits()->attach($audit->id,[
             'weekOf' => Carbon::now()->startOfWeek()->format('Y-m-d'),
-            'lead_source' => $this->lead_source,
+            'lead_source' => $this->answers['lead_source'],
             'pdf_title' => $client->policy_holder.date('dmYgi', time()).'.pdf'
         ]);
 
         session()->flash('message', 'Successfully created audit.');
         
         return redirect()->to('/calls/audit');
+    }
 
+    public function save()
+    {
+    
+        $this->audit->update([
 
+            'adviser_id' => $this->adviser_id,
+            'user_id' => auth()->id(),
+            'qa' => json_encode($this->answers)
+        ]);
+
+        session()->flash('message', 'Successfully Updated Audit.');
+        
+        $this->emit('auditUpdate');
     }
 
     /**
@@ -129,6 +157,6 @@ class CreateAuditForm extends Component
      */
     public function render()
     {
-        return view('livewire.create-audit-form');
+        return view('livewire.audit-form');
     }
 }

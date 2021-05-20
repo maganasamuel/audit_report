@@ -69,6 +69,11 @@ class PDFController extends Controller
             [
                 'question' => 'Do you have any further comments?',
                 'answer' =>  $answers['is_action_taken']
+            ],
+
+            [
+                'question' => 'Notes: ',
+                'answer' =>  isset($answers['notes']) ? $answers['notes'] : 'N/A'
             ]
         ];
 

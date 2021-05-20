@@ -1,4 +1,7 @@
 <div>
+    @include('livewire.update-audit')
+    @include('alerts.delete-modal')
+
     <div class="d-flex justify-content-between pt-4">
         <div>
             <select wire:model="perPage" class="form-control">
@@ -12,6 +15,17 @@
             <input wire:model="search" type="text" class="form-control" placeholder="Search Clients">
         </div>
     </div>
+
+    @if (session()->has('message'))
+
+        <div class="alert alert-success alert-dismissible fade show rounded-0 mt-4" role="alert">
+
+            <span class="alert-text"><strong>Success!</strong> {{ session('message') }}</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <div class="table-responsive py-4">
         <table class="table table-flush">
@@ -50,14 +64,14 @@
                             <!-- <a href="" class="btn btn-primary btn-sm" title="Send Audit">
                                 <i class="far fa-envelope"></i> 
                             </a>  -->
-                            <a href="" class="btn btn-info btn-sm" title="Edit audit">
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#updateAuditModal" title="Edit audit" wire:click="onEdit({{$audit->id}})">
                                 <i class="far fa-edit"></i>
-                            </a> 
+                            </button> 
 
-                            <a href="" class="btn btn-danger btn-sm" title="Delete audit">
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" title="Delete audit" wire:click="onDelete({{$audit->id}})">
 
                                 <i class="far fa-trash-alt"></i>
-                            </a> 
+                            </button> 
     
          
                         </td>
@@ -82,5 +96,17 @@
             </div>
         </div>
     </div>
+
+    @push('js')
+    <script type="text/javascript">
+        window.livewire.on('auditUpdate', () => {
+            $('#updateAuditModal').modal('hide');
+        });
+
+        window.livewire.on('onConfirmDelete', () => {
+            $('#deleteModal').modal('hide');
+        });
+    </script>
+    @endpush
             
 </div>
