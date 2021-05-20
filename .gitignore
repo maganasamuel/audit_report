@@ -3,6 +3,7 @@
 /public/pdfs
 /public/css
 /public/storage
+/public/js
 /storage/*.key
 /vendor
 .env
