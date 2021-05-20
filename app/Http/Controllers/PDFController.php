@@ -85,6 +85,6 @@ class PDFController extends Controller
             'questions' => $questions,
         ]);
 
-        return $pdf->stream();
+        return $pdf->stream($audit->pivot->pdf_title);
     }
 }
