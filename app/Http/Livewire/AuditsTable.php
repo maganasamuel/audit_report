@@ -54,12 +54,24 @@ class AuditsTable extends Component
         $this->emit('auditClicked', $audit->id);
     }
 
+    /**
+     * Will prompt delete modal
+     *
+     * @param Audit $audit
+     * @return void
+     */
     public function onDelete(Audit $audit)
     {
         $this->audit = $audit;
     }
 
 
+    /**
+     * 
+     * Will confirm deletion
+     *
+     * @return void
+     */
     public function confirmDelete()
     {
         $this->audit->delete();
@@ -69,6 +81,15 @@ class AuditsTable extends Component
         $this->emit('onConfirmDelete');
     }
 
+    /**
+     * 
+     * This email will be sent to client's manager
+     * Discuss if the adviser will be given a copy
+     *
+     * @param Audit $audit
+     * @param Client $client
+     * @return void
+     */
     public function sendEmail(Audit $audit, Client $client)
     {
         $audit = $client->audits()->where('audit_id', $audit->id)->first();
