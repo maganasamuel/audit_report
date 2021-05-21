@@ -35,45 +35,47 @@
                     <th>#</th>
                     <th><a wire:click.prevent="sortBy('pdf_title)" href="#" role="button">
                     	PDF Title
-                    	
+
                     </a></th>
                     <th><a wire:click.prevent="sortBy('weekOf')" href="#" role="button">
                     	Week Of
-                    
+
                     </a></th>
                     <th class="text-right">Actions</th>
-       
+
                 </tr>
             </thead>
 
             <tbody>
                 @foreach($audits as $key => $audit)
                     <tr wire:key="{{ $audit->id }}">
-                       
+
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $audit->pivot->pdf_title }}</td>
                         <td>{{ $audit->pivot->weekOf }}</td>
-                        <td class="text-right" 
-                            wire:ignore 
-                            
+                        <td class="text-right"
+                            wire:ignore
+
                         >
-                            <a href="/profile/clients/{{$client->id}}/audits/{{$audit->id}}/pdf" class="btn btn-success btn-sm" title="View audit">
+                            <a href="/profile/clients/{{$client->id}}/audits/{{$audit->id}}/pdf" target="_blank" class="btn btn-success btn-sm" title="View audit">
                                 <i class="fa fa-eye"></i>
                             </a>
+
                           
                             <button class="btn btn-primary btn-sm" title="Send Audit" wire:click="sendEmail({{$audit->id}}, {{$client->id}})">
                                 <i class="far fa-envelope"></i> 
                             </button> 
+
                             <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#updateAuditModal" title="Edit audit" wire:click="onEdit({{$audit->id}})">
                                 <i class="far fa-edit"></i>
-                            </button> 
+                            </button>
 
                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" title="Delete audit" wire:click="onDelete({{$audit->id}})">
 
                                 <i class="far fa-trash-alt"></i>
-                            </button> 
-    
-         
+                            </button>
+
+
                         </td>
                     </tr>
                 @endforeach
@@ -109,5 +111,5 @@
 
     </script>
     @endpush
-            
+
 </div>
