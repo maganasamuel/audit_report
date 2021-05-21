@@ -8,7 +8,7 @@
                     <select class="form-control" name="report_type" wire:model.lazy="report_type">
                         <option value="" disabled selected>Choose an option.</option>
                         <option value="audit">Audit</option>
-                        <option value="survey">Survey</option>
+                       {{-- <option value="survey">Survey</option>--}}
                     </select>
 
                     @error('report_type')
