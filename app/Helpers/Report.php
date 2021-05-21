@@ -19,13 +19,13 @@ class Report {
         $this->dateEnd = $dateEnd;
     }
 
-    // public function generate($relations)
-    // {
-    //     return $this->model->{$relations}
-    //         ->where('created_at','>=', '2021-05-21')
-    //         ->where('created_at', '<=', '2021-05-22');
+    public function generate($relations)
+    {
+        return $this->model->{$relations}
+            ->where('created_at','>=', '2021-05-21')
+            ->where('created_at', '<=', '2021-05-22');
 
-    //     $this->model->totalClients
-    // }
+      
+    }
 
 }

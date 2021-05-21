@@ -76,22 +76,24 @@ class ReportForm extends Component
 
         $reportName = $this->adviser->name .'_reports_' .Carbon::now()->timestamp .'.pdf';
 
-        $this->adviser->audits->where('created_at', '>=', '2021-05-21')->where('created_at' , '<=',  '2021-05-21');
+        $dateStart = Carbon::parse($this->start_date);
 
-        return response()->streamDownload(function () {
+        $dateEnd = Carbon::parse($this->end_date);
+
+        return response()->streamDownload(function ()use($dateStart, $dateEnd) {
             $pdf= PDF::loadView('reports.pdf', [
                 'adviser' => $this->adviser,
                 'date' => Carbon::now()->toDayDateTimeString(),
-                'start_date' => Carbon::parse($this->start_date)->format('d/m/y'),
-                'end_date' => Carbon::parse($this->end_date)->format('d/m/y'),
-                'total_clients' => $this->adviser->totalClients(),
-                'service_rating' => $this->adviser->serviceRating(),
-                'disclosure_percentage' => $this->adviser->disclosurePercentage(),
-                'payment_percentage' => $this->adviser->paymentPercentage(),
-                'policy_replaced_percentage' => $this->adviser->policyReplacedPercentage(),
-                'correct_occupation_percentage' => $this->adviser->correctOccupationPercentage(),
-                'compliance_percentage' => $this->adviser->compliancePercentage(),
-                'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage()
+                'start_date' => Carbon::parse($this->start_date)->copy()->format('d/m/y'),
+                'end_date' => Carbon::parse($this->end_date)->copy()->format('d/m/y'),
+                'total_clients' => $this->adviser->totalClients($dateStart, $dateEnd),
+                'service_rating' => $this->adviser->serviceRating($dateStart, $dateEnd),
+                'disclosure_percentage' => $this->adviser->disclosurePercentage($dateStart, $dateEnd),
+                'payment_percentage' => $this->adviser->paymentPercentage($dateStart, $dateEnd),
+                'policy_replaced_percentage' => $this->adviser->policyReplacedPercentage($dateStart, $dateEnd),
+                'correct_occupation_percentage' => $this->adviser->correctOccupationPercentage($dateStart, $dateEnd),
+                'compliance_percentage' => $this->adviser->compliancePercentage($dateStart, $dateEnd),
+                'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd)
             ]);
 
             echo $pdf->stream();

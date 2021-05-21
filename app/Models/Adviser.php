@@ -28,9 +28,9 @@ class Adviser extends Model
      *
      * @return int
      */
-    public function totalClients()
+    public function totalClients($dateStart, $dateEnd)
     {
-      return count($this->audits->map(function($audit){
+      return count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['policy_no'];
       })->groupBy(function($value) {
@@ -45,16 +45,16 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function serviceRating()
+    public function serviceRating($dateStart, $dateEnd)
     {
-      $rating = $this->audits->map(function($audit){
+      $rating = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['adviser_scale'];
 
       })->sum();
 
 
-      return $rating / count($this->audits);
+      return $rating == 0 ? 0 : $rating / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd));
 
     }
 
@@ -64,9 +64,9 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function disclosurePercentage()
+    public function disclosurePercentage($dateStart, $dateEnd)
     {
-      $total = $this->audits->map(function($audit){
+      $total = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['medical_agreement'];
 
@@ -75,7 +75,7 @@ class Adviser extends Model
         return $value == 'yes - refer to notes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
     /**
@@ -83,9 +83,9 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function paymentPercentage()
+    public function paymentPercentage($dateStart, $dateEnd)
     {
-      $total = $this->audits->map(function($audit){
+      $total = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['bank_account_agreement'];
 
@@ -94,7 +94,7 @@ class Adviser extends Model
         return $value == 'yes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
         /**
@@ -102,9 +102,9 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function policyReplacedPercentage()
+    public function policyReplacedPercentage($dateStart, $dateEnd)
     {
-      $total = $this->audits->map(function($audit){
+      $total = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['replace_policy'];
 
@@ -113,7 +113,7 @@ class Adviser extends Model
         return $value == 'yes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
         /**
@@ -121,7 +121,7 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function correctOccupationPercentage()
+    public function correctOccupationPercentage($dateStart, $dateEnd)
     {
       $total = $this->audits->map(function($audit){
 
@@ -132,7 +132,7 @@ class Adviser extends Model
         return $value == 'yes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
     /**
@@ -140,9 +140,9 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function compliancePercentage()
+    public function compliancePercentage($dateStart, $dateEnd)
     {
-      $total = $this->audits->map(function($audit){
+      $total = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['is_action_taken'];
 
@@ -151,7 +151,7 @@ class Adviser extends Model
         return $value == 'yes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
     /**
@@ -159,9 +159,9 @@ class Adviser extends Model
      *
      * @return double
      */
-    public function replacementRisksPercentage()
+    public function replacementRisksPercentage($dateStart, $dateEnd)
     {
-      $total = $this->audits->map(function($audit){
+      $total = $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd)->map(function($audit){
 
           return json_decode($audit->qa, true)['is_action_taken'];
 
@@ -170,13 +170,9 @@ class Adviser extends Model
         return $value == 'yes';
       });
 
-      return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
+      return $total == 0 ? 0 : ( ($total / count($this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd))) * 100 );
     }
 
-    public function audit($question, $answer)
-    {
-      
-    }
 }
 
 
