@@ -94,7 +94,7 @@
 
     @push('js')
     <script type="text/javascript">
-        window.livewire.on('clientUpdate', () => {
+        window.livewire.on('clientUpdate', (data) => {
             $('#updateClientModal').modal('hide');
         });
 

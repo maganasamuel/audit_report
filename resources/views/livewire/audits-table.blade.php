@@ -12,7 +12,7 @@
             </select>
         </div>
         <div >
-            <input wire:model="search" type="text" class="form-control" placeholder="Search Clients">
+            <input wire:model="search" type="text" class="form-control" placeholder="Search Audits">
         </div>
     </div>
 
@@ -61,9 +61,9 @@
                                 <i class="fa fa-eye"></i>
                             </a>
                           
-                            <!-- <a href="" class="btn btn-primary btn-sm" title="Send Audit">
+                            <button class="btn btn-primary btn-sm" title="Send Audit" wire:click="sendEmail({{$audit->id}}, {{$client->id}})">
                                 <i class="far fa-envelope"></i> 
-                            </a>  -->
+                            </button> 
                             <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#updateAuditModal" title="Edit audit" wire:click="onEdit({{$audit->id}})">
                                 <i class="far fa-edit"></i>
                             </button> 
@@ -106,6 +106,7 @@
         window.livewire.on('onConfirmDelete', () => {
             $('#deleteModal').modal('hide');
         });
+
     </script>
     @endpush
             
