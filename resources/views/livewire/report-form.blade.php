@@ -54,7 +54,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                         </div>
-                        <input class="form-control" placeholder="Start date" type="text" wire:model.lazy="start_date">
+                        <input id="start_date" autocomplete="off" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" data-date-today-highlight="true" class="form-control datepicker" placeholder="Start date" type="text" onchange='Livewire.emit("selectStartDate",this.value)'>
 
                         @error('start_date')
                             <span class="invalid-feedback" style="display: block;" role="alert">
@@ -70,7 +70,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                         </div>
-                        <input class="form-control" placeholder="End date" type="text" wire:model.lazy="end_date">
+                        <input autocomplete="off" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" class="form-control datepicker" placeholder="End date" type="text" onchange='Livewire.emit("selectEndDate",this.value)'>
 
                         @error('end_date')
                             <span class="invalid-feedback" style="display: block;" role="alert">
@@ -85,4 +85,7 @@
             <button class="btn btn-primary" type="submit">Generate Report</button>
         </div>
     </form>
+
+   
+
 </div>

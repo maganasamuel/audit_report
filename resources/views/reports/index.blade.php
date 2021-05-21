@@ -25,6 +25,9 @@
 
   @push('js')
     <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $('.datepicker').datepicker({todayHighlight:true});
+    </script>
   @endpush
 
   {{--@include('custom-scripts.report-js')

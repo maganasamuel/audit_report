@@ -32,6 +32,22 @@ class ReportForm extends Component
         'adviser_id' => 'required'
     ];
 
+    protected $listeners = [
+        'selectStartDate'=> 'getStartDate',
+        'selectEndDate' => 'getEndDate'
+    ];
+
+    public function getStartDate($value)
+    {
+        $this->start_date = $value;
+    }
+
+    public function getEndDate($value)
+    {
+        $this->end_date = $value;
+    }
+
+
     public function updatedAdviserId($value)
     {
 
@@ -50,9 +66,7 @@ class ReportForm extends Component
     {
         $this->advisers = Adviser::orderBy('name', 'asc')->get();
 
-        $this->start_date = Carbon::now()->format('d/m/y');
 
-        $this->end_date = Carbon::now()->addMonth()->format('d/m/y');
 
     }
 
@@ -60,15 +74,16 @@ class ReportForm extends Component
     {
         $this->validate();
 
- 
         $reportName = $this->adviser->name .'_reports_' .Carbon::now()->timestamp .'.pdf';
+
+        $this->adviser->audits->where('created_at', '>=', '2021-05-21')->where('created_at' , '<=',  '2021-05-21');
 
         return response()->streamDownload(function () {
             $pdf= PDF::loadView('reports.pdf', [
                 'adviser' => $this->adviser,
                 'date' => Carbon::now()->toDayDateTimeString(),
-                'start_date' => Carbon::createFromFormat('d/m/y', $this->start_date)->format('d/m/y'),
-                'end_date' => Carbon::createFromFormat('d/m/y', $this->start_date)->format('d/m/y'),
+                'start_date' => Carbon::parse($this->start_date)->format('d/m/y'),
+                'end_date' => Carbon::parse($this->end_date)->format('d/m/y'),
                 'total_clients' => $this->adviser->totalClients(),
                 'service_rating' => $this->adviser->serviceRating(),
                 'disclosure_percentage' => $this->adviser->disclosurePercentage(),

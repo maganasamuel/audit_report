@@ -172,6 +172,11 @@ class Adviser extends Model
 
       return $total == 0 ? 0 : ( ($total / count($this->audits)) * 100 );
     }
+
+    public function audit($question, $answer)
+    {
+      
+    }
 }
 
 
