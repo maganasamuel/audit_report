@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td><strong>Date generated: </strong> {{ $date }}</td>
-          <td><strong>Period Covered: </strong> {{ $date_range }}</td>
+          <td><strong>Period Covered: </strong> {{ $start_date }} - {{ $end_date }}</td>
         </tr>
       </table>
       <div style="text-align: center;">
@@ -44,6 +44,7 @@
           <strong style="text-decoration: underline;">Audits</strong>
         </h2>
       </div>
+
       <table class="audits-table" width="100%" style="border-spacing: 0; border: 1px solid black;">
         <tr>
           <td style="text-align: center; background-color: #adcdea;"><strong>Title</strong></td>
@@ -53,40 +54,41 @@
           <td>
             <strong>No. of Clients Audited:</strong>
           </td>
-          <td style="text-align: center;">{{ $clients }}</td>
+          <td style="text-align: center;">{{ $total_clients }}</td>
         </tr>
         <tr>
           <td>
             <strong>Adviser Standard of Service Rating:</strong>
           </td>
           <td style="text-align: center;">
-            {{ $avg_rating }}%
+            {{ $service_rating }}%
           </td>
         </tr>
         <tr>
           <td><strong>Complete Disclosure by Client:</strong></td>
-          <td style="text-align: center;">{{ $perc_cdc }}%</td>
+          <td style="text-align: center;">{{ $disclosure_percentage }}%</td>
         </tr>
         <tr>
           <td><strong>Client Payment Method has been Set: </strong></td>
-          <td style="text-align: center;">{{ $perc_cpm }}%</td>
+          <td style="text-align: center;">{{ $payment_percentage }}%</td>
         </tr>
         <tr>
           <td><strong>Client Policy Being Replaced: </strong></td>
-          <td style="text-align: center;">{{ $perc_cbr }}%</td>
+          <td style="text-align: center;">{{ $policy_replaced_percentage }}%</td>
         </tr>
         <tr>
           <td><strong>Client Provided Correct Occupation: </strong></td>
-          <td style="text-align: center;">{{ $perc_cpco }}%</td>
+          <td style="text-align: center;">{{ $correct_occupation_percentage }}%</td>
         </tr>
         <tr>
           <td><strong>Compliance Documents Received by Client: </strong></td>
-          <td style="text-align: center;">{{ $perc_cdrc }}%</td>
+          <td style="text-align: center;">{{ $compliance_percentage }}%</td>
         </tr>
         <tr>
           <td><strong>Explanation of Risk in Replacement: </strong></td>
-          <td style="text-align: center;">{{ $perc_errb }}%</td>
+          <td style="text-align: center;">{{ $replacement_risks_percentage }}%</td>
         </tr>
       </table>
+      
     </body>
 </html>

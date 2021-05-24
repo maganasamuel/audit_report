@@ -24,6 +24,7 @@ class ReportController extends Controller
     return view('reports.index', compact('advisers'));
   }
 
+
   public function fetch_adviser(Request $request){
     if($request->ajax()){
       $adviser = Adviser::find($request->id );

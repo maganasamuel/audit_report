@@ -62,7 +62,8 @@ class ClientForm extends Component
 
         session()->flash('message', 'Successfully updated Client.');
         
-        $this->emit('clientUpdate');
+        $this->emit('clientUpdate', $this->client);
+
     }
 
     public function render()
