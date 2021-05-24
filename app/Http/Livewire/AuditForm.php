@@ -19,7 +19,7 @@ class AuditForm extends Component
         'received_copy' => 'yes',
         'with_policy' => 'yes',
         'confirm_adviser' => 'yes',
-        'medical_agreement' => 'yes',
+        'medical_agreement' => 'yes - refer to notes',
         'bank_account_agreement' => 'yes',
         'replace_policy' => 'no',
         'confirm_occupation' => '',

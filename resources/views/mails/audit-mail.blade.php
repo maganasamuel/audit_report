@@ -158,7 +158,7 @@
                     <tr>
                       <td align='center' style='font-size:0px;padding:10px 25px;word-break:break-word;'>
                         <div style='color:#777777;font-family:Oxygen, Helvetica neue, sans-serif;font-size:14px;line-height:21px;text-align:center;'>
-                          Here's <span style="font-weight: bolder; text-transform: uppercase;">{{ $details['client_name'] }}'s</span> Audit Report with Policy Number: <span style="font-weight: bolder; text-transform: uppercase;">{{ $details['client_no'] }}</span>
+                          Here's <span style="font-weight: bolder; text-transform: uppercase;">{{ $policy_holder }}'s</span> Audit Report with Policy Number: <span style="font-weight: bolder; text-transform: uppercase;">{{ $policy_no }}</span>
                         </div>
                       </td>
                     </tr>
