@@ -1,7 +1,4 @@
 <div>
-  @include('profile.clients.edit')
-  @include('alerts.delete-modal')
-
   <div class="d-flex justify-content-between pt-4">
     <div>
       <x-page.range wire:model="perPage" />
@@ -11,18 +8,6 @@
         placeholder="Search Clients">
     </div>
   </div>
-
-  @if (session()->has('message'))
-    <div class="alert alert-success alert-dismissible fade show rounded-0 mt-4"
-      role="alert">
-      <span class="alert-text"><strong>Success!</strong>
-        {{ session('message') }}</span>
-      <button type="button" class="close" data-dismiss="alert"
-        aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  @endif
 
   <div class="table-responsive py-4">
     <table class="table table-flush">
@@ -64,8 +49,8 @@
               </a>
 
               <button class="btn btn-info btn-sm" data-toggle="modal"
-                data-target="#updateClientModal" title="Edit Client"
-                wire:click="onEdit({{ $client->id }})">
+                data-target="#editClientModal" title="Edit Client"
+                wire:click="$emitTo('clients.edit', 'editClient', {{ $client->id }})">
                 <i class="far fa-edit"></i>
               </button>
 
@@ -85,18 +70,22 @@
     <x-page.nav :paginator="$clients" :search="$search" on-each-side="1"
       entity-name="clients" />
   </div>
-
-  @push('js')
-    <script type="text/javascript">
-      window.livewire.on('clientUpdate', (data) => {
-        $('#updateClientModal').modal('hide');
-      });
-
-      window.livewire.on('onConfirmDelete', () => {
-        $('#deleteModal').modal('hide');
-      });
-
-    </script>
-  @endpush
-
 </div>
+
+@push('scripts')
+  <script type="text/javascript">
+    window.livewire.on('clientUpdated', (data) => {
+      $('#editClientModal').modal('hide');
+
+      $('#success').removeClass('d-none').addClass('d-block');
+      $('#success-text').text(data);
+
+      @this.call('render');
+    });
+
+    window.livewire.on('onConfirmDelete', () => {
+      $('#deleteModal').modal('hide');
+    });
+
+  </script>
+@endpush

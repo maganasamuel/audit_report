@@ -52,15 +52,6 @@ class Index extends Component
         }
     }
 
-    public function onEdit(Client $client)
-    {
-        $this->client = $client;
-
-        $this->updateMode = true;
-
-        $this->emit('clientClicked', $client->id);
-    }
-
     public function onDelete(Client $client)
     {
         $this->client = $client;
