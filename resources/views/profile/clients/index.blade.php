@@ -2,7 +2,7 @@
 
 @section('content')
   @include('users.partials.header', [
-  'title' => __('Client Details'),
+  'title' => __('Clients'),
   'description' => __('This is the Clients table. You can see different
   information of the clients on this table. You can add, update or delete as
   well.'),
