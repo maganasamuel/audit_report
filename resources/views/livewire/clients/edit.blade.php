@@ -26,13 +26,7 @@
                     wire:model.lazy="input.policy_holder"
                     placeholder="Enter Policy Holder">
 
-                  @error('policy_holder')
-                    <span class="invalid-feedback" style="display: block;"
-                      role="alert">
-                      <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-
+                  <x-input-error for="policy_holder" />
                 </div>
 
                 <div class="form-group">
@@ -43,25 +37,16 @@
                     wire:model.lazy="input.policy_no"
                     placeholder="Enter Policy Number">
 
-                  @error('policy_no')
-                    <span class="invalid-feedback" style="display: block;"
-                      role="alert">
-                      <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-
+                  <x-input-error for="policy_no" />
                 </div>
 
                 <div class="form-group mt-4">
                   <button type="submit" class="btn btn-primary"><i
                       class="fa fa-circle-o-notch fa-spin d-none m-1"></i>Edit</button>
                 </div>
-
               </form>
-
             </div>
           @endif
-
         </div>
       </div>
     </div>

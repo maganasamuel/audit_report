@@ -25,9 +25,7 @@
                     placeholder="Adviser Name"
                     wire:model.defer="input.name">
                 </div>
-                @error('name')
-                  <p class="small text-danger mt-1">{{ $message }}</p>
-                @enderror
+                <x-input-error for="name" />
               </div>
             </div>
           </div>
@@ -44,9 +42,7 @@
                     placeholder="FSP Number"
                     wire:model.defer="input.fsp_no">
                 </div>
-                @error('fsp_no')
-                  <p class="small text-danger mt-1">{{ $message }}</p>
-                @enderror
+                <x-input-error for="fsp_no" />
               </div>
             </div>
           </div>

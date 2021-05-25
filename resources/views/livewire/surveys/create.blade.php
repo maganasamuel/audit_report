@@ -14,9 +14,7 @@
         </option>
       @endforeach
     </select>
-    @error('adviser_id')
-      <p class="small text-danger mt-1">{{ $message }}</p>
-    @enderror
+    <x-input-error for="adviser_id" />
   </div>
 
   <div class="form-group">
@@ -27,9 +25,7 @@
       <option value="Yes">Yes</option>
       <option value="No">No</option>
     </select>
-    @error('new_client')
-      <p class="small text-danger mt-1">{{ $message }}</p>
-    @enderror
+    <x-input-error for="new_client" />
   </div>
 
   @if (isset($input['new_client']))
@@ -39,18 +35,14 @@
           <input type="text" name="policy_holder" placeholder="Policy Holder"
             class="form-email form-control" id="policy_holder"
             wire:model.lazy="input.policy_holder">
-          @error('policy_holder')
-            <p class="small text-danger mt-1">{{ $message }}</p>
-          @enderror
+          <x-input-error for="policy_holder" />
         </div>
 
         <div class="form-group col-md-6">
           <input type="text" name="policy_no" id="policy_no"
             placeholder="Policy No" class="form-control"
             wire:model.lazy="input.policy_no">
-          @error('policy_no')
-            <p class="small text-danger mt-1">{{ $message }}</p>
-          @enderror
+          <x-input-error for="policy_no" />
         </div>
       </div>
     @elseif($input['new_client'] == 'No')
@@ -65,9 +57,7 @@
               </option>
             @endforeach
           </select>
-          @error('client_id')
-            <p class="small text-danger mt-1">{{ $message }}</p>
-          @enderror
+          <x-input-error for="client_id" />
         </div>
 
         <div class="form-group col-lg-6 col-md-12">
@@ -100,9 +90,7 @@
           class="form-control"
           wire:model.debounce="input.sa.answers.{{ $index }}">
       @endif
-      @error('sa.answers.' . $index)
-        <p class="small text-danger mt-1">{{ $message }}</p>
-      @enderror
+      <x-input-error for="{{ 'sa.answers.' . $index }}" />
     </div>
   @endforeach
 
