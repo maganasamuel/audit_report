@@ -59,18 +59,18 @@
             <td class="text-right"
               wire:ignore>
               <a href="{{ $client->path() }}" class="btn btn-success btn-sm"
-                title="View Client">
+                title="View Details">
                 <i class="fa fa-eye"></i>
               </a>
 
               <button class="btn btn-info btn-sm" data-toggle="modal"
-                data-target="#updateClientModal" title="Edit audit"
+                data-target="#updateClientModal" title="Edit Client"
                 wire:click="onEdit({{ $client->id }})">
                 <i class="far fa-edit"></i>
               </button>
 
               <button class="btn btn-danger btn-sm" data-toggle="modal"
-                data-target="#deleteModal" title="Delete audit"
+                data-target="#deleteModal" title="Delete Client"
                 wire:click="onDelete({{ $client->id }})">
 
                 <i class="far fa-trash-alt"></i>
