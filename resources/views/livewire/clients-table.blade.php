@@ -4,12 +4,7 @@
 
   <div class="d-flex justify-content-between pt-4">
     <div>
-      <select wire:model="perPage" class="form-control">
-        <option value="10">10</option>
-        <option value="25">25</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-      </select>
+      <x-page.range wire:model="perPage" />
     </div>
     <div>
       <input wire:model="search" type="text" class="form-control"
@@ -87,22 +82,8 @@
       </tbody>
     </table>
 
-    <div class="d-flex justify-content-between d-flex-items-center pt-2">
-      <div class="px-4 text-muted">
-
-        @if ($clients->firstItem() > 0)
-          <small>
-            Showing {{ $clients->firstItem() }} to
-            {{ $clients->lastItem() }} out of {{ $clients->total() }}
-          </small>
-        @else
-          <small>{{ $search ? 'No clients found.' : 'No available clients.' }}</small>
-        @endif
-      </div>
-      <div class="px-4">
-        {{ $clients->links() }}
-      </div>
-    </div>
+    <x-page.nav :paginator="$clients" :search="$search" on-each-side="1"
+      entity-name="clients" />
   </div>
 
   @push('js')

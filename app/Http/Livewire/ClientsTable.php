@@ -25,11 +25,11 @@ class ClientsTable extends Component
         'desc' => 'fa-sort-down',
     ];
 
-    public $sortAsc = true;
-
     public $client;
 
     public $updateMode = false;
+
+    protected $paginationTheme = 'bootstrap';
 
     public function updatingSearch()
     {
