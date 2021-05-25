@@ -8,16 +8,24 @@ use Livewire\WithPagination;
 
 class ClientsTable extends Component
 {
-
     use WithPagination;
 
-	public $perPage = 10;
+    public $perPage = 10;
 
-	public $search;
+    public $search;
 
-	public $sortField = 'policy_holder';
+    public $sortColumn = [
+        'name' => 'policy_holder',
+        'direction' => 'asc',
+    ];
 
-	public $sortAsc = true;
+    public $sortClasses = [
+        '' => 'fa-sort',
+        'asc' => 'fa-sort-up',
+        'desc' => 'fa-sort-down',
+    ];
+
+    public $sortAsc = true;
 
     public $client;
 
@@ -28,14 +36,24 @@ class ClientsTable extends Component
         $this->resetPage();
     }
 
-    public function sortBy($field)
-	{
+    public function sortBy($column)
+    {
+        $sortDirections = [
+            '' => 'asc',
+            'asc' => 'desc',
+            'desc' => '',
+        ];
 
-        $this->sortAsc === $field ? $this->sortAsc = !$this->sortAsc : $this->sortField = $field;
-	}
+        if ($this->sortColumn['name'] == $column) {
+            $this->sortColumn['direction'] = $sortDirections[$this->sortColumn['direction']];
+        } else {
+            $this->sortColumn['name'] = $column;
+            $this->sortColumn['direction'] = 'asc';
+        }
+    }
 
     public function onEdit(Client $client)
-    {   
+    {
         $this->client = $client;
 
         $this->updateMode = true;
@@ -48,7 +66,6 @@ class ClientsTable extends Component
         $this->client = $client;
     }
 
-
     public function confirmDelete()
     {
         $this->client->delete();
@@ -58,17 +75,15 @@ class ClientsTable extends Component
         $this->emit('onConfirmDelete');
     }
 
-
     public function render()
     {
-        $this->search = strtolower($this->search);
-        
-    	$clients = Client::whereRaw('lower(policy_holder) like (?)',["%{$this->search}%"])
-            ->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+        $query = Client::where('policy_holder', 'like', '%' . $this->search . '%');
 
-        return view('livewire.clients-table',[
+        if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
+            $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
+        }
+        $clients = $query->paginate($this->perPage);
 
-            'clients' => $clients->paginate($this->perPage)
-        ]);
+        return view('livewire.clients-table', compact('clients'));
     }
 }
