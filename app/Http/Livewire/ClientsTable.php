@@ -77,11 +77,13 @@ class ClientsTable extends Component
 
     public function render()
     {
-        $query = Client::where('policy_holder', 'like', '%' . $this->search . '%');
+        $query = Client::where('policy_holder', 'like', '%' . $this->search . '%')
+            ->orWhere('policy_no', 'like', '%' . $this->search . '%');
 
         if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
         }
+
         $clients = $query->paginate($this->perPage);
 
         return view('livewire.clients-table', compact('clients'));
