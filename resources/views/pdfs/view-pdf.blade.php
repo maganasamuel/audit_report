@@ -10,11 +10,6 @@
   <link rel="stylesheet" href="/css/pdf.css" />
 
   <style>
-    body {
-      font-family: 'calibri';
-      font-size: 11pt;
-    }
-
     #questions {
       background-color: #fff;
       color: #000;
