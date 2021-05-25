@@ -30,7 +30,7 @@
 
     <div class="card">
       <div class="card-body">
-        @livewire('clients-table')
+        @livewire('clients.index')
       </div>
     </div>
 

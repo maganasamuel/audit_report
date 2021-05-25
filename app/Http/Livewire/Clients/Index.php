@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Clients;
 
 use App\Models\Client;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ClientsTable extends Component
+class Index extends Component
 {
     use WithPagination;
 
@@ -86,6 +86,6 @@ class ClientsTable extends Component
 
         $clients = $query->paginate($this->perPage);
 
-        return view('livewire.clients-table', compact('clients'));
+        return view('livewire.clients.index', compact('clients'));
     }
 }
