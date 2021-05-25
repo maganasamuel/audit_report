@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Adviser;
 use Carbon\Carbon;
 use Livewire\Component;
-use Barryvdh\DomPDF\Facade as PDF;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class ReportForm extends Component
 {
@@ -28,12 +28,12 @@ class ReportForm extends Component
         'report_type' => 'required',
         'start_date' => 'required',
         'end_date' => 'required',
-        'adviser_id' => 'required'
+        'adviser_id' => 'required',
     ];
 
     protected $listeners = [
-        'selectStartDate'=> 'getStartDate',
-        'selectEndDate' => 'getEndDate'
+        'selectStartDate' => 'getStartDate',
+        'selectEndDate' => 'getEndDate',
     ];
 
     public function getStartDate($value)
@@ -46,14 +46,11 @@ class ReportForm extends Component
         $this->end_date = $value;
     }
 
-
     public function updatedAdviserId($value)
     {
-
         $this->adviser = Adviser::find($value);
 
         $this->fsp_no = $this->adviser->fsp_no;
-
     }
 
     public function updated($property)
@@ -64,27 +61,24 @@ class ReportForm extends Component
     public function mount()
     {
         $this->advisers = Adviser::orderBy('name', 'asc')->get();
-
-
-
     }
 
     public function onSubmit()
     {
         $this->validate();
 
-        $reportName = $this->adviser->name .'_reports_' .Carbon::now()->timestamp .'.pdf';
+        $reportName = $this->adviser->name . '_reports_' . Carbon::now()->timestamp . '.pdf';
 
         $dateStart = Carbon::parse($this->start_date);
 
         $dateEnd = Carbon::parse($this->end_date);
 
-        return response()->streamDownload(function ()use($dateStart, $dateEnd) {
-            $pdf= PDF::loadView('reports.pdf', [
+        return response()->streamDownload(function () use ($dateStart, $dateEnd) {
+            $pdf = Pdf::loadView('reports.pdf', [
                 'adviser' => $this->adviser,
-                'date' => Carbon::now()->toDayDateTimeString(),
-                'start_date' => Carbon::parse($this->start_date)->copy()->format('d/m/y'),
-                'end_date' => Carbon::parse($this->end_date)->copy()->format('d/m/y'),
+                'date' => date('D, jS F, Y h:i A'),
+                'start_date' => Carbon::parse($this->start_date)->copy()->format('d/m/Y'),
+                'end_date' => Carbon::parse($this->end_date)->copy()->format('d/m/Y'),
                 'total_clients' => $this->adviser->totalClients($dateStart, $dateEnd),
                 'service_rating' => $this->adviser->serviceRating($dateStart, $dateEnd),
                 'disclosure_percentage' => $this->adviser->disclosurePercentage($dateStart, $dateEnd),
@@ -92,12 +86,11 @@ class ReportForm extends Component
                 'policy_replaced_percentage' => $this->adviser->policyReplacedPercentage($dateStart, $dateEnd),
                 'correct_occupation_percentage' => $this->adviser->correctOccupationPercentage($dateStart, $dateEnd),
                 'compliance_percentage' => $this->adviser->compliancePercentage($dateStart, $dateEnd),
-                'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd)
+                'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd),
             ]);
 
             echo $pdf->stream();
         }, $reportName);
-
     }
 
     public function render()
