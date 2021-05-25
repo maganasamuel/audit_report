@@ -12,7 +12,7 @@ return [
     | location for this type of information, allowing packages to have
     | a conventional file to locate the various service credentials.
     |
-    */
+     */
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
@@ -33,6 +33,47 @@ return [
     'company' => [
         'web' => env('COMPANY_WEB', 'www.eliteinsure.co.nz'),
         'url' => env('COMPANY_URL', 'https://eliteinsure.co.nz'),
+    ],
+
+    'survey' => [
+        'questions' => [
+            [
+                'type' => 'boolean',
+                'text' => 'Have you had a chance to discuss this cancellation with your Adviser?',
+            ],
+            [
+                'type' => 'text',
+                'text' => 'Who is your Adviser?',
+            ],
+            [
+                'type' => 'boolean',
+                'text' => 'Are you replacing your Partners Life Policy with one at another Provider?',
+            ],
+            [
+                'type' => 'boolean',
+                'text' => 'Did your Adviser explain the differences between your Partners Life Policy and your new replacement insurance Policy?',
+            ],
+            [
+                'type' => 'boolean',
+                'text' => 'Did your Adviser explain the risk of Non-Disclosure or Misstatement to you?',
+            ],
+            [
+                'type' => 'boolean',
+                'text' => 'Did your Adviser discuss both the benefits you forfeit and any risks you might be exposed to in cancelling your cover from us?',
+            ],
+            [
+                'type' => 'text',
+                'text' => 'Why are you cancelling your Policy with us?',
+            ],
+            [
+                'type' => 'text',
+                'text' => 'Who is your new insurer?',
+            ],
+            [
+                'type' => 'text',
+                'text' => 'What could we do to improve?',
+            ],
+        ],
     ],
 
 ];

@@ -23,7 +23,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
         <!-- Javascripts -->
 
-        
+        <link href="{{ mix('css/main.css') }}" rel="stylesheet">
         @livewireStyles
     </head>
     <body class="{{ $class ?? '' }}">
@@ -35,6 +35,7 @@
         @endauth
         
         <div class="main-content">
+
             @include('layouts.navbars.navbar')
             @yield('content')
         </div>

@@ -1,4 +1,7 @@
 <div>
+    @include('livewire.update-audit')
+    @include('alerts.delete-modal')
+
     <div class="d-flex justify-content-between pt-4">
         <div>
             <select wire:model="perPage" class="form-control">
@@ -9,9 +12,20 @@
             </select>
         </div>
         <div >
-            <input wire:model="search" type="text" class="form-control" placeholder="Search Clients">
+            <input wire:model="search" type="text" class="form-control" placeholder="Search Audits">
         </div>
     </div>
+
+    @if (session()->has('message'))
+
+        <div class="alert alert-success alert-dismissible fade show rounded-0 mt-4" role="alert">
+
+            <span class="alert-text"><strong>Success!</strong> {{ session('message') }}</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <div class="table-responsive py-4">
         <table class="table table-flush">
@@ -21,45 +35,47 @@
                     <th>#</th>
                     <th><a wire:click.prevent="sortBy('pdf_title)" href="#" role="button">
                     	PDF Title
-                    	
+
                     </a></th>
                     <th><a wire:click.prevent="sortBy('weekOf')" href="#" role="button">
                     	Week Of
-                    
+
                     </a></th>
                     <th class="text-right">Actions</th>
-       
+
                 </tr>
             </thead>
 
             <tbody>
                 @foreach($audits as $key => $audit)
                     <tr wire:key="{{ $audit->id }}">
-                       
+
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $audit->pivot->pdf_title }}</td>
                         <td>{{ $audit->pivot->weekOf }}</td>
-                        <td class="text-right" 
-                            wire:ignore 
-                            
+                        <td class="text-right"
+                            wire:ignore
+
                         >
-                            <a href="/profile/clients/{{$client->id}}/audits/{{$audit->id}}/pdf" class="btn btn-success btn-sm" title="View audit">
+                            <a href="/profile/clients/{{$client->id}}/audits/{{$audit->id}}/pdf" target="_blank" class="btn btn-success btn-sm" title="View audit">
                                 <i class="fa fa-eye"></i>
                             </a>
-                          
-                            <!-- <a href="" class="btn btn-primary btn-sm" title="Send Audit">
-                                <i class="far fa-envelope"></i> 
-                            </a>  -->
-                            <a href="" class="btn btn-info btn-sm" title="Edit audit">
-                                <i class="far fa-edit"></i>
-                            </a> 
 
-                            <a href="" class="btn btn-danger btn-sm" title="Delete audit">
+                          
+                            <button class="btn btn-primary btn-sm" title="Send Audit" wire:click="sendEmail({{$audit->id}}, {{$client->id}})">
+                                <i class="far fa-envelope"></i> 
+                            </button> 
+
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#updateAuditModal" title="Edit audit" wire:click="onEdit({{$audit->id}})">
+                                <i class="far fa-edit"></i>
+                            </button>
+
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" title="Delete audit" wire:click="onDelete({{$audit->id}})">
 
                                 <i class="far fa-trash-alt"></i>
-                            </a> 
-    
-         
+                            </button>
+
+
                         </td>
                     </tr>
                 @endforeach
@@ -82,5 +98,18 @@
             </div>
         </div>
     </div>
-            
+
+    @push('js')
+    <script type="text/javascript">
+        window.livewire.on('auditUpdate', () => {
+            $('#updateAuditModal').modal('hide');
+        });
+
+        window.livewire.on('onConfirmDelete', () => {
+            $('#deleteModal').modal('hide');
+        });
+
+    </script>
+    @endpush
+
 </div>
