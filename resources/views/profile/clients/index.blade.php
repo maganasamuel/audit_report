@@ -29,7 +29,6 @@
     @include('extra.cancel-survey-pdf-modal') --}}
 
     @livewire('clients.edit')
-    @include('alerts.delete-modal')
 
     <div class="card">
       <div class="card-body">

@@ -56,7 +56,7 @@
 
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 data-target="#deleteModal" title="Delete Client"
-                wire:click="onDelete({{ $client->id }})">
+                wire:click="deleteClient({{ $client->id }})">
 
                 <i class="far fa-trash-alt"></i>
               </button>
@@ -70,6 +70,8 @@
     <x-page.nav :paginator="$clients" :search="$search" on-each-side="1"
       entity-name="clients" />
   </div>
+
+  @include('alerts.delete-modal')
 </div>
 
 @push('scripts')
@@ -83,8 +85,11 @@
       @this.call('render');
     });
 
-    window.livewire.on('onConfirmDelete', () => {
+    window.livewire.on('clientDeleted', (data) => {
       $('#deleteModal').modal('hide');
+
+      $('#success').removeClass('d-none').addClass('d-block');
+      $('#success-text').text(data);
     });
 
   </script>

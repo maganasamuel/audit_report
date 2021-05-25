@@ -52,7 +52,7 @@ class Index extends Component
         }
     }
 
-    public function onDelete(Client $client)
+    public function deleteClient(Client $client)
     {
         $this->client = $client;
     }
@@ -61,9 +61,7 @@ class Index extends Component
     {
         $this->client->delete();
 
-        session()->flash('message', 'Successfully deleted client.');
-
-        $this->emit('onConfirmDelete');
+        $this->emit('clientDeleted', 'Successfully deleted client.');
     }
 
     public function render()
