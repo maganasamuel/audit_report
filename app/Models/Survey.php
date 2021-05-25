@@ -9,11 +9,19 @@ class Survey extends Model
 {
     use HasFactory;
 
-    public function advisers(){
-      return $this->belongsTo(Adviser::class);
+    protected $guarded = [];
+
+    protected $casts = [
+        'sa' => 'array',
+    ];
+
+    public function advisers()
+    {
+        return $this->belongsTo(Adviser::class);
     }
 
-    public function clients(){
-      return $this->belongsTo(Client::class);
+    public function clients()
+    {
+        return $this->belongsTo(Client::class);
     }
 }
