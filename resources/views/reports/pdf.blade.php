@@ -1,94 +1,150 @@
 <!doctype html>
 <html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Reports PDF </title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-          .audits-table td {
-            border: 1px solid black;
-            padding: 5px;
-          }
 
-          .header-table td {
-            border: 1px solid black;
-            padding: 5px;
-          }
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Report</title>
 
-          .audits-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-          }
-        </style>
-    </head>
-    <body>
-      <img src="{{ public_path('assets/img/eliteInsure_vertical.png') }}" alt="" width="100px" style="margin-bottom: 30px;" />
-      <div style="text-align: center; background-color: #adcdea; padding: 10px; border: 2px solid black">
-        <h1>
-          <strong>Adviser Summary</strong>
-        </h1>
-      </div>
-      <table class="header-table" width="100%" style="border: 1px solid black; border-spacing: 0">
-        <tr>
-          <td><strong>Name:</strong> {{ $adviser->name }}</td>
-          <td><strong>FSP no.</strong> {{ $adviser->fsp_no }}</td>
-        </tr>
-        <tr>
-          <td><strong>Date generated: </strong> {{ $date }}</td>
-          <td><strong>Period Covered: </strong> {{ $start_date }} - {{ $end_date }}</td>
-        </tr>
-      </table>
-      <div style="text-align: center;">
-        <h2>
-          <strong style="text-decoration: underline;">Audits</strong>
-        </h2>
-      </div>
+  <link rel="stylesheet" href="/css/pdf.css" />
 
-      <table class="audits-table" width="100%" style="border-spacing: 0; border: 1px solid black;">
-        <tr>
-          <td style="text-align: center; background-color: #adcdea;"><strong>Title</strong></td>
-          <td style="text-align: center; background-color: #adcdea;"><strong>Percentage %</strong></td>
-        </tr>
-        <tr>
-          <td>
-            <strong>No. of Clients Audited:</strong>
-          </td>
-          <td style="text-align: center;">{{ $total_clients }}</td>
-        </tr>
-        <tr>
-          <td>
-            <strong>Adviser Standard of Service Rating:</strong>
-          </td>
-          <td style="text-align: center;">
-            {{ $service_rating }}%
-          </td>
-        </tr>
-        <tr>
-          <td><strong>Complete Disclosure by Client:</strong></td>
-          <td style="text-align: center;">{{ $disclosure_percentage }}%</td>
-        </tr>
-        <tr>
-          <td><strong>Client Payment Method has been Set: </strong></td>
-          <td style="text-align: center;">{{ $payment_percentage }}%</td>
-        </tr>
-        <tr>
-          <td><strong>Client Policy Being Replaced: </strong></td>
-          <td style="text-align: center;">{{ $policy_replaced_percentage }}%</td>
-        </tr>
-        <tr>
-          <td><strong>Client Provided Correct Occupation: </strong></td>
-          <td style="text-align: center;">{{ $correct_occupation_percentage }}%</td>
-        </tr>
-        <tr>
-          <td><strong>Compliance Documents Received by Client: </strong></td>
-          <td style="text-align: center;">{{ $compliance_percentage }}%</td>
-        </tr>
-        <tr>
-          <td><strong>Explanation of Risk in Replacement: </strong></td>
-          <td style="text-align: center;">{{ $replacement_risks_percentage }}%</td>
-        </tr>
-      </table>
-      
-    </body>
+  <style>
+    .audits-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .bg-gray {
+      background-color: #adcdea;
+    }
+
+  </style>
+</head>
+
+<body>
+  <htmlpageheader name="page-header-first">
+    <table class="header">
+      <tr>
+        <td class="header-left-box">
+          &nbsp;
+        </td>
+        <td class="header-image"><img
+            src="{{ asset('assets/img/logo-only.png') }}"
+            height="0.76in" /></td>
+        <td class="header-title">AUDIT REPORT</td>
+        <td class="header-right-box">
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </htmlpageheader>
+  <htmlpageheader name="page-header">
+    <table class="header">
+      <tr>
+        <td class="header-left-box">
+          &nbsp;
+        </td>
+        <td class="header-image"><img
+            src="{{ asset('assets/img/logo-only.png') }}"
+            height="0.76in" /></td>
+        <td class="header-title">&nbsp;</td>
+        <td class="header-right-box">
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </htmlpageheader>
+  <htmlpagefooter name="page-footer">
+    <table class="table-footer">
+      <tr>
+        <td class="footer-logo">
+          <img src="{{ asset('assets/img/EliteInsure_Horizontal.png') }}"
+            width="2.12in" />
+        </td>
+        <td class="footer-page">
+          <a
+            href="{{ config('services.company.url') }}"
+            class="footer-link"
+            target="_blank">{{ config('services.company.web') }}</a>&nbsp;|&nbsp;Page
+          {PAGENO}
+        </td>
+      </tr>
+    </table>
+  </htmlpagefooter>
+
+  <div class="margin">
+    <div class="text-center bg-gray p-4 border border-2">
+      <h1 class="font-bold">Adviser Summary</h1>
+    </div>
+    <table class="header-table" class="w-full border">
+      <tr>
+        <td class="border p-2"><span class="font-bold">Name:</span>
+          {{ $adviser->name }}</td>
+        <td class="border p-2"><span class="font-bold">FSP No.</span>
+          {{ $adviser->fsp_no }}</td>
+      </tr>
+      <tr>
+        <td class="border p-2"><span class="font-bold">Date generated:</span>
+          {{ $date }}
+        </td>
+        <td class="border p-2"><span class="font-bold">Period Covered:</span>
+          {{ $start_date }} -
+          {{ $end_date }}</td>
+      </tr>
+    </table>
+    <div class="text-center">
+      <h2 class="font-bold underline">Audits</h2>
+    </div>
+
+    <table class="audits-table w-full border">
+      <tr>
+        <td class="border p-2 font-bold text-center bg-gray">Title</td>
+        <td class="border p-2 font-bold text-center bg-gray">Percentage %</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">No. of Clients Audited:</td>
+        <td class="border p-2 text-center">{{ $total_clients }}</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Adviser Standard of Service Rating:
+        </td>
+        <td class="border p-2 text-center">{{ $service_rating }}%</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Complete Disclosure by Client:</td>
+        <td class="border p-2 text-center">
+          {{ $disclosure_percentage }}%</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Client Payment Method has been Set:
+        </td>
+        <td class="border p-2 text-center">{{ $payment_percentage }}%</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Client Policy Being Replaced:</td>
+        <td class="border p-2 text-center">{{ $policy_replaced_percentage }}%
+        </td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Client Provided Correct Occupation:
+        </td>
+        <td class="border p-2 text-center">
+          {{ $correct_occupation_percentage }}%
+        </td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Compliance Documents Received by
+          Client:</td>
+        <td class="border p-2 text-center">{{ $compliance_percentage }}%</td>
+      </tr>
+      <tr>
+        <td class="border p-2 font-bold">Explanation of Risk in Replacement:
+        </td>
+        <td class="border p-2 text-center">
+          {{ $replacement_risks_percentage }}%</td>
+      </tr>
+    </table>
+  </div>
+</body>
+
 </html>
