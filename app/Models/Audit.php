@@ -22,23 +22,13 @@ class Audit extends Model
             ->withTimestamps();
     }
 
-    public function advisers()
-    {
-        return $this->hasMany(Adviser::class);
-    }
-
     public function adviser()
     {
         return $this->belongsTo(Adviser::class);
     }
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function caller()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
