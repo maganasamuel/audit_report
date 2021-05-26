@@ -14,11 +14,12 @@ class AdviserSeeder extends Seeder
      */
     public function run()
     {
-        Adviser::factory(200)->create();
+        $names = ['Alice', 'Adam', 'Alan'];
 
-        Adviser::factory()->create([
-            'name' => 'Alice Alpha',
-            'fsp_no' => 11111,
-        ]);
+        foreach ($names as $name) {
+            Adviser::factory()->create([
+                'name' => $name,
+            ]);
+        }
     }
 }
