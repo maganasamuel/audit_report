@@ -4,7 +4,7 @@
       <x-page.range wire:model="perPage" />
     </div>
     <div>
-      <input wire:model="search" type="text" class="form-control"
+      <input wire:model.debounce="search" type="text" class="form-control"
         placeholder="Search Clients">
     </div>
   </div>
@@ -18,16 +18,15 @@
           <th><a wire:click.prevent="sortBy('policy_holder')" href="#"
               role="button">
               Policy Holder
-              &nbsp;
-              <i
-                class="fa fa-lg {{ $sortColumn['name'] == 'policy_holder' ? $sortClasses[$sortColumn['direction']] : 'fa-sort' }}">&nbsp;</i>
+              <x-sort-indicator :sort-column="$sortColumn"
+                column-name="policy_holder" />
             </a></th>
           <th><a wire:click.prevent="sortBy('policy_no')" href="#"
               role="button">
               Policy Number
               &nbsp;
-              <i
-                class="fa fa-lg {{ $sortColumn['name'] == 'policy_no' ? $sortClasses[$sortColumn['direction']] : 'fa-sort' }}">&nbsp;</i>
+              <x-sort-indicator :sort-column="$sortColumn"
+                column-name="policy_no" />
             </a></th>
           <th class="text-right">Actions</th>
 
