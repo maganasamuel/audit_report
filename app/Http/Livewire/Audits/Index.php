@@ -1,36 +1,63 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Audits;
 
 use App\Models\Audit;
 use App\Models\Client;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Barryvdh\DomPDF\Facade as PDF;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
-class AuditsTable extends Component
+class Index extends Component
 {
-
     use WithPagination;
-
-	public $perPage = 10;
-
-	public $search;
-
-	public $sortField = 'pdf_title';
-
-	public $sortAsc = true;
 
     public $client;
 
-    public $updateMode = false;
+    public $perPage = 10;
+
+    public $search;
+
+    public $sortColumn = [
+        'name' => '',
+        'direction' => '',
+    ];
 
     public $audit;
+
+    protected $paginationTheme = 'bootstrap';
 
     public function mount($client)
     {
         $this->client = $client;
+    }
+
+    public function render()
+    {
+        $query = $this->client->audits()->when($this->search, function ($query) {
+            return $query->whereHas('clients', function (Builder $query) {
+                $query->where('clients.id', $this->client->id)
+                    ->where(function ($query) {
+                        $query->where('audit_client.pdf_title', 'like', '%' . $this->search . '%')
+                            ->orWhere('audit_client.lead_source', 'like', '%' . $this->search . '%');
+                    });
+            });
+        });
+
+        if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
+            $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
+        }
+
+        $audits = $query->paginate($this->perPage);
+
+        return view('livewire.audits.index', compact('audits'));
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
     }
 
     public function updatingSearch()
@@ -38,15 +65,24 @@ class AuditsTable extends Component
         $this->resetPage();
     }
 
-    public function sortBy($field)
-	{
+    public function sortBy($column)
+    {
+        $sortDirections = [
+            '' => 'asc',
+            'asc' => 'desc',
+            'desc' => '',
+        ];
 
-        $this->sortAsc === $field ? $this->sortAsc = !$this->sortAsc : $this->sortField = $field;
-	}
-
+        if ($this->sortColumn['name'] == $column) {
+            $this->sortColumn['direction'] = $sortDirections[$this->sortColumn['direction']];
+        } else {
+            $this->sortColumn['name'] = $column;
+            $this->sortColumn['direction'] = 'asc';
+        }
+    }
 
     public function onEdit(Audit $audit)
-    {   
+    {
         $this->audit = $audit;
 
         $this->updateMode = true;
@@ -58,6 +94,7 @@ class AuditsTable extends Component
      * Will prompt delete modal
      *
      * @param Audit $audit
+     *
      * @return void
      */
     public function onDelete(Audit $audit)
@@ -65,9 +102,8 @@ class AuditsTable extends Component
         $this->audit = $audit;
     }
 
-
     /**
-     * 
+     *
      * Will confirm deletion
      *
      * @return void
@@ -82,12 +118,13 @@ class AuditsTable extends Component
     }
 
     /**
-     * 
+     *
      * This email will be sent to client's manager
      * Discuss if the adviser will be given a copy
      *
      * @param Audit $audit
      * @param Client $client
+     *
      * @return void
      */
     public function sendEmail(Audit $audit, Client $client)
@@ -99,99 +136,82 @@ class AuditsTable extends Component
 
             [
                 'question' => 'I understand you recently took out a policy with (fidelity, partners, aia) from one of our advisers Is that correct?',
-                'answer' => $answers['with_policy']
+                'answer' => $answers['with_policy'],
             ],
             [
                 'question' => 'Was the adviser by him / herself?',
-                'answer' => $answers['confirm_adviser']
+                'answer' => $answers['confirm_adviser'],
             ],
             [
 
                 'question' => "How would you describe the adviser's standard of service on a scale of 1-10? (10 is the highest)",
-                'answer' => $answers['adviser_scale']
+                'answer' => $answers['adviser_scale'],
             ],
             [
                 'question' => 'As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place , we have noted your current pre-existing medical conditions are',
-                'answer' => $answers['medical_conditions']
+                'answer' => $answers['medical_conditions'],
             ],
             [
                 'question' => 'Is there anything else apart from this not stated?',
-                'answer' => $answers['medical_agreement']
+                'answer' => $answers['medical_agreement'],
             ],
             [
                 'question' => 'We have received authority for all future payments to be direct debited from your bank account? Is this correct?',
-                'answer' => $answers['bank_account_agreement']
+                'answer' => $answers['bank_account_agreement'],
             ],
             [
                 'question' => 'Is there anything else apart from this not stated?',
-                'answer' => $answers['medical_agreement']
+                'answer' => $answers['medical_agreement'],
             ],
             [
                 'question' => 'Is that correct? ',
-                'answer' => $answers['confirm_occupation']
+                'answer' => $answers['confirm_occupation'],
             ],
             [
                 'question' => 'What is your understanding of the benefits of the policy?',
-                'answer' => $answers['policy_understanding']
+                'answer' => $answers['policy_understanding'],
             ],
             [
                 'question' => 'It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you received them?',
-                'answer' => $answers['received_copy']
+                'answer' => $answers['received_copy'],
             ],
             [
                 'question' => 'Do you have any further comments?',
-                'answer' => isset($answers['further_comments']) ? $answers['further_comments'] : 'N/A'
+                'answer' => $answers['further_comments'] ?? 'N/A',
             ],
 
             [
                 'question' => 'If replacement, were the risks of replacing this insurance policy explained to you?',
-                'answer' => $answers['replacement_is_discussed']
+                'answer' => $answers['replacement_is_discussed'],
             ],
             [
                 'question' => 'Do you have any further comments?',
-                'answer' =>  $answers['is_action_taken']
+                'answer' => $answers['is_action_taken'],
             ],
 
             [
                 'question' => 'Notes: ',
-                'answer' =>  isset($answers['notes']) ? $answers['notes'] : 'N/A'
-            ]
+                'answer' => $answers['notes'] ?? 'N/A',
+            ],
         ];
 
-
-        $pdf= PDF::loadView('pdfs.view-pdf', [
-
+        $pdf = Pdf::loadView('pdfs.view-pdf', [
             'weekOf' => $audit->pivot->weekOf,
             'lead_source' => $audit->pivot->lead_source,
             'audit' => $audit,
             'client' => $client,
-            'questions' => $questions
+            'questions' => $questions,
         ]);
-   
+
         $data['policy_holder'] = $client->policy_holder;
         $data['policy_no'] = $client->policy_no;
-  
-  
-        Mail::send('mails.audit-mail', $data, function($message)use($data, $pdf) {
+
+        Mail::send('mails.audit-mail', $data, function ($message) use ($data, $pdf) {
             $message->to('admin@eliteinsure.co.nz')
-                    ->subject('Audit Report')
-                    ->attachData($pdf->output(), "audit_report.pdf");
+                ->subject('Audit Report')
+                ->attachData($pdf->output(), 'audit_report.pdf');
         });
 
         session()->flash('message', 'Successfully sent email to manager.');
-    }
-
-    public function render()
-    {
-        $this->search = strtolower($this->search);
-        
-    	$audits = $this->client->audits()
-            ->whereRaw('lower(pdf_title) like (?)',["%{$this->search}%"])
-            ->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
-
-        return view('livewire.audits-table',[
-
-            'audits' => $audits->paginate($this->perPage)
-        ]);
     }
 }
