@@ -15,15 +15,14 @@ class CreateAuditClientTable extends Migration
     {
         Schema::create('audit_client', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('audit_id');
+            $table->foreignId('client_id')
+            ;
             $table->date('weekOf');
             $table->string('pdf_title')->default('default.pdf');
             $table->enum('lead_source', ['Telemarketer', 'BDM', 'Self-generated']);
-            $table->foreignId('client_id');
-            $table->foreignId('audit_id');
-            $table->timestamps();
 
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-            $table->foreign('audit_id')->references('id')->on('audits')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
