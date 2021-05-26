@@ -8,6 +8,7 @@ use App\Models\User;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TestSeeder extends Seeder
 {
@@ -26,17 +27,19 @@ class TestSeeder extends Seeder
 
         $faker = Factory::create();
 
-        Audit::factory(200)
-            ->hasAttached(
-                Client::inRandomOrder()->first() ?? Client::factory(),
-                [
-                    'weekOf' => date('Y-m-d'),
-                    'lead_source' => $faker->randomElement(['Telemarketer', 'BDM', 'Self-generated']),
-                    'pdf_title' => 'audit-report.pdf',
-                ],
-            )
-            ->create([
-                'user_id' => $admin->id,
-            ]);
+        foreach (range(1, 200) as $index) {
+            Audit::factory()
+                ->hasAttached(
+                    Client::inRandomOrder()->first() ?? Client::factory(),
+                    [
+                        'weekOf' => $faker->date(),
+                        'lead_source' => $faker->randomElement(['Telemarketer', 'BDM', 'Self-generated']),
+                        'pdf_title' => Str::slug($faker->jobTitle) . '.pdf',
+                    ],
+                )
+                ->create([
+                    'user_id' => $admin->id,
+                ]);
+        }
     }
 }
