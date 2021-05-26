@@ -19,17 +19,30 @@ class Index extends Component
         'direction' => 'asc',
     ];
 
-    public $sortClasses = [
-        '' => 'fa-sort',
-        'asc' => 'fa-sort-up',
-        'desc' => 'fa-sort-down',
-    ];
-
     public $client;
 
-    public $updateMode = false;
-
     protected $paginationTheme = 'bootstrap';
+
+    public function render()
+    {
+        $query = Client::when($this->search, function ($query) {
+            return $query->where('policy_holder', 'like', '%' . $this->search . '%')
+                ->orWhere('policy_no', 'like', '%' . $this->search . '%');
+        });
+
+        if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
+            $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
+        }
+
+        $clients = $query->paginate($this->perPage);
+
+        return view('livewire.clients.index', compact('clients'));
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
+    }
 
     public function updatingSearch()
     {
@@ -62,19 +75,5 @@ class Index extends Component
         $this->client->delete();
 
         $this->emit('clientDeleted', 'Successfully deleted client.');
-    }
-
-    public function render()
-    {
-        $query = Client::where('policy_holder', 'like', '%' . $this->search . '%')
-            ->orWhere('policy_no', 'like', '%' . $this->search . '%');
-
-        if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
-            $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
-        }
-
-        $clients = $query->paginate($this->perPage);
-
-        return view('livewire.clients.index', compact('clients'));
     }
 }
