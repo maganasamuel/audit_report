@@ -43,9 +43,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function audits()
+    public function createdAudits()
     {
-        return $this->hasMany(Audit::class);
+        return $this->hasMany(Audit::class, 'created_by');
+    }
+
+    public function updatedAudits()
+    {
+        return $this->hasMany(Audit::class, 'updated_by');
     }
 
     public function createdSurveys()
