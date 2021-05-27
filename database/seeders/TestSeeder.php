@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Audit;
 use App\Models\Client;
+use App\Models\Survey;
 use App\Models\User;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -22,6 +23,7 @@ class TestSeeder extends Seeder
         Audit::truncate();
         DB::select('DELETE FROM audit_client');
         DB::select('ALTER TABLE audit_client AUTO_INCREMENT=1');
+        Survey::truncate();
 
         $admin = User::where('is_admin', true)->first();
 
@@ -41,5 +43,7 @@ class TestSeeder extends Seeder
                     'user_id' => $admin->id,
                 ]);
         }
+
+        Survey::factory(200)->create();
     }
 }
