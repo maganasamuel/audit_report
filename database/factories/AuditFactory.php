@@ -24,8 +24,8 @@ class AuditFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::inRandomOrder()->first() ? User::inRandomOrder()->first()->id : User::factory(),
-            'adviser_id' => Adviser::inRandomOrder()->first() ? Adviser::inRandomOrder()->first()->id : Adviser::factory(),
+            'user_id' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
+            'adviser_id' => Adviser::count() ? Adviser::inRandomOrder()->first()->id : Adviser::factory(),
             'qa' => [
                 'notes' => 'Test notes',
                 'policy_no' => '111',
