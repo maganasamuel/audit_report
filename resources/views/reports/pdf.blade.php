@@ -84,7 +84,7 @@
           {{ $adviser->fsp_no }}</td>
       </tr>
       <tr>
-        <td class="border p-2"><span class="font-bold">Date generated:</span>
+        <td class="border p-2"><span class="font-bold">Date Generated:</span>
           {{ $date }}
         </td>
         <td class="border p-2"><span class="font-bold">Period Covered:</span>
