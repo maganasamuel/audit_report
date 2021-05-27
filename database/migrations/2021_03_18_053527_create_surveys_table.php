@@ -17,11 +17,10 @@ class CreateSurveysTable extends Migration
             $table->id();
             $table->foreignId('adviser_id');
             $table->foreignId('client_id');
+            $table->foreignId('created_by');
+            $table->foreignId('updated_by')->nullable();
 
             $table->json('sa');
-            $table->string('survey_pdf');
-            $table->string('created_by');
-            $table->string('updated_by')->nullable();
             $table->boolean('is_cancelled')->default(0);
 
             $table->timestamps();

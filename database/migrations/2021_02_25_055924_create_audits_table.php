@@ -15,9 +15,12 @@ class CreateAuditsTable extends Migration
     {
         Schema::create('audits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
             $table->foreignId('adviser_id');
+            $table->foreignId('client_id');
+            $table->foreignId('created_by');
+            $table->foreignId('updated_by')->nullable();
 
+            $table->string('lead_source'); // Telemarketer, BDM, Self-Generated
             $table->json('qa');
 
             $table->timestamps();
