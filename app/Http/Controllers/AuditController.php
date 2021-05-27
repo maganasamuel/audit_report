@@ -13,6 +13,6 @@ class AuditController extends Controller
      */
     public function create()
     {
-        return view('calls.audit');
+        return view('audits.create');
     }
 }
