@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Audit;
+use App\Models\Survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,10 +18,11 @@ class Client extends Model
      *
      * @return App\Models\Audit
      */
-    public function audits(){
-      return $this->belongsToMany(Audit::class)
-                  ->withPivot('weekOf', 'lead_source', 'pdf_title')
-                  ->withTimestamps();
+    public function audits()
+    {
+        return $this->belongsToMany(Audit::class)
+            ->withPivot('weekOf', 'lead_source', 'pdf_title')
+            ->withTimestamps();
     }
 
     /**
@@ -29,10 +32,11 @@ class Client extends Model
      */
     public function path()
     {
-      return '/profile/clients/' . $this->id;
+        return '/profile/clients/' . $this->id;
     }
 
-    public function surveys(){
-      return $this->hasMany(Survey::class);
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
     }
 }

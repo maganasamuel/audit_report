@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Audit;
+use App\Models\Survey;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,7 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function audits(){
+    public function audits()
+    {
         return $this->hasMany(Audit::class);
+    }
+
+    public function createdSurveys()
+    {
+        return $this->hasMany(Survey::class, 'created_by');
+    }
+
+    public function updatedSurveys()
+    {
+        return $this->hasMany(Survey::class, 'updated_by');
     }
 }
