@@ -27,6 +27,8 @@ class SurveyFactory extends Factory
         return [
             'adviser_id' => Adviser::count() ? Adviser::inRandomOrder()->first()->id : Adviser::factory(),
             'client_id' => Client::count() ? Client::inRandomOrder()->first()->id : Client::factory(),
+            'created_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
+            'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'sa' => [
                 'answers' => [
                     'Yes',
@@ -53,16 +55,6 @@ class SurveyFactory extends Factory
             ],
             'created_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
-            'survey_pdf' => '',
         ];
-    }
-
-    public function configure()
-    {
-        return $this->afterCreating(function (Survey $survey) {
-            $survey->update([
-                'survey_pdf' => $survey->client->policy_holder . ' ' . date('dmYgi') . '.pdf',
-            ]);
-        });
     }
 }

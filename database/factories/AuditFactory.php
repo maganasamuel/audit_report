@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Adviser;
 use App\Models\Audit;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,8 +25,11 @@ class AuditFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'adviser_id' => Adviser::count() ? Adviser::inRandomOrder()->first()->id : Adviser::factory(),
+            'client_id' => Client::count() ? Client::inRandomOrder()->first()->id : Client::factory(),
+            'created_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
+            'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
+            'lead_source' => $this->faker->randomElement(['Telemarketer', 'BDM', 'Self-Generated']),
             'qa' => [
                 'notes' => 'Test notes',
                 'policy_no' => '111',
