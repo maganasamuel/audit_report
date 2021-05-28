@@ -24,33 +24,25 @@ class AuditFactory extends Factory
      */
     public function definition()
     {
+        $qa = [];
+
+        foreach (config('services.audit.questions') as $key => $question) {
+            if (in_array($question['type'], ['text', 'text-optional'])) {
+                $qa[$key] = $this->faker->catchPhrase;
+            } elseif ('boolean' == $question['type']) {
+                $qa[$key] = $this->faker->randomElement(['yes', 'no']);
+            } elseif ('select' == $question['type']) {
+                $qa[$key] = $this->faker->randomElement(collect($question['values'])->pluck('value')->all());
+            }
+        }
+
         return [
             'adviser_id' => Adviser::count() ? Adviser::inRandomOrder()->first()->id : Adviser::factory(),
             'client_id' => Client::count() ? Client::inRandomOrder()->first()->id : Client::factory(),
             'created_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'lead_source' => $this->faker->randomElement(['Telemarketer', 'BDM', 'Self-Generated']),
-            'qa' => [
-                'notes' => 'Test notes',
-                'policy_no' => '111',
-                'occupation' => 'Test occupation',
-                'lead_source' => 'Telemarketer',
-                'with_policy' => 'yes',
-                'adviser_scale' => 10,
-                'is_new_client' => 'no',
-                'policy_holder' => 'Charlie Cruz',
-                'received_copy' => 'yes',
-                'replace_policy' => 'yes',
-                'confirm_adviser' => 'yes',
-                'is_action_taken' => 'yes',
-                'further_comments' => 'Test comments',
-                'medical_agreement' => 'yes - refer to notes',
-                'confirm_occupation' => 'yes',
-                'medical_conditions' => 'Test medical conditions',
-                'policy_understanding' => 'Test benefits',
-                'bank_account_agreement' => 'yes',
-                'replacement_is_discussed' => 'yes',
-            ],
+            'qa' => $qa,
         ];
     }
 }
