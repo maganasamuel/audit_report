@@ -1,17 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdviserController;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\CallController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SpecificUserController;
+use App\Http\Controllers\UserController;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PDFController;
-use App\Http\Controllers\CallController;
-use App\Http\Controllers\TempController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuditController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\AdviserController;
-use App\Http\Controllers\SpecificUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,7 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/calls/audit', [AuditController::class, 'create'])->name('calls.audit');
 
     //PDFs
-    Route::get('/profile/clients/{client}/audits/{audit}/pdf', [PDFController::class, 'pdf'])->name('profile.clients.audits.pdf');
+    Route::get('/profile/clients/{client}/audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('profile.clients.audits.pdf');
 
     //Clients
     Route::get('/profile/clients', [ClientController::class, 'index']);
