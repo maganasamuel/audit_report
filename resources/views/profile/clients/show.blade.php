@@ -13,6 +13,8 @@
     @include('alerts.success')
     @include('alerts.error')
 
+    @include('audits.edit')
+
     {{-- pending... surveys.edit --}}
 
     <div class="card">
@@ -47,40 +49,4 @@
 
     @include('layouts.footers.auth')
   </div>
-
-  {{-- <div class="container-fluid mt--7">
-
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Audits</h4>
-          </div>
-
-          <div class="card-body">
-            @livewire('clients.show', ['client' => $client])
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="row mt-4">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Surveys</h4>
-          </div>
-
-          <div class="card-body">
-            <p>surveys here....</p>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    @include('layouts.footers.auth')
-  </div> --}}
-
 @endsection

@@ -1,5 +1,5 @@
 <div>
-  <div wire:ignore.self class="modal right fade" id="updateAuditModal"
+  <div class="modal right fade" id="editAuditModal"
     tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -14,11 +14,25 @@
         </div>
 
         <div class="modal-body">
-          @if ($audit)
-            @livewire('audits.form', ['audit' => $audit])
-          @endif
+          @livewire('audits.form')
         </div>
       </div>
     </div>
   </div>
 </div>
+
+@push('scripts')
+  <script type="text/javascript">
+    window.onload = () => {
+      $(function() {
+        $(document).on('audit-updated', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+
+          $('#editAuditModal').modal('hide');
+        });
+      })
+    }
+
+  </script>
+@endpush
