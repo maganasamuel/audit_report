@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Audits;
 
 use App\Actions\Audits\CreateAudit;
+use App\Actions\Audits\UpdateAudit;
 use App\Models\Adviser;
 use App\Models\Audit;
 use App\Models\Client;
-use Carbon\Carbon;
 use Livewire\Component;
 
 class Form extends Component
@@ -15,7 +15,7 @@ class Form extends Component
 
     public $audit;
 
-    protected $listeners = ['auditClicked'];
+    protected $listeners = ['editAudit'];
 
     public function getAdvisersProperty()
     {
@@ -69,14 +69,20 @@ class Form extends Component
         ];
     }
 
-    public function auditClicked(Audit $audit)
+    public function editAudit($auditId)
     {
-        $this->audit = $audit;
+        $this->audit = Audit::findOrFail($auditId);
 
-        if ($this->audit) {
-            $this->answers = $this->audit->qa;
-            $this->adviser_id = $this->audit->adviser_id;
-        }
+        $data = collect($this->audit)->only([
+            'adviser_id',
+            'client_id',
+            'lead_source',
+            'qa',
+        ])->all();
+
+        $data['is_new_client'] = 'no';
+
+        $this->input = $data;
     }
 
     public function submit()
@@ -97,12 +103,10 @@ class Form extends Component
 
     public function updateAudit()
     {
-        $this->audit->update([
-            'adviser_id' => $this->adviser_id,
-            'user_id' => auth()->id(),
-            'qa' => json_encode($this->answers),
-        ]);
-        session()->flash('message', 'Successfully Updated Audit.');
-        $this->emit('auditUpdate');
+        $action = new UpdateAudit();
+
+        $action->update($this->input, $this->audit);
+
+        $this->dispatchBrowserEvent('audit-updated', 'Succuessfully updated audit.');
     }
 }
