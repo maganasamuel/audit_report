@@ -87,10 +87,10 @@
       </tr>
       <tr>
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Caller Name:
-          {{ $audit->caller->name }}
+          {{ $audit->user->name }}
         </th>
         <th class="p-2 text-left border-b border-white">Caller Email Address:
-          {{ $audit->caller->email }}</th>
+          {{ $audit->user->email }}</th>
       </tr>
     </table>
     <br>

@@ -1,7 +1,4 @@
 <div>
-  @include('livewire.update-audit')
-  @include('alerts.delete-modal')
-
   <div class="d-flex justify-content-between pt-4">
     <x-page.range wire:model="perPage" />
     <div>
@@ -79,17 +76,4 @@
     <x-page.nav :paginator="$audits" :search="$search" on-each-side="1"
       entity-name="audits" />
   </div>
-
-  @push('scripts')
-    <script type="text/javascript">
-      window.livewire.on('auditUpdate', () => {
-        $('#updateAuditModal').modal('hide');
-      });
-
-      window.livewire.on('onConfirmDelete', () => {
-        $('#deleteModal').modal('hide');
-      });
-
-    </script>
-  @endpush
 </div>

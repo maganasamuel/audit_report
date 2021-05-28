@@ -67,7 +67,7 @@ class CreateSurvey
         unset($data['new_client'], $data['policy_holder'], $data['policy_no']);
 
         $data['survey_pdf'] = $client->policy_holder . ' ' . date('dmYgi') . '.pdf';
-        $data['created_by'] = Auth::user()->name;
+        $data['created_by'] = Auth::user()->id;
 
         $data['sa']['questions'] = collect(config('services.survey.questions'))->pluck('text')->all();
 

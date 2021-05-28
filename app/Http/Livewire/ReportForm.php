@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Adviser;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
@@ -73,24 +74,28 @@ class ReportForm extends Component
 
         $dateEnd = Carbon::parse($this->end_date);
 
-        return response()->streamDownload(function () use ($dateStart, $dateEnd) {
-            $pdf = Pdf::loadView('reports.pdf', [
-                'adviser' => $this->adviser,
-                'date' => date('D, jS F, Y h:i A'),
-                'start_date' => Carbon::parse($this->start_date)->copy()->format('d/m/Y'),
-                'end_date' => Carbon::parse($this->end_date)->copy()->format('d/m/Y'),
-                'total_clients' => $this->adviser->totalClients($dateStart, $dateEnd),
-                'service_rating' => $this->adviser->serviceRating($dateStart, $dateEnd),
-                'disclosure_percentage' => $this->adviser->disclosurePercentage($dateStart, $dateEnd),
-                'payment_percentage' => $this->adviser->paymentPercentage($dateStart, $dateEnd),
-                'policy_replaced_percentage' => $this->adviser->policyReplacedPercentage($dateStart, $dateEnd),
-                'correct_occupation_percentage' => $this->adviser->correctOccupationPercentage($dateStart, $dateEnd),
-                'compliance_percentage' => $this->adviser->compliancePercentage($dateStart, $dateEnd),
-                'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd),
-            ]);
+        $data = [
+            'adviser' => $this->adviser,
+            'date' => date('D, jS F, Y h:i A'),
+            'start_date' => Carbon::parse($this->start_date)->copy()->format('d/m/Y'),
+            'end_date' => Carbon::parse($this->end_date)->copy()->format('d/m/Y'),
+            'total_clients' => $this->adviser->totalClients($dateStart, $dateEnd),
+            'service_rating' => $this->adviser->serviceRating($dateStart, $dateEnd),
+            'disclosure_percentage' => $this->adviser->disclosurePercentage($dateStart, $dateEnd),
+            'payment_percentage' => $this->adviser->paymentPercentage($dateStart, $dateEnd),
+            'policy_replaced_percentage' => $this->adviser->policyReplacedPercentage($dateStart, $dateEnd),
+            'correct_occupation_percentage' => $this->adviser->correctOccupationPercentage($dateStart, $dateEnd),
+            'compliance_percentage' => $this->adviser->compliancePercentage($dateStart, $dateEnd),
+            'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd),
+        ];
 
-            echo $pdf->stream();
-        }, $reportName);
+        $pdf = Pdf::loadView('reports.pdf', $data);
+
+        Storage::deleteDirectory('reports');
+
+        Storage::put('reports/' . $reportName, $pdf->output());
+
+        return Storage::download('reports/' . $reportName);
     }
 
     public function render()

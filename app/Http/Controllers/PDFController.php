@@ -13,7 +13,7 @@ class PDFController extends Controller
     {
         $audit = $client->audits()->where('audit_id', $audit->id)->first();
 
-        $answers = json_decode($audit->qa, true);
+        $answers = $audit->qa;
         $questions = [
 
             [
