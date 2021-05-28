@@ -9,7 +9,7 @@
 
   <!-- Kevin 3-->
   <div class="container-fluid mt--7">
-    @if (session()->has('message'))
+    {{-- @if (session()->has('message'))
       <div class="alert alert-success alert-dismissible fade show rounded-0"
         role="alert">
         <span class="alert-text"><strong>Success!</strong>
@@ -19,9 +19,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    @endif
+    @endif --}}
 
-    <div class="card w-100 rounded-0 p-4">
+    @include('alerts.success');
+
+    <div class="card w-100 p-4">
       <div class="card-body">
         <div class="card-title">
           <h3 class="mb-0">Audit Report</h3>
@@ -39,3 +41,19 @@
     @include('layouts.footers.auth')
   </div>
 @endsection
+
+@push('scripts')
+  <script type="text/javascript">
+    window.onload = () => {
+      $(function() {
+        $(document).on('audit-created', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+
+          window.scrollTo(0, 0);
+        });
+      });
+    };
+
+  </script>
+@endpush
