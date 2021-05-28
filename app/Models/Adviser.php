@@ -40,27 +40,11 @@ class Adviser extends Model
         ]);
     }
 
-    /**
-     * Get all total clients
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return int
-     */
     public function totalClients($dateStart, $dateEnd)
     {
         return $this->filterAudits($dateStart, $dateEnd)->count();
     }
 
-    /**
-     * Average Adivser's service rate
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function serviceRating($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -72,15 +56,6 @@ class Adviser extends Model
         return 0 == $sum ? 0 : ($sum / ($auditCount * 10)) * 100;
     }
 
-    /**
-     *
-     * Disclousre of medical status
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function disclosurePercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -92,14 +67,6 @@ class Adviser extends Model
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Bank account agreement percentage
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function paymentPercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -111,14 +78,6 @@ class Adviser extends Model
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Replaced Policy agreement percentage
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function policyReplacedPercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -130,14 +89,6 @@ class Adviser extends Model
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Occupation agreement percentage
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function correctOccupationPercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -149,14 +100,6 @@ class Adviser extends Model
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Compliance agreement percentage
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function compliancePercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
@@ -168,14 +111,6 @@ class Adviser extends Model
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Replacement of policy agreement percentage
-     *
-     * @param mixed $dateStart
-     * @param mixed $dateEnd
-     *
-     * @return double
-     */
     public function replacementRisksPercentage($dateStart, $dateEnd)
     {
         $audits = $this->filterAudits($dateStart, $dateEnd);
