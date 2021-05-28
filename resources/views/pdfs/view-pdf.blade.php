@@ -73,10 +73,10 @@
     <table class="w-full" style="background-color: #adcdea;">
       <tr>
         <th class="p-2 text-left w-half border-b border-white">&nbsp;&nbsp;Date:
-          {{ date('jS F Y', strtotime(str_replace('/', '-', $weekOf))) }}
+          {{ date('jS F Y', strtotime(str_replace('/', '-', $audit->created_at))) }}
         </th>
         <th class="p-2 text-left w-half border-b border-white">Lead Source:
-          {{ $lead_source }}</th>
+          {{ $audit->lead_source }}</th>
       </tr>
       <tr>
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Adviser:
@@ -87,32 +87,31 @@
       </tr>
       <tr>
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Caller Name:
-          {{ $audit->user->name }}
+          {{ $audit->creator->name }}
         </th>
         <th class="p-2 text-left border-b border-white">Caller Email Address:
-          {{ $audit->user->email }}</th>
+          {{ $audit->creator->email }}</th>
       </tr>
     </table>
     <br>
 
-    @foreach ($questions as $key => $question)
+    @foreach (config('services.audit.questions') as $key => $question)
       <div style="page-break-inside: avoid;">
-        @if ($question['question'] == 'Notes:')
+        @if ($key == 'notes')
           <p>&nbsp;</p>
         @endif
 
-        <ol type="1" start="{{ $key + 1 }}" id="questions"
+        <ul id="questions"
           class="text-justify">
-          <li
-            class="{{ $question['question'] == 'Notes:' ? 'list-none' : '' }}">
-            {{ $question['question'] }}
+          <li class="list-none">
+            {{ $question['text'] }}
             <ol type="disc" class="font-bold">
               <li class="mt-4">
-                {{ empty($question['answer']) ? 'N/A' : ucfirst($question['answer']) }}
+                {{ empty($audit->qa[$key]) ? 'N/A' : ucfirst($audit->qa[$key]) }}
               </li>
             </ol>
           </li>
-        </ol>
+        </ul>
       </div>
     @endforeach
   </div>
