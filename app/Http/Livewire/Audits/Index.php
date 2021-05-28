@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Audits;
 use App\Models\Audit;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -36,19 +37,40 @@ class Index extends Component
 
     public function render()
     {
-        $query = $this->client->audits()->when($this->search, function ($query) {
-            return $query->whereHas('clients', function (Builder $query) {
-                $query->where('clients.id', $this->client->id)
-                    ->where(function ($query) {
-                        $query->where('audit_client.pdf_title', 'like', '%' . $this->search . '%')
-                            ->orWhere('audit_client.lead_source', 'like', '%' . $this->search . '%');
-                    });
+        $query = $this->client->audits()
+            ->select(
+                'audits.id',
+                'adviser.name as adviser_name',
+                'audits.lead_source',
+                'audits.created_at',
+                'creator.name as creator_name',
+                'updator.name as updator_name'
+            )->leftJoin('advisers as adviser', 'adviser.id', 'audits.adviser_id')
+            ->leftJoin('users as creator', 'creator.id', 'audits.created_by')
+            ->leftJoin('users as updator', 'updator.id', 'audits.updated_by')
+            ->when($this->search, function ($query) {
+                $query->where(function ($query) {
+                    $query->where('adviser.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('audits.lead_source', 'like', '%' . $this->search . '%')
+                        ->when(strtotime($this->search), function ($query) {
+                            $query->orWhereBetween('audits.created_at', [
+                                Carbon::parse($this->search)->startOfDay()->toDateTimeString(),
+                                Carbon::parse($this->search)->endOfDay()->toDateTimeString(),
+                            ]);
+
+                            return $query;
+                        })->orWhere('creator.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('updator.name', 'like', '%' . $this->search . '%');
+                });
+
+                return $query;
             });
-        });
 
         if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
         }
+
+        $query->orderBy('audits.id');
 
         $audits = $query->paginate($this->perPage);
 
@@ -79,15 +101,6 @@ class Index extends Component
             $this->sortColumn['name'] = $column;
             $this->sortColumn['direction'] = 'asc';
         }
-    }
-
-    public function onEdit(Audit $audit)
-    {
-        $this->audit = $audit;
-
-        $this->updateMode = true;
-
-        $this->emit('auditClicked', $audit->id);
     }
 
     /**
