@@ -15,11 +15,11 @@
         <tr>
           <th>#</th>
           <th>
-            <a wire:click.prevent="sortBy('adviser.name')" href="#"
+            <a wire:click.prevent="sortBy('adviser_name')" href="#"
               role="button">
               Adviser
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="adviser.name" />
+                column-name="adviser_name" />
             </a>
           </th>
           <th>
@@ -39,29 +39,28 @@
             </a>
           </th>
           <th>
-            <a wire:click.prevent="sortBy('creator.name')" href="#"
+            <a wire:click.prevent="sortBy('creator_name')" href="#"
               role="button">
               Created By
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="creator.name" />
+                column-name="creator_name" />
             </a>
           </th>
           <th>
-            <a wire:click.prevent="sortBy('updator.name')" href="#"
+            <a wire:click.prevent="sortBy('updator_name')" href="#"
               role="button">
               Updated By
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="updator.name" />
+                column-name="updator_name" />
             </a>
           </th>
-
           <th class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
         @foreach ($audits as $key => $audit)
           <tr wire:key="{{ $audit->id }}">
-            <td>{{ /* $key + 1 */ $audit->id }}</td>
+            <td>{{ $key + 1 }}</td>
             <td>{{ $audit->adviser_name }}</td>
             <td>{{ $audit->lead_source }}</td>
             <td>{{ $audit->created_at->format('d/m/Y') }}</td>

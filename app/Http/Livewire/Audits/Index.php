@@ -70,8 +70,6 @@ class Index extends Component
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
         }
 
-        $query->orderBy('audits.id');
-
         $audits = $query->paginate($this->perPage);
 
         return view('livewire.audits.index', compact('audits'));
