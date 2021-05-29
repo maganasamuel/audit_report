@@ -4,7 +4,7 @@
 
   <br><br>
 
-  # Hello Admin Account,
+  # Hello {{ $audit->creator->name }},
 
   Here's audit report of {{ $audit->client->policy_holder }} with policy number:
   {{ $audit->client->policy_no }}.

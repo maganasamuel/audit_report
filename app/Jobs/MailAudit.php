@@ -36,6 +36,6 @@ class MailAudit implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to(config('services.mail.receiver'))->send(new AuditMail($this->audit));
+        Mail::to($this->audit->creator->email)->send(new AuditMail($this->audit));
     }
 }
