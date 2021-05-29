@@ -20,19 +20,3 @@
     </div>
   </div>
 </div>
-
-@push('scripts')
-  <script type="text/javascript">
-    window.onload = () => {
-      $(function() {
-        $(document).on('audit-updated', function(event) {
-          $('#success').removeClass('d-none').addClass('d-block');
-          $('#success-text').text(event.detail);
-
-          $('#editAuditModal').modal('hide');
-        });
-      })
-    }
-
-  </script>
-@endpush
