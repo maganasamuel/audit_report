@@ -73,14 +73,14 @@
                 title="View Audit">
                 <i class="fa fa-eye"></i>
               </a>
-              <button class="btn btn-primary btn-sm" title="Send Audit"
-                wire:click="sendEmail({{ $audit->id }}, {{ $client->id }})">
-                <i class="far fa-envelope"></i>
-              </button>
               <button class="btn btn-info btn-sm" data-toggle="modal"
                 data-target="#editAuditModal" title="Edit Audit"
                 wire:click="$emitTo('audits.form', 'editAudit', {{ $audit->id }})">
                 <i class="far fa-edit"></i>
+              </button>
+              <button class="btn btn-primary btn-sm" title="Send Audit"
+                wire:click="mailAudit({{ $audit->id }})">
+                <i class="far fa-envelope"></i>
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 data-target="#deleteModal" title="Delete Audit"
@@ -96,17 +96,31 @@
     <x-page.nav :paginator="$audits" :search="$search" on-each-side="1"
       entity-name="audits" />
   </div>
-
-  @push('scripts')
-    <script type="text/javascript">
-      window.livewire.on('auditUpdate', () => {
-        $('#updateAuditModal').modal('hide');
-      });
-
-      window.livewire.on('onConfirmDelete', () => {
-        $('#deleteModal').modal('hide');
-      });
-
-    </script>
-  @endpush
 </div>
+
+@push('scripts')
+  <script type="text/javascript">
+    window.onload = () => {
+      $(function() {
+        $(document).on('audit-updated', function(event) {
+          $('#editAuditModal').modal('hide');
+
+          @this.call('render');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('audit-mailed', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+      });
+    }
+
+    window.livewire.on('onConfirmDelete', () => {
+      $('#deleteModal').modal('hide');
+    });
+
+  </script>
+@endpush
