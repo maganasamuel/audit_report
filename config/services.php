@@ -173,4 +173,8 @@ return [
         ],
     ],
 
+    'mail' => [
+        'receiver' => env('MAIL_RECEIVER', 'admin@eliteinsure.co.nz'),
+    ],
+
 ];
