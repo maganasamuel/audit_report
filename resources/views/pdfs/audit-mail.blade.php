@@ -82,7 +82,7 @@
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Adviser:
           {{ $audit->adviser->name }} </th>
         <th class="p-2 text-left border-b border-white">Policy Holder:
-          {{ $client->policy_holder }}
+          {{ $audit->client->policy_holder }}
         </th>
       </tr>
       <tr>
