@@ -84,7 +84,7 @@
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 data-target="#deleteModal" title="Delete Audit"
-                wire:click="onDelete({{ $audit->id }})">
+                wire:click="$emit('delete-audit', {{ $audit->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
             </td>
@@ -115,12 +115,21 @@
           $('#success').removeClass('d-none').addClass('d-block');
           $('#success-text').text(event.detail);
         });
+
+        window.livewire.on('delete-audit', (auditId) => {
+          @this.set('auditId', auditId);
+
+          $('#deleteModal').modal('show');
+        });
+
+        $(document).on('audit-deleted', function(event) {
+          $('#deleteModal').modal('hide');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
       });
     }
-
-    window.livewire.on('onConfirmDelete', () => {
-      $('#deleteModal').modal('hide');
-    });
 
   </script>
 @endpush

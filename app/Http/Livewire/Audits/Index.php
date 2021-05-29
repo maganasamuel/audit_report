@@ -23,7 +23,7 @@ class Index extends Component
         'direction' => '',
     ];
 
-    public $audit;
+    public $auditId;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -105,17 +105,10 @@ class Index extends Component
         $this->dispatchBrowserEvent('audit-mailed', 'Successfully sent email to manager.');
     }
 
-    public function confirmDeleteAudit(Audit $audit)
+    public function confirmDelete()
     {
-        $this->audit = $audit;
-    }
+        Audit::find($this->auditId)->delete();
 
-    public function deleteAudit()
-    {
-        $this->audit->delete();
-
-        session()->flash('message', 'Successfully deleted audit.');
-
-        $this->emit('onConfirmDelete');
+        $this->dispatchBrowserEvent('audit-deleted', 'Successfully deleted audit.');
     }
 }
