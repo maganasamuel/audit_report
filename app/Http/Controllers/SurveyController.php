@@ -3,92 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adviser;
-use App\Models\Audit;
 use App\Models\Client;
 use App\Models\Survey;
 use Auth;
 use DataTables;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use File;
 use Illuminate\Http\Request;
 use PDF;
 use Storage;
 
-class CallController extends Controller
+class SurveyController extends Controller
 {
-    public function audit()
-    {
-        $advisers = Adviser::orderBy('name')->get();
-
-        return view('calls.audit', compact('advisers'));
-    }
-
-    // public function store_audit(Request $request){
-    //   if($request->ajax()){
-    //     $audit = new Audit;
-    //     $adviser = Adviser::find($request->adviser);
-
-    //     if($request->policy_holder != null){
-    //       $client = new Client;
-    //       $client->policy_holder = $request->policy_holder;
-    //       $client->policy_no = $request->policy_no;
-    //       $client->save();
-    //     } else {
-    //       $client = Client::find($request->old_policy_holder);
-    //     }
-
-    //     $audit->qa = json_encode($request->qa);
-    //     $audit->adviser_id = $request->adviser;
-    //     $audit->user_id = Auth::user()->id;
-    //     $audit->save();
-
-    //     $client->audits()->attach($audit->id,
-    //     [
-    //       "weekOf" => date('Y-m-d', strtotime($request->weekOf)),
-    //       "lead_source" => $request->lead_source,
-    //     ]);
-
-    //     $qa = json_decode($client->audits[0]->qa);
-    //     $clients = Client::find($client->id);
-
-    //     $pdf_title = $clients->policy_holder.date('dmYgi', time()).'.pdf';
-
-    //     $client->audits()->updateExistingPivot($audit->id,
-    //     [
-    //       "pdf_title" => $pdf_title
-    //     ]);
-
-    //     $options = new Options();
-    //     $options->set([
-    //       'defaultFont' => 'Helvetica',
-    //       "enable_php" => true
-    //     ]);
-
-    //     $dompdf = new Dompdf($options);
-
-    //     $data = [
-    //       "clients" => $clients,
-    //       "adviser_name" => $adviser->name,
-    //       "caller_name" => Auth::user()->name,
-    //       "caller_email" => Auth::user()->email,
-    //       "questions" => $qa->questions,
-    //       "answers" => $qa->answers
-    //     ];
-
-    //     $path = public_path('/pdfs/' . $pdf_title);
-    //     $pdf = PDF::loadView('pdfs.view-pdf', $data)->save($path);
-
-    //     $content = $pdf->download()->getOriginalContent();
-    //     Storage::put($pdf_title, $pdf->output());
-
-    //     $message = "Audit #". $audit->id ." has been stored.";
-
-    //     return $message;
-    //   }
-    // }
-
-    public function survey()
+    public function create()
     {
         return view('calls.survey');
     }
