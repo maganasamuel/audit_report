@@ -9,9 +9,13 @@
 
 @push('scripts')
   <script type="text/javascript">
-    $('#success').on('click', function() {
-      $(this).removeClass('d-block').addClass('d-none');
-    })
+    window.onload = () => {
+      $(function() {
+        $('#success').on('click', function() {
+          $(this).removeClass('d-block').addClass('d-none');
+        });
+      });
+    }
 
   </script>
 @endpush
