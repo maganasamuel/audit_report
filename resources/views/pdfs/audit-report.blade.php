@@ -108,40 +108,40 @@
       <tr>
         <td class="border p-2 font-bold">Adviser Standard of Service Rating:
         </td>
-        <td class="border p-2 text-center">{{ $service_rating }}%</td>
+        <td class="border p-2 text-center">{{ round($service_rating) }}%</td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Complete Disclosure by Client:</td>
         <td class="border p-2 text-center">
-          {{ $disclosure_percentage }}%</td>
+          {{ round($disclosure_percentage) }}%</td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Client Payment Method has been Set:
         </td>
-        <td class="border p-2 text-center">{{ $payment_percentage }}%</td>
+        <td class="border p-2 text-center">{{ round($payment_percentage) }}%</td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Client Policy Being Replaced:</td>
-        <td class="border p-2 text-center">{{ $policy_replaced_percentage }}%
+        <td class="border p-2 text-center">{{ round($policy_replaced_percentage) }}%
         </td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Client Provided Correct Occupation:
         </td>
         <td class="border p-2 text-center">
-          {{ $correct_occupation_percentage }}%
+          {{ round($correct_occupation_percentage) }}%
         </td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Compliance Documents Received by
           Client:</td>
-        <td class="border p-2 text-center">{{ $compliance_percentage }}%</td>
+        <td class="border p-2 text-center">{{ round($compliance_percentage) }}%</td>
       </tr>
       <tr>
         <td class="border p-2 font-bold">Explanation of Risk in Replacement:
         </td>
         <td class="border p-2 text-center">
-          {{ $replacement_risks_percentage }}%</td>
+          {{ round($replacement_risks_percentage) }}%</td>
       </tr>
     </table>
   </div>

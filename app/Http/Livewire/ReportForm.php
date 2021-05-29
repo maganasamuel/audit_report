@@ -89,7 +89,7 @@ class ReportForm extends Component
             'replacement_risks_percentage' => $this->adviser->replacementRisksPercentage($dateStart, $dateEnd),
         ];
 
-        $pdf = Pdf::loadView('reports.pdf', $data);
+        $pdf = Pdf::loadView('pdfs.audit-report', $data);
 
         Storage::deleteDirectory('reports');
 
