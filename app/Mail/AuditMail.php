@@ -40,7 +40,7 @@ class AuditMail extends Mailable
      */
     public function build()
     {
-        $pdf = Pdf::loadView('pdfs.audit-mail', [
+        $pdf = Pdf::loadView('pdfs.audit', [
             'audit' => $this->audit,
         ]);
 
