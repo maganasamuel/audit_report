@@ -16,8 +16,8 @@
   {{-- <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png"> --}}
 
   <!-- Fonts -->
-  <link rel="preload" href="/fonts/QuattrocentoSans-Regular.ttf" as="font"
-    crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+    rel="stylesheet">
 
   <!-- Extra details for Live View on GitHub Pages -->
   <link rel="stylesheet"
@@ -33,13 +33,19 @@
     rel="stylesheet">
   <link type="text/css" href="{{ asset('argon') }}/css/custom.css?v=1.0.0"
     rel="stylesheet">
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet" />
+
   <link rel="stylesheet" type="text/css"
     href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
-  <!-- Javascripts -->
 
   <link href="{{ mix('css/main.css') }}" rel="stylesheet">
 
   @livewireStyles
+
+  @stack('styles')
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -52,7 +58,6 @@
   @endauth
 
   <div class="main-content">
-
     @include('layouts.navbars.navbar')
     @yield('content')
   </div>
@@ -61,30 +66,32 @@
     @include('layouts.footers.guest')
   @endguest
 
-  <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js">
+  <!-- Javascripts -->
+  <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js" defer>
   </script>
   <script
-    src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js">
+    src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" defer>
   </script>
-  <link
-    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
-    rel="stylesheet" />
+
+  <script type="text/javascript"
+    src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" defer>
+  </script>
+
+  <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0" defer></script>
+
   <script
-    src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js">
+    src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer>
   </script>
+
   <script type="text/javascript" charset="utf8"
-    src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+    src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js" defer></script>
   <script type="text/javascript" charset="utf8"
-    src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js">
+    src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js" defer>
   </script>
 
   @livewireScripts
 
   @stack('scripts')
-
-  <!-- Argon JS -->
-  <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
-
 </body>
 
 </html>
