@@ -18,7 +18,7 @@ class AuditController extends Controller
     {
         $audit = $client->audits()->where('id', $audit->id)->firstOrFail();
 
-        $pdf = Pdf::loadView('pdfs.view-pdf', [
+        $pdf = Pdf::loadView('pdfs.audit', [
             'audit' => $audit,
             'client' => $client,
         ]);
