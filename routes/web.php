@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AuditController;
-use App\Http\Controllers\CallController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SpecificUserController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\UserController;
 use App\Models\Client;
 use Illuminate\Http\Request;
@@ -22,6 +22,36 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+Route::middleware(['auth'])->group(function () {
+    // Calls
+    Route::group(['prefix' => 'calls', 'as' => 'calls.'], function () {
+        Route::get('audit', [AuditController::class, 'create'])->name('audit');
+        Route::get('survey', [SurveyController::class, 'create'])->name('survey');
+    });
+
+    // Profile
+    Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
+        // Cilents
+        Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
+            Route::get('/', [ClientController::class, 'index'])->name('index');
+            Route::group(['prefix' => '{client}'], function () {
+                Route::get('/', [ClientController::class, 'show'])->name('show');
+                Route::get('audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
+            });
+        });
+    });
+
+    // Reports
+    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('{type}/pdf/{adviser}/{startDate}/{endDate}', [ReportController::class, 'pdf'])->name('pdf');
+    });
+
+    // Surveys
+    Route::get('/surveys', [SurveyController::class, 'show_survey'])->name('surveys.index');
+});
+
+// Unknown routes
 Route::get('/', function () {
     if (1 == ! Auth::user()->is_admin) {
         return view('/users/home');
@@ -85,27 +115,6 @@ Route::group(['middleware' => 'checkuser'], function () {
     Route::post('/user/deactivate_user', [UserController::class, 'deactivate_user'])->name('user.deactivate_user')->middleware('checkuser');
 });
 
-//Edited by Jearson
-
-Route::middleware(['auth'])->group(function () {
-    //Calls
-    Route::get('/calls/audit', [AuditController::class, 'create'])->name('calls.audit');
-
-    //PDFs
-    Route::get('/profile/clients/{client}/audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('profile.clients.audits.pdf');
-
-    //Clients
-    Route::get('/profile/clients', [ClientController::class, 'index']);
-    Route::get('/profile/clients/{client}', [ClientController::class, 'show']);
-
-    Route::post('/reports/pdf', [ReportController::class, 'store'])->name('reports.pdf');
-});
-
-/** End here */
-
-Route::get('/calls/survey', [CallController::class, 'survey'])->name('calls.survey')->middleware('auth');
-Route::post('/calls/store_audit', [CallController::class, 'store_audit'])->name('calls.store_audit')->middleware('auth');
-
 //Normal Users
 Route::get('/users/home', [UserController::class, 'home'])->name('users.home')->middleware('auth');
 Route::post('/usercontroller/fetchdata', [UserController::class, 'fetch_data'])->name('users.fetch_data')->middleware('auth');
@@ -121,17 +130,15 @@ Route::post('/pdfs/delete_client', [ClientController::class, 'delete_client'])->
 Route::get('/specificusercontroller/fetch_data', [SpecificUserController::class, 'fetch_data'])->name('normal_users.fetch_data')->middleware('auth');
 
 //Surveys
-Route::get('/surveys', [CallController::class, 'show_survey'])->name('surveys.index')->middleware('auth');
-Route::get('/surveycontroller/fetch_data', [CallController::class, 'fetch_data'])->name('surveys.fetch_data')->middleware('auth');
-Route::get('/calls/fetch_clients', [CallController::class, 'fetch_clients'])->name('calls.fetch_clients')->middleware('auth');
-Route::get('/pdfs/view-survey', [ClientController::class, 'view_survey'])->name('pdfs.view_survey')->middleware('auth');
-Route::get('/pdfs/edit_survey', [CallController::class, 'edit_pdf'])->name('pdfs.edit_survey')->middleware('auth');
-Route::post('/pdfs/update_survey', [CallController::class, 'update_pdf'])->name('pdfs.update_survey')->middleware('auth');
-Route::post('/pdfs/confirm_cancel_survey', [CallController::class, 'confirm_cancel_survey'])->name('pdfs.confirm_cancel_survey')->middleware('auth');
-Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->name('pdfs.cancel_survey')->middleware('auth');
 
-//Reports
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('auth');
+// Route::get('/surveycontroller/fetch_data', [CallController::class, 'fetch_data'])->name('surveys.fetch_data')->middleware('auth');
+// Route::get('/calls/fetch_clients', [CallController::class, 'fetch_clients'])->name('calls.fetch_clients')->middleware('auth');
+Route::get('/pdfs/view-survey', [ClientController::class, 'view_survey'])->name('pdfs.view_survey')->middleware('auth');
+// Route::get('/pdfs/edit_survey', [CallController::class, 'edit_pdf'])->name('pdfs.edit_survey')->middleware('auth');
+// Route::post('/pdfs/update_survey', [CallController::class, 'update_pdf'])->name('pdfs.update_survey')->middleware('auth');
+// Route::post('/pdfs/confirm_cancel_survey', [CallController::class, 'confirm_cancel_survey'])->name('pdfs.confirm_cancel_survey')->middleware('auth');
+// Route::post('/pdfs/cancel_survey', [CallController::class, 'cancel_survey'])->name('pdfs.cancel_survey')->middleware('auth');
+
 Route::post('/fetch_advisers', [ReportController::class, 'fetch_adviser'])->name('reports.fetch_adviser')->middleware('auth');
 // Route::post('/reports/pdf', [ReportController::class, 'view_pdf'])->name('reports.pdf')->middleware('auth');
 
