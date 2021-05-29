@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Surveys;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
