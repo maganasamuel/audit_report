@@ -14,8 +14,7 @@
     @include('alerts.error')
 
     @include('audits.edit', ['clientId' => $client->id])
-
-    {{-- pending... surveys.edit --}}
+    @include('surveys.edit', ['clientId' => $client->id])
 
     <div class="card">
       <div class="card-body">
@@ -41,7 +40,7 @@
           </div>
           <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
             aria-labelledby="surveysTab">
-            {{-- @livewire('surveys.index') --}}
+            @livewire('surveys.index', ['clientId' => $client->id])
           </div>
         </div>
       </div>
@@ -50,3 +49,51 @@
     @include('layouts.footers.auth')
   </div>
 @endsection
+
+@push('scripts')
+  <script type="text/javascript">
+    window.onload = () => {
+      $(function() {
+        $(document).on('audit-updated', function(event) {
+          console.log('audit-updated');
+          $('#editAuditModal').modal('hide');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('audit-mailed', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('audit-deleted', function(event) {
+          $('#deleteModal').modal('hide');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('survey-updated', function(event) {
+          $('#editSurveyModal').modal('hide');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('survey-mailed', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+
+        $(document).on('survey-deleted', function(event) {
+          $('#deleteModal').modal('hide');
+
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
+        });
+      });
+    }
+
+  </script>
+@endpush
