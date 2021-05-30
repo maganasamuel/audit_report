@@ -26,11 +26,15 @@ class Form extends Component
 
     public function getAuditProperty()
     {
-        if ($this->auditId) {
+        if (! $this->auditId) {
+            return;
+        }
+
+        if ($this->profileClientId) {
             return $this->profileClient->audits()->findOrFail($this->auditId);
         }
 
-        return;
+        return auth()->user()->createdAudits()->findOrFail($this->auditId);
     }
 
     public function getAdvisersProperty()
