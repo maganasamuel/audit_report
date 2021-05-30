@@ -6,6 +6,7 @@ use App\Jobs\MailAudit;
 use App\Models\Audit;
 use App\Models\Client;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,7 +27,7 @@ class Index extends Component
 
     public $auditId;
 
-    protected $listeners = ['auditUpdated' => 'render'];
+    protected $listeners = ['auditUpdated' => 'render', 'delete-audit' => 'deleteAudit'];
 
     protected $paginationTheme = 'bootstrap';
 
@@ -130,6 +131,11 @@ class Index extends Component
         MailAudit::dispatch($audit);
 
         $this->dispatchBrowserEvent('audit-mailed', 'Successfully sent email to manager.');
+    }
+
+    public function deleteAudit()
+    {
+        Session::forget('cannotDelete');
     }
 
     public function confirmDelete()

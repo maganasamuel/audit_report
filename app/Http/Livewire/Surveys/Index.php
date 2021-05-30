@@ -6,6 +6,7 @@ use App\Jobs\MailSurvey;
 use App\Models\Client;
 use App\Models\Survey;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,7 +27,7 @@ class Index extends Component
 
     public $surveyId;
 
-    protected $listeners = ['surveyUpdated' => 'render'];
+    protected $listeners = ['surveyUpdated' => 'render', 'delete-survey' => 'deleteSurvey'];
 
     protected $paginationTheme = 'bootstrap';
 
@@ -128,6 +129,11 @@ class Index extends Component
         MailSurvey::dispatch($survey);
 
         $this->dispatchBrowserEvent('survey-mailed', 'Successfully sent email to manager');
+    }
+
+    public function deleteSurvey()
+    {
+        Session::forget('cannotDelete');
     }
 
     public function confirmDelete()
