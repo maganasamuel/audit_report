@@ -35,23 +35,31 @@ class Index extends Component
         return Client::findOrFail($this->clientId);
     }
 
-    public function mount($clientId)
+    public function mount($clientId = null)
     {
         $this->clientId = $clientId;
     }
 
     public function render()
     {
-        $query = $this->client->surveys()
-            ->select(
-                'surveys.id',
-                'adviser.name as adviser_name',
-                'surveys.created_at',
-                'creator.name as creator_name',
-                'updator.name as updator_name'
-            )->leftJoin('advisers as adviser', 'adviser.id', 'surveys.adviser_id')
+        if ($this->clientId) {
+            $query = $this->client->surveys();
+        } else {
+            $query = auth()->user()->createdSurveys();
+        }
+
+        $query->select(
+            'surveys.id',
+            'adviser.name as adviser_name',
+            'surveys.created_at',
+            'creator.name as creator_name',
+            'updator.name as updator_name',
+            'client.policy_holder',
+            'client.policy_no'
+        )->leftJoin('advisers as adviser', 'adviser.id', 'surveys.adviser_id')
             ->leftJoin('users as creator', 'creator.id', 'surveys.created_by')
             ->leftJoin('users as updator', 'updator.id', 'surveys.updated_by')
+            ->leftJoin('clients as client', 'client.id', 'surveys.client_id')
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('adviser.name', 'like', '%' . $this->search . '%')
@@ -62,8 +70,17 @@ class Index extends Component
                             ]);
 
                             return $query;
-                        })->orWhere('creator.name', 'like', '%' . $this->search . '%')
-                        ->orWhere('updator.name', 'like', '%' . $this->search . '%');
+                        })->when($this->clientId, function ($query) {
+                            $query->orWhere('creator.name', 'like', '%' . $this->search . '%');
+
+                            return $query;
+                        })->orWhere('updator.name', 'like', '%' . $this->search . '%')
+                        ->when(! $this->clientId, function ($query) {
+                            $query->orWhere('client.policy_holder', 'like', '%' . $this->search . '%')
+                                ->orWhere('client.policy_no', 'like', '%' . $this->search . '%');
+
+                            return $query;
+                        });
                 });
 
                 return $query;
