@@ -23,6 +23,11 @@ class Client extends Model
         return $this->hasMany(Audit::class);
     }
 
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
+    }
+
     /**
      * Path of client
      *
@@ -31,10 +36,5 @@ class Client extends Model
     public function path()
     {
         return '/profile/clients/' . $this->id;
-    }
-
-    public function surveys()
-    {
-        return $this->hasMany(Survey::class);
     }
 }
