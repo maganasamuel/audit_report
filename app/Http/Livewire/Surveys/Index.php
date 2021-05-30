@@ -2,6 +2,10 @@
 
 namespace App\Http\Livewire\Surveys;
 
+use App\Jobs\MailSurvey;
+use App\Models\Client;
+use App\Models\Survey;
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -9,7 +13,7 @@ class Index extends Component
 {
     use WithPagination;
 
-    public $client;
+    public $clientId;
 
     public $perPage = 10;
 
@@ -20,23 +24,99 @@ class Index extends Component
         'direction' => '',
     ];
 
-    public $survey;
+    public $surveyId;
+
+    protected $listeners = ['surveyUpdated' => 'render'];
 
     protected $paginationTheme = 'bootstrap';
 
-    public function mount($client)
+    public function getClientProperty()
     {
-        $this->client = $client;
+        return Client::findOrFail($this->clientId);
+    }
+
+    public function mount($clientId)
+    {
+        $this->clientId = $clientId;
     }
 
     public function render()
     {
-        $query = $this->client->surveys()->when($this->search, function ($query) {
-            return $query->where();
-        });
+        $query = $this->client->surveys()
+            ->select(
+                'surveys.id',
+                'adviser.name as adviser_name',
+                'surveys.created_at',
+                'creator.name as creator_name',
+                'updator.name as updator_name'
+            )->leftJoin('advisers as adviser', 'adviser.id', 'surveys.adviser_id')
+            ->leftJoin('users as creator', 'creator.id', 'surveys.created_by')
+            ->leftJoin('users as updator', 'updator.id', 'surveys.updated_by')
+            ->when($this->search, function ($query) {
+                $query->where(function ($query) {
+                    $query->where('adviser.name', 'like', '%' . $this->search . '%')
+                        ->when(strtotime($this->search), function ($query) {
+                            $query->orWhereBetween('surveys.created_at', [
+                                Carbon::parse($this->search)->startOfDay()->toDateTimeString(),
+                                Carbon::parse($this->search)->endOfDay()->toDateTimeString(),
+                            ]);
+
+                            return $query;
+                        })->orWhere('creator.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('updator.name', 'like', '%' . $this->search . '%');
+                });
+
+                return $query;
+            });
+
+        if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
+            $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
+        } else {
+            $query->orderBy('id', 'desc');
+        }
 
         $surveys = $query->paginate($this->perPage);
 
         return view('livewire.surveys.index', compact('surveys'));
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function sortBy($column)
+    {
+        $sortDirections = [
+            '' => 'asc',
+            'asc' => 'desc',
+            'desc' => '',
+        ];
+
+        if ($this->sortColumn['name'] == $column) {
+            $this->sortColumn['direction'] = $sortDirections[$this->sortColumn['direction']];
+        } else {
+            $this->sortColumn['name'] = $column;
+            $this->sortColumn['direction'] = 'asc';
+        }
+    }
+
+    public function mailSurvey(Survey $survey)
+    {
+        MailSurvey::dispatch($survey);
+
+        $this->dispatchBrowserEvent('survey-mailed', 'Successfully sent email to manager');
+    }
+
+    public function confirmDelete()
+    {
+        Survey::find($this->surveyId)->delete();
+
+        $this->dispatchBrowserEvent('survey-deleted', 'Successfully deleted survey.');
     }
 }

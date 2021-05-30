@@ -1,9 +1,11 @@
 <div>
+  @include('alerts.delete-modal')
+
   <div class="d-flex justify-content-between pt-4">
     <x-page.range wire:model="perPage" />
     <div>
       <input wire:model.debounce="search" type="text" class="form-control"
-        placeholder="Search Audits">
+        placeholder="Search Surveys">
     </div>
   </div>
 
@@ -13,58 +15,67 @@
         <tr>
           <th>#</th>
           <th>
-            <a wire:click.prevent="sortBy('pivot_pdf_title')" href="#"
+            <a wire:click.prevent="sortBy('adviser_name')" href="#"
               role="button">
-              PDF Title
+              Adviser
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="pivot_pdf_title" />
+                column-name="adviser_name" />
             </a>
           </th>
           <th>
-            <a wire:click.prevent="sortBy('pivot_weekOf')" href="#"
+            <a wire:click.prevent="sortBy('created_at')" href="#"
               role="button">
-              Week Of
+              Date Called
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="pivot_weekOf" />
+                column-name="created_at" />
             </a>
           </th>
           <th>
-            <a wire:click.prevent="sortBy('pivot_lead_source')" href="#"
+            <a wire:click.prevent="sortBy('creator_name')" href="#"
               role="button">
-              Lead Source
+              Caller
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="pivot_lead_source" />
+                column-name="creator_name" />
+            </a>
+          </th>
+          <th>
+            <a wire:click.prevent="sortBy('updator_name')" href="#"
+              role="button">
+              Last Updated By
+              <x-sort-indicator :sort-column="$sortColumn"
+                column-name="updator_name" />
             </a>
           </th>
           <th class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($audits as $key => $audit)
-          <tr wire:key="{{ $audit->id }}">
+        @foreach ($surveys as $key => $survey)
+          <tr wire:key="{{ $survey->id }}">
             <td>{{ $key + 1 }}</td>
-            <td>{{ $audit->pivot->pdf_title }}</td>
-            <td>{{ $audit->pivot->weekOf }}</td>
-            <td>{{ $audit->pivot->lead_source }}</td>
+            <td>{{ $survey->adviser_name }}</td>
+            <td>{{ $survey->created_at->format('d/m/Y') }}</td>
+            <td>{{ $survey->creator_name }}</td>
+            <td>{{ $survey->updator_name }}</td>
             <td class="text-right"
               wire:ignore>
-              <a href="/profile/clients/{{ $client->id }}/audits/{{ $audit->id }}/pdf"
+              <a href="{{ route('profile.clients.surveys.pdf', ['client' => $this->client->id, 'survey' => $survey->id]) }}"
                 target="_blank" class="btn btn-success btn-sm"
-                title="View audit">
+                title="View Survey">
                 <i class="fa fa-eye"></i>
               </a>
-              <button class="btn btn-primary btn-sm" title="Send Audit"
-                wire:click="sendEmail({{ $audit->id }}, {{ $client->id }})">
-                <i class="far fa-envelope"></i>
-              </button>
               <button class="btn btn-info btn-sm" data-toggle="modal"
-                data-target="#updateAuditModal" title="Edit audit"
-                wire:click="onEdit({{ $audit->id }})">
+                data-target="#editSurveyModal" title="Edit Survey"
+                wire:click="$emitTo('surveys.form', 'editSurvey', {{ $survey->id }})">
                 <i class="far fa-edit"></i>
               </button>
+              <button class="btn btn-primary btn-sm" title="Send Survey"
+                wire:click="mailSurvey({{ $survey->id }})">
+                <i class="far fa-envelope"></i>
+              </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
-                data-target="#deleteModal" title="Delete audit"
-                wire:click="onDelete({{ $audit->id }})">
+                data-target="#deleteModal" title="Delete Survey"
+                wire:click="$emit('delete-survey', {{ $survey->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
             </td>
@@ -73,7 +84,22 @@
       </tbody>
     </table>
 
-    <x-page.nav :paginator="$audits" :search="$search" on-each-side="1"
-      entity-name="audits" />
+    <x-page.nav :paginator="$surveys" :search="$search" on-each-side="1"
+      entity-name="surveys" />
   </div>
 </div>
+
+@push('scripts')
+  <script type="text/javascript">
+    window.onload = () => {
+      $(function() {
+        window.livewire.on('delete-survey', (surveyId) => {
+          @this.set('surveyId', surveyId);
+
+          $('#deleteModal').modal('show');
+        });
+      });
+    }
+
+  </script>
+@endpush

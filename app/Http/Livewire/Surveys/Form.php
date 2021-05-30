@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Surveys;
 
 use App\Actions\Surveys\CreateSurvey;
+use App\Actions\Surveys\UpdateSurvey;
 use App\Models\Adviser;
 use App\Models\Client;
 use Livewire\Component;
@@ -79,6 +80,7 @@ class Form extends Component
         foreach (config('services.survey.questions') as $key => $value) {
             $sa[$key] = '';
         }
+
         $this->input = [
             'adviser_id' => '',
             'is_new_client' => '',
@@ -125,6 +127,8 @@ class Form extends Component
         $action = new UpdateSurvey();
 
         $action->update($this->input, $this->survey);
+
+        $this->emitTo('surveys.index', 'surveyUpdated');
 
         $this->dispatchBrowserEvent('survey-updated', 'Successfully updated survey.');
     }
