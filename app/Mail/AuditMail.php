@@ -14,10 +14,6 @@ class AuditMail extends Mailable
 
     public $audit;
 
-    public $policy_holder;
-
-    public $policy_no;
-
     /**
      * Create a new message instance.
      *
@@ -28,9 +24,6 @@ class AuditMail extends Mailable
     public function __construct($audit)
     {
         $this->audit = $audit;
-
-        $this->policy_holder = $this->audit->client->policy_holder;
-        $this->policy_no = $this->audit->client->policy_no;
     }
 
     /**
@@ -47,6 +40,5 @@ class AuditMail extends Mailable
         return $this->markdown('emails.audit')
             ->subject('Audit Report')
             ->attachData($pdf->output(), 'audit-report.pdf');
-
     }
 }
