@@ -70,19 +70,19 @@
 
 @push('scripts')
   <script type="text/javascript">
-    window.onload = () => {
-      $(function() {
-        $('#date_range').datepicker()
-          .on('hide', function(event) {
-            @this.set('input.start_date', $('#start_date').val());
-            @this.set('input.end_date', $('#end_date').val());
-          });
-      });
+    const handleReportLoad = () => {
+      $('#date_range').datepicker()
+        .on('hide', function(event) {
+          @this.set('input.start_date', $('#start_date').val());
+          @this.set('input.end_date', $('#end_date').val());
+        });
 
-      $(document).on('report-generated', function(event){
+      $(document).on('report-generated', function(event) {
         window.open(event.detail, '_blank');
       });
     }
+
+    window.addEventListener('load', handleReportLoad);
 
   </script>
 @endpush

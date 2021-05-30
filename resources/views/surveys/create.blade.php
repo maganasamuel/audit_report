@@ -24,16 +24,16 @@
 
   @push('scripts')
     <script type="text/javascript">
-      window.onload = () => {
-        $(function() {
-          $(document).on('survey-created', function(event) {
-            $('#success').removeClass('d-none').addClass('d-block');
-            $('#success-text').text(event.detail);
+      const handleCreateSurveyLoad = () => {
+        $(document).on('survey-created', function(event) {
+          $('#success').removeClass('d-none').addClass('d-block');
+          $('#success-text').text(event.detail);
 
-            window.scrollTo(0, 0);
-          });
+          window.scrollTo(0, 0);
         });
       }
+
+      window.addEventListener('load', handleCreateSurveyLoad);
 
     </script>
   @endpush
