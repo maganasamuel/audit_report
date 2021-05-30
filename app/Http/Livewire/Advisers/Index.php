@@ -96,8 +96,6 @@ class Index extends Component
 
     public function confirmDelete()
     {
-        Session::forget('cannotDelete');
-
         if (! $this->canDeleteAdviser()) {
             return false;
         }
