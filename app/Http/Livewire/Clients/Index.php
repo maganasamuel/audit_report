@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Clients;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -68,12 +69,37 @@ class Index extends Component
     public function deleteClient(Client $client)
     {
         $this->client = $client;
+
+        $this->canDeleteClient();
     }
 
     public function confirmDelete()
     {
+        if (! $this->canDeleteClient()) {
+            return false;
+        }
+
         $this->client->delete();
 
         $this->emit('clientDeleted', 'Successfully deleted client.');
+    }
+
+    public function canDeleteClient()
+    {
+        Session::forget('cannotDelete');
+
+        if ($this->client->audits()->count()) {
+            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no audits with this client.');
+
+            return false;
+        }
+
+        if ($this->client->surveys()->count()) {
+            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no surveys with this client.');
+
+            return false;
+        }
+
+        return true;
     }
 }
