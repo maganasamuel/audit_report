@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SpecificUserController;
 use App\Http\Controllers\SurveyController;
@@ -22,10 +23,21 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+Auth::routes();
+
+Route::redirect('/', '/home');
+
 Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
     // Calls
     Route::group(['prefix' => 'calls', 'as' => 'calls.'], function () {
-        Route::get('audit', [AuditController::class, 'create'])->name('audit');
+        Route::group(['prefix' => 'audit', 'as' => 'audit'], function () {
+            Route::get('/', [AuditController::class, 'create']);
+            Route::get('/{audit}/pdf', [AuditController::class, 'pdf'])->name('.pdf');
+        });
+
         Route::get('survey', [SurveyController::class, 'create'])->name('survey');
     });
 
@@ -50,26 +62,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Surveys
     Route::get('/surveys', [SurveyController::class, 'show_survey'])->name('surveys.index');
-});
-
-// Unknown routes
-Route::get('/', function () {
-    if (1 == ! Auth::user()->is_admin) {
-        return view('/users/home');
-    } else {
-        return view('dashboard');
-    }
-    // return view('home');
-})->middleware('auth');
-
-Auth::routes();
-
-Route::get('/home', function () {
-    if (1 == Auth::user()->is_admin) {
-        return view('home');
-    } else {
-        return view('/users/home');
-    }
 });
 
 Route::group(['middleware' => 'isActive'], function () {

@@ -12,7 +12,7 @@
 
     <div class="card w-100">
       <div class="card-body">
-        <h5>All Made Calls</h5>
+        <h3 class="mb-3">All Made Calls</h3>
 
         <ul class="nav nav-tabs" id="clientDetailsTab" role="tablist">
           <li class="nav-item">
