@@ -25,11 +25,15 @@ class Form extends Component
 
     public function getSurveyProperty()
     {
-        if ($this->surveyId) {
+        if (! $this->surveyId) {
+            return;
+        }
+
+        if ($this->profileClientId) {
             return $this->profileClient->surveys()->findOrFail($this->surveyId);
         }
 
-        return;
+        return auth()->user()->createdSurveys()->findOrFail($this->surveyId);
     }
 
     public function getAdvisersProperty()

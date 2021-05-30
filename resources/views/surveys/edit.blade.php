@@ -14,7 +14,7 @@
         </div>
 
         <div class="modal-body">
-          @livewire('surveys.form', ['profileClientId' => $clientId])
+          @livewire('surveys.form', ['profileClientId' => $clientId ?? null])
         </div>
       </div>
     </div>
