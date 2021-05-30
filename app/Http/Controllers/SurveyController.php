@@ -14,9 +14,15 @@ class SurveyController extends Controller
         return view('surveys.create');
     }
 
-    public function pdf(Client $client, Survey $survey)
+    public function pdf(Client $client = null, Survey $survey)
     {
-        $survey = $client->surveys()->where('id', $survey->id)->firstOrFail();
+        if ($client) {
+            $survey = $client->surveys()->where('id', $survey->id)->firstOrFail();
+        } else {
+            $survey = auth()->user()->createdSurveys()->where('id', $survey->id)->firstOrFail();
+
+            $client = $survey->client;
+        }
 
         $pdf = Pdf::loadView('pdfs.survey', [
             'survey' => $survey,

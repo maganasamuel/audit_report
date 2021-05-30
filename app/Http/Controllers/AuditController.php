@@ -14,9 +14,15 @@ class AuditController extends Controller
         return view('audits.create');
     }
 
-    public function pdf(Client $client, Audit $audit)
+    public function pdf(Client $client = null, Audit $audit)
     {
-        $audit = $client->audits()->where('id', $audit->id)->firstOrFail();
+        if ($client) {
+            $audit = $client->audits()->where('id', $audit->id)->firstOrFail();
+        } else {
+            $audit = auth()->user()->createdAudits()->where('id', $audit->id)->firstOrFail();
+
+            $client = $audit->client;
+        }
 
         $pdf = Pdf::loadView('pdfs.audit', [
             'audit' => $audit,
