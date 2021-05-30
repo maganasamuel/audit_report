@@ -35,10 +35,13 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'calls', 'as' => 'calls.'], function () {
         Route::group(['prefix' => 'audit', 'as' => 'audit'], function () {
             Route::get('/', [AuditController::class, 'create']);
-            Route::get('/{audit}/pdf', [AuditController::class, 'pdf'])->name('.pdf');
+            Route::get('{audit}/pdf', [AuditController::class, 'pdf'])->name('.pdf');
         });
 
-        Route::get('survey', [SurveyController::class, 'create'])->name('survey');
+        Route::group(['prefix' => 'survey', 'as' => 'survey'], function () {
+            Route::get('/', [SurveyController::class, 'create']);
+            Route::get('{survey}/pdf', [SurveyController::class, 'pdf'])->name('.pdf');
+        });
     });
 
     // Profile
