@@ -40,8 +40,7 @@
             <td>{{ $key + 1 }}</td>
             <td>{{ $client->policy_holder }}</td>
             <td>{{ $client->policy_no }}</td>
-            <td class="text-right"
-              wire:ignore>
+            <td class="text-right">
               <a href="{{ $client->path() }}" class="btn btn-success btn-sm"
                 title="View Details">
                 <i class="fa fa-eye"></i>
