@@ -132,7 +132,7 @@
 
     <div class="form-group mt-4">
       <button type="submit" class="btn btn-primary"><i
-          class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $audit ? 'Save' : 'Submit' }}</button>
+          class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $auditId ? 'Save' : 'Submit' }}</button>
     </div>
   </form>
 </div>

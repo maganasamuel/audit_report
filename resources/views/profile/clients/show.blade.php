@@ -13,7 +13,7 @@
     @include('alerts.success')
     @include('alerts.error')
 
-    @include('audits.edit')
+    @include('audits.edit', ['clientId' => $client->id])
 
     {{-- pending... surveys.edit --}}
 
@@ -37,7 +37,7 @@
           <div class="tab-pane fade show active" id="auditsTabItem"
             role="tabpanel"
             aria-labelledby="auditsTab">
-            @livewire('audits.index', ['client' => $client])
+            @livewire('audits.index', ['clientId' => $client->id])
           </div>
           <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
             aria-labelledby="surveysTab">

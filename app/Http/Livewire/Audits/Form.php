@@ -11,11 +11,27 @@ use Livewire\Component;
 
 class Form extends Component
 {
+    public $profileClientId;
+
+    public $auditId;
+
     public $input;
 
-    public $audit;
-
     protected $listeners = ['editAudit'];
+
+    public function getProfileClientProperty()
+    {
+        return Client::find($this->profileClientId);
+    }
+
+    public function getAuditProperty()
+    {
+        if ($this->auditId) {
+            return $this->profileClient->audits()->findOrFail($this->auditId);
+        }
+
+        return;
+    }
 
     public function getAdvisersProperty()
     {
@@ -32,8 +48,10 @@ class Form extends Component
         return Client::find($this->input['client_id']);
     }
 
-    public function mount()
+    public function mount($profileClientId = null)
     {
+        $this->profileClientId = $profileClientId;
+
         $this->resetInput();
     }
 
@@ -71,14 +89,14 @@ class Form extends Component
 
     public function editAudit($auditId)
     {
-        $this->audit = Audit::findOrFail($auditId);
+        $this->auditId = $auditId;
 
-        $data = collect($this->audit)->only([
+        $data = $this->audit->only([
             'adviser_id',
             'client_id',
             'lead_source',
             'qa',
-        ])->all();
+        ]);
 
         $data['is_new_client'] = 'no';
 
@@ -87,7 +105,7 @@ class Form extends Component
 
     public function submit()
     {
-        $this->audit ? $this->updateAudit() : $this->createAudit();
+        $this->auditId ? $this->updateAudit() : $this->createAudit();
     }
 
     public function createAudit()
