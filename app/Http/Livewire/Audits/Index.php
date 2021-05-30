@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Audits;
 
 use App\Jobs\MailAudit;
 use App\Models\Audit;
+use App\Models\Client;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,7 +13,7 @@ class Index extends Component
 {
     use WithPagination;
 
-    public $client;
+    public $clientId;
 
     public $perPage = 10;
 
@@ -27,9 +28,14 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public function mount($client)
+    public function getClientProperty()
     {
-        $this->client = $client;
+        return Client::findOrFail($this->clientId);
+    }
+
+    public function mount($clientId)
+    {
+        $this->clientId = $clientId;
     }
 
     public function render()

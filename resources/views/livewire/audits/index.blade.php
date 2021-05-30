@@ -68,7 +68,7 @@
             <td>{{ $audit->updator_name }}</td>
             <td class="text-right"
               wire:ignore>
-              <a href="{{ route('profile.clients.audits.pdf', ['audit' => $audit->id, 'client' => $client->id]) }}"
+              <a href="{{ route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) }}"
                 target="_blank" class="btn btn-success btn-sm"
                 title="View Audit">
                 <i class="fa fa-eye"></i>
