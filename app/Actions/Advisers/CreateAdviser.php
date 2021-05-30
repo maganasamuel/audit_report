@@ -17,6 +17,8 @@ class CreateAdviser
             'fsp_no' => 'FSP Number',
         ])->validate();
 
+        $data['status'] = 'Active';
+
         $adviser = Adviser::create($data);
 
         return $adviser;
