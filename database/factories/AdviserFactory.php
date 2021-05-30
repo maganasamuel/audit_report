@@ -24,7 +24,7 @@ class AdviserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'fsp_no' => $this->faker->randomNumber(5),
-            'status' => 'Active',
+            'status' => $this->faker->randomElement(['Active', 'Terminated']),
         ];
     }
 }
