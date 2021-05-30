@@ -19,14 +19,18 @@
         <div class="py-3 text-center">
           <i class="ni ni-bell-55 ni-3x"></i>
           <h4 class="heading mt-4">You should read this!</h4>
-          <p>{{ __('Are you sure you want to delete?') }}</p>
+          <p id="delete-modal-text">
+            {{ Session::get('cannotDelete', 'Are you sure you want to delete?') }}
+          </p>
         </div>
 
       </div>
 
       <div class="modal-footer">
-        <button wire:click="confirmDelete" type="button"
-          class="btn btn-white">Ok, Got it</button>
+        @if (!Session::has('cannotDelete'))
+          <button wire:click="confirmDelete" type="button"
+            class="btn btn-white">Ok, Got it</button>
+        @endif
         <button type="button" class="btn btn-link text-white ml-auto"
           data-dismiss="modal">Close</button>
       </div>
