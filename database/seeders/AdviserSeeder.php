@@ -19,6 +19,7 @@ class AdviserSeeder extends Seeder
         foreach ($names as $name) {
             Adviser::factory()->create([
                 'name' => $name,
+                'status' => 'Active',
             ]);
         }
     }
