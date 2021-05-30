@@ -10,16 +10,31 @@
 
   <div class="container-fluid mt--7">
     @include('alerts.success')
+
     <div class="card w-100">
       <div class="card-body">
         <div class="card-title">
           <h3 class="mb-0">Survey</h3>
         </div>
-        @livewire('surveys.create')
+        @livewire('surveys.form')
       </div>
     </div>
     @include('layouts.footers.auth')
   </div>
 
-  @include('custom-scripts.survey-js')
+  @push('scripts')
+    <script type="text/javascript">
+      window.onload = () => {
+        $(function() {
+          $(document).on('survey-created', function(event) {
+            $('#success').removeClass('d-none').addClass('d-block');
+            $('#success-text').text(event.detail);
+
+            window.scrollTo(0, 0);
+          });
+        });
+      }
+
+    </script>
+  @endpush
 @endsection

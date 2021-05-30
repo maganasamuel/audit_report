@@ -16,7 +16,7 @@ class SurveyController extends Controller
 {
     public function create()
     {
-        return view('calls.survey');
+        return view('surveys.create');
     }
 
     public function show_survey()
