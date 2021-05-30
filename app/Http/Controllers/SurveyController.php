@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Adviser;
 use App\Models\Client;
 use App\Models\Survey;
-use Auth;
-use DataTables;
-use File;
-use Illuminate\Http\Request;
-use PDF;
-use Storage;
+use Illuminate\Support\Str;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class SurveyController extends Controller
 {
@@ -19,7 +14,19 @@ class SurveyController extends Controller
         return view('surveys.create');
     }
 
-    public function show_survey()
+    public function pdf(Client $client, Survey $survey)
+    {
+        $survey = $client->surveys()->where('id', $survey->id)->firstOrFail();
+
+        $pdf = Pdf::loadView('pdfs.survey', [
+            'survey' => $survey,
+            'client' => $client,
+        ]);
+
+        return $pdf->stream(Str::slug('Survey Report - ' . $client->policy_holder . ' - ' . $survey->created_at->format('d-m-Y')) . '.pdf');
+    }
+
+    /* public function show_survey()
     {
         return view('surveys.index');
     }
@@ -165,5 +172,5 @@ class SurveyController extends Controller
 
             return $message;
         }
-    }
+    } */
 }
