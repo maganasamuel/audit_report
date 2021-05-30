@@ -125,6 +125,8 @@ class Form extends Component
 
         $action->update($this->input, $this->audit);
 
+        $this->emitTo('audits.index', 'auditUpdated');
+
         $this->dispatchBrowserEvent('audit-updated', 'Succuessfully updated audit.');
     }
 }

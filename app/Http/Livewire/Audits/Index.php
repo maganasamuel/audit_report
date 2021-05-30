@@ -26,6 +26,8 @@ class Index extends Component
 
     public $auditId;
 
+    protected $listeners = ['auditUpdated' => 'render'];
+
     protected $paginationTheme = 'bootstrap';
 
     public function getClientProperty()
@@ -71,6 +73,8 @@ class Index extends Component
 
         if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
+        } else {
+            $query->orderBy('id', 'desc');
         }
 
         $audits = $query->paginate($this->perPage);

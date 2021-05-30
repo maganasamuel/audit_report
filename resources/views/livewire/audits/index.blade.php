@@ -33,7 +33,7 @@
           <th>
             <a wire:click.prevent="sortBy('created_at')" href="#"
               role="button">
-              Date Created
+              Date Called
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="created_at" />
             </a>
@@ -41,7 +41,7 @@
           <th>
             <a wire:click.prevent="sortBy('creator_name')" href="#"
               role="button">
-              Created By
+              Caller
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="creator_name" />
             </a>
@@ -49,7 +49,7 @@
           <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
               role="button">
-              Updated By
+              Last Updated By
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="updator_name" />
             </a>
@@ -102,31 +102,10 @@
   <script type="text/javascript">
     window.onload = () => {
       $(function() {
-        $(document).on('audit-updated', function(event) {
-          $('#editAuditModal').modal('hide');
-
-          @this.call('render');
-
-          $('#success').removeClass('d-none').addClass('d-block');
-          $('#success-text').text(event.detail);
-        });
-
-        $(document).on('audit-mailed', function(event) {
-          $('#success').removeClass('d-none').addClass('d-block');
-          $('#success-text').text(event.detail);
-        });
-
         window.livewire.on('delete-audit', (auditId) => {
           @this.set('auditId', auditId);
 
           $('#deleteModal').modal('show');
-        });
-
-        $(document).on('audit-deleted', function(event) {
-          $('#deleteModal').modal('hide');
-
-          $('#success').removeClass('d-none').addClass('d-block');
-          $('#success-text').text(event.detail);
         });
       });
     }
