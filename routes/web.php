@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => '{client}'], function () {
                 Route::get('/', [ClientController::class, 'show'])->name('show');
                 Route::get('audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
+                Route::get('surveys/{survey}/pdf', [SurveyController::class, 'pdf'])->name('surveys.pdf');
             });
         });
     });
