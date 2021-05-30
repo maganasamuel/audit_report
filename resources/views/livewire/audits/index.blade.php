@@ -1,5 +1,5 @@
 <div>
-  @include('alerts.delete-modal')
+  @include('alerts.delete-modal', ['id' => 'deleteAuditModal'])
 
   <div class="d-flex justify-content-between pt-4">
     <x-page.range wire:model="perPage" />
@@ -30,6 +30,24 @@
                 column-name="lead_source" />
             </a>
           </th>
+          @if (!$clientId)
+            <th>
+              <a wire:click.prevent="sortBy('policy_holder')" href="#"
+                role="button">
+                Polich Holder
+                <x-sort-indicator :sort-column="$sortColumn"
+                  column-name="policy_holder" />
+              </a>
+            </th>
+            <th>
+              <a wire:click.prevent="sortBy('policy_no')" href="#"
+                role="button">
+                Policy Number
+                <x-sort-indicator :sort-column="$sortColumn"
+                  column-name="policy_no" />
+              </a>
+            </th>
+          @endif
           <th>
             <a wire:click.prevent="sortBy('created_at')" href="#"
               role="button">
@@ -38,14 +56,16 @@
                 column-name="created_at" />
             </a>
           </th>
-          <th>
-            <a wire:click.prevent="sortBy('creator_name')" href="#"
-              role="button">
-              Caller
-              <x-sort-indicator :sort-column="$sortColumn"
-                column-name="creator_name" />
-            </a>
-          </th>
+          @if ($clientId)
+            <th>
+              <a wire:click.prevent="sortBy('creator_name')" href="#"
+                role="button">
+                Caller
+                <x-sort-indicator :sort-column="$sortColumn"
+                  column-name="creator_name" />
+              </a>
+            </th>
+          @endif
           <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
               role="button">
@@ -63,12 +83,17 @@
             <td>{{ $key + 1 }}</td>
             <td>{{ $audit->adviser_name }}</td>
             <td>{{ $audit->lead_source }}</td>
+            @if (!$clientId)
+              <td>{{ $audit->policy_holder }}</td>
+              <td>{{ $audit->policy_no }}</td>
+            @endif
             <td>{{ $audit->created_at->format('d/m/Y') }}</td>
-            <td>{{ $audit->creator_name }}</td>
+            @if ($clientId)
+              <td>{{ $audit->creator_name }}</td>
+            @endif
             <td>{{ $audit->updator_name }}</td>
-            <td class="text-right"
-              wire:ignore>
-              <a href="{{ route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) }}"
+            <td class="text-right">
+              <a href="{{ $clientId ? route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) : route('calls.audit.pdf', ['audit' => $audit->id]) }}"
                 target="_blank" class="btn btn-success btn-sm"
                 title="View Audit">
                 <i class="fa fa-eye"></i>
@@ -83,7 +108,7 @@
                 <i class="far fa-envelope"></i>
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
-                data-target="#deleteModal" title="Delete Audit"
+                title="Delete Audit"
                 wire:click="$emit('delete-audit', {{ $audit->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
@@ -100,15 +125,15 @@
 
 @push('scripts')
   <script type="text/javascript">
-    window.onload = () => {
-      $(function() {
-        window.livewire.on('delete-audit', (auditId) => {
-          @this.set('auditId', auditId);
+    const deleteAudit = () => {
+      window.livewire.on('delete-audit', (auditId) => {
+        @this.set('auditId', auditId);
 
-          $('#deleteModal').modal('show');
-        });
+        $('#deleteAuditModal').modal('show');
       });
     }
+
+    window.addEventListener('load', deleteAudit);
 
   </script>
 @endpush
