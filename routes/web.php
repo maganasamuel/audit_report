@@ -46,6 +46,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Profile
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
+        // Advisers
+        Route::group(['prefix' => 'advisers', 'as' => 'advisers.'], function () {
+            Route::get('/', [AdviserController::class, 'index'])->name('index');
+        });
+
         // Cilents
         Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
             Route::get('/', [ClientController::class, 'index'])->name('index');
@@ -64,13 +69,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Surveys
-    Route::get('/surveys', [SurveyController::class, 'show_survey'])->name('surveys.index');
+    // Route::get('/surveys', [SurveyController::class, 'show_survey'])->name('surveys.index');
 });
 
 Route::group(['middleware' => 'isActive'], function () {
     Route::get('/home', [App\Http\Controllers\UserController::class, 'home'])->name('users.home');
 });
 
+// Unknown routes
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
