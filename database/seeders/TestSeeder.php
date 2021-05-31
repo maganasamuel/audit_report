@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Audit;
 use App\Models\Survey;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class TestSeeder extends Seeder
@@ -15,6 +16,11 @@ class TestSeeder extends Seeder
      */
     public function run()
     {
+        User::factory()->create([
+            'email' => 'inactive-user@mail.com',
+            'status' => 'Deactivated',
+        ]);
+
         Audit::truncate();
         Survey::truncate();
 
