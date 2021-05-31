@@ -34,7 +34,8 @@ var Datepicker = (function() {
 	function init($this) {
 		var options = {
 			disableTouchKeyboard: true,
-			autoclose: false
+			autoclose: false,
+            format: 'dd/mm/yyyy'
 		};
 
 		$this.datepicker(options);
@@ -114,7 +115,7 @@ var FormControl = (function() {
 
 	function init($this) {
 		$this.on('focus blur', function(e) {
-        $(this).parents('.form-group').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
+        $(this).parents('.form-group').toggleClass('focused', (e.type === 'focus' || this.value?.length > 0));
     }).trigger('blur');
 	}
 
@@ -955,7 +956,7 @@ var OrdersChart = (function() {
 							}
 
 							content += '<span class="popover-body-value">' + yLabel + '</span>';
-							
+
 							return content;
 						}
 					}

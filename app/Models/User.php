@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Audit;
+use App\Models\Survey;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
+        'is_admin',
     ];
 
     /**
@@ -41,7 +46,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function audits(){
-        return $this->hasMany(Audit::class);
+    public function createdAudits()
+    {
+        return $this->hasMany(Audit::class, 'created_by');
+    }
+
+    public function updatedAudits()
+    {
+        return $this->hasMany(Audit::class, 'updated_by');
+    }
+
+    public function createdSurveys()
+    {
+        return $this->hasMany(Survey::class, 'created_by');
+    }
+
+    public function updatedSurveys()
+    {
+        return $this->hasMany(Survey::class, 'updated_by');
     }
 }

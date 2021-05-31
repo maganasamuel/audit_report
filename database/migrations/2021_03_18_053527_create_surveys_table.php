@@ -15,17 +15,15 @@ class CreateSurveysTable extends Migration
     {
         Schema::create('surveys', function (Blueprint $table) {
             $table->id();
-            $table->json('sa');
-            $table->string('survey_pdf');
-            $table->string('created_by');
-            $table->string('updated_by')->nullable();
-            $table->boolean('is_cancelled')->default(0);
             $table->foreignId('adviser_id');
             $table->foreignId('client_id');
+            $table->foreignId('created_by');
+            $table->foreignId('updated_by')->nullable();
+
+            $table->json('sa');
+            $table->boolean('is_cancelled')->default(0);
 
             $table->timestamps();
-            $table->foreign('adviser_id')->references('id')->on('advisers');
-            $table->foreign('client_id')->references('id')->on('clients');
         });
     }
 
