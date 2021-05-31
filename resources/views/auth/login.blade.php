@@ -41,6 +41,11 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
+                                @if(Session::has('auth-error'))
+                                  <span class="invalid-feedback" style="display: block;" role="alert">
+                                        <strong>{{ Session::get('auth-error') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                 <div class="input-group input-group-alternative">
