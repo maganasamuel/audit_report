@@ -152,6 +152,14 @@
             <i class="fas fa-flag text-blue"></i></i> {{ __('Report') }}
           </a>
         </li>
+        @if (auth()->user()->is_admin)
+          <li class="nav-item">
+            <a href="{{ route('users.index') }}"
+              class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
+              <i class="fas fa-users text-blue"></i> Users
+            </a>
+          </li>
+        @endif
         {{-- <li class="nav-item ">
           <a class="nav-link" href="{{ route('surveys.index') }}">
             <i class="fas fa-poll-h text-orange"></i>{{ __('Survey') }}
