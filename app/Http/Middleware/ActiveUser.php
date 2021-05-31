@@ -2,24 +2,31 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Session;
 
-class CheckIfAdmin
+class ActiveUser
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->is_admin == 1){
-            return $next($request);
+        if ('Deactivated' == Auth::user()->status) {
+            Auth::logout();
+
+            Session::put('auth-error', 'Invalid credentials');
+
+            return redirect(route('login'));
         }
-        return redirect()->route('login');
+
+        return $next($request);
     }
 }
