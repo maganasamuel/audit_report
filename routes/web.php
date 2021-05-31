@@ -43,21 +43,23 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
     });
 
     // Profile
-    Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth.admin']], function () {
+    Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
 
-        // Advisers
-        Route::group(['prefix' => 'advisers', 'as' => 'advisers.'], function () {
-            Route::get('/', [AdviserController::class, 'index'])->name('index');
-        });
+        Route::group(['middleware' => ['auth.admin']], function () {
+            // Advisers
+            Route::group(['prefix' => 'advisers', 'as' => 'advisers.'], function () {
+                Route::get('/', [AdviserController::class, 'index'])->name('index');
+            });
 
-        // Cilents
-        Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
-            Route::get('/', [ClientController::class, 'index'])->name('index');
-            Route::group(['prefix' => '{client}'], function () {
-                Route::get('/', [ClientController::class, 'show'])->name('show');
-                Route::get('audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
-                Route::get('surveys/{survey}/pdf', [SurveyController::class, 'pdf'])->name('surveys.pdf');
+            // Cilents
+            Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
+                Route::get('/', [ClientController::class, 'index'])->name('index');
+                Route::group(['prefix' => '{client}'], function () {
+                    Route::get('/', [ClientController::class, 'show'])->name('show');
+                    Route::get('audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
+                    Route::get('surveys/{survey}/pdf', [SurveyController::class, 'pdf'])->name('surveys.pdf');
+                });
             });
         });
     });
