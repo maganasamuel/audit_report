@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Surveys
+    // Route::get('/surveys', [SurveyController::class, 'show_survey'])->name('surveys.index');
+
 // Unknown routes
 Route::group(['middleware' => 'isActive'], function () {
     Route::get('/home', [App\Http\Controllers\UserController::class, 'home'])->name('users.home');
