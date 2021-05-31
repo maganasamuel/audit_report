@@ -15,9 +15,11 @@ class CreateAdvisersTable extends Migration
     {
         Schema::create('advisers', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
             $table->integer('fsp_no');
-            $table->enum('status', ['Active', 'Terminated']);
+            $table->string('status'); // Active, Terminated;
+
             $table->timestamps();
         });
     }

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Audit;
+use App\Models\Survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Adviser extends Model
 {
@@ -15,169 +18,107 @@ class Adviser extends Model
         'status',
     ];
 
-    public function audits(){
-      return $this->hasMany(Audit::class);
-    }
+    protected $casts = [
+        'sa' => 'array',
+    ];
 
-    public function surveys(){
-      return $this->hasMany(Survey::class);
-    }
-
-    /**
-     * Get all total clients
-     *
-     * @return int
-     */
-    public function totalClients($dateStart, $dateEnd)
+    public function audits()
     {
-      return count($this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        return $this->hasMany(Audit::class);
+    }
 
-          return json_decode($audit->qa, true)['policy_no'];
-      })->groupBy(function($value) {
-
-          return $value;
-      }));
-
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
     }
 
     public function filterAudits($dateStart, $dateEnd)
     {
-      return $this->audits->where('created_at', '>=' , $dateStart)->where('created_at', '<=', $dateEnd);
+        return $this->audits()->whereBetween('created_at', [
+            Carbon::parse($dateStart)->startOfDay()->format('Y-m-d H:i:s'),
+            Carbon::parse($dateEnd)->endOfDay()->format('Y-m-d H:i:s'),
+        ]);
     }
 
-    /**
-     * Average Adivser's service rate
-     *
-     * @return double
-     */
+    public function totalClients($dateStart, $dateEnd)
+    {
+        return $this->filterAudits($dateStart, $dateEnd)->count();
+    }
+
     public function serviceRating($dateStart, $dateEnd)
     {
-      $rating = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['adviser_scale'];
+        $auditCount = $audits->count();
 
-      })->sum();
+        $sum = $audits->sum('qa->adviser_scale');
 
-
-      return $rating == 0 ? 0 : $rating / count($this->filterAudits($dateStart, $dateEnd));
-
+        return 0 == $sum ? 0 : ($sum / ($auditCount * 10)) * 100;
     }
 
-    /**
-     * 
-     * Disclousre of medical status
-     *
-     * @return double
-     */
     public function disclosurePercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['medical_agreement'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->received_copy', 'yes')->count();
 
-        return $value == 'yes - refer to notes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Bank account agreement percentage
-     *
-     * @return double
-     */
     public function paymentPercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['bank_account_agreement'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->bank_account_agreement', 'yes')->count();
 
-        return $value == 'yes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-        /**
-     * Replaced Policy agreement percentage
-     *
-     * @return double
-     */
     public function policyReplacedPercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['replace_policy'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->replace_policy', 'yes')->count();
 
-        return $value == 'yes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-        /**
-     * Occupation agreement percentage
-     *
-     * @return double
-     */
     public function correctOccupationPercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['confirm_occupation'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->confirm_occupation', 'yes')->count();
 
-        return $value == 'yes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Compliance agreement percentage
-     *
-     * @return double
-     */
     public function compliancePercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['is_action_taken'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->is_action_taken', 'yes')->count();
 
-        return $value == 'yes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
 
-    /**
-     * Replacement of policy agreement percentage
-     *
-     * @return double
-     */
     public function replacementRisksPercentage($dateStart, $dateEnd)
     {
-      $total = $this->filterAudits($dateStart, $dateEnd)->map(function($audit){
+        $audits = $this->filterAudits($dateStart, $dateEnd);
 
-          return json_decode($audit->qa, true)['is_action_taken'];
+        $auditCount = $audits->count();
 
-      })->sum(function($value) {
+        $count = $audits->where('qa->replacement_is_discussed', 'yes')->count();
 
-        return $value == 'yes';
-      });
-
-      return $total == 0 ? 0 : ( ($total / count($this->filterAudits($dateStart, $dateEnd))) * 100 );
+        return 0 == $count ? 0 : ($count / $auditCount) * 100;
     }
-
 }
-
-

@@ -2,126 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Client;
 use App\Models\Adviser;
-use App\Models\Audit;
-use App\Models\Survey;
-use App\Models\User;
-use Carbon\Carbon;
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use PDF;
-
-use File;
-use Storage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class ReportController extends Controller
 {
-  public function index(){
-    $advisers = Adviser::orderBy('name')->get();
-    return view('reports.index', compact('advisers'));
-  }
-
-
-  public function fetch_adviser(Request $request){
-    if($request->ajax()){
-      $adviser = Adviser::find($request->id );
-      
-      return $adviser;
-    }
-  }
-
-  public function view_pdf(Request $request){
-    $adviser = Adviser::find($request->adviser);
-    $date = date('d-m-Y');
-
-    $startDate = Carbon::parse($request->startDate)->startOfDay();
-    $endDate = Carbon::parse($request->endDate)->endOfDay();
-
-    $clients = Audit::where('adviser_id', $adviser->id)->count();
-    $qa = Audit::where('adviser_id', $adviser->id)->whereBetween('created_at', [$startDate, $endDate])->get();
-    
-    $question3 = [];
-    $question4 = [];
-    $question5 = [];
-    $question6 = [];
-    $question7 = [];
-    $question8 = [];
-    $question9 = [];
-    
-    foreach($qa as $q){
-      $test = json_decode($q->qa);
-      array_push($question3, $test->answers[2]/10);
-      array_push($question4, $test->answers[3]);
-      array_push($question5, $test->answers[4]);
-      array_push($question6, $test->answers[5]);
-      array_push($question7, $test->answers[6]);
-      array_push($question8, $test->answers[8]);
-      array_push($question9, $test->answers[10]);
+    public function index()
+    {
+        return view('reports.index');
     }
 
-    $avg_rating = round((array_sum($question3)/count($question3))*100, 2);
-    $perc_cdc = round(($this->no_positive($question4)/$clients)*100, 2);
-    $perc_cpm = round(($this->yes_positive($question5)/$clients)*100, 2);
-    $perc_cbr = round(($this->yes_positive($question6)/$clients)*100, 2);
-    $perc_cpco = round(($this->yes_positive($question7)/$clients)*100, 2);
-    $perc_cdrc = round(($this->yes_positive($question8)/$clients)*100, 2);
-    $perc_errb = round(($this->yes_positive($question9)/$clients)*100, 2);
+    public function pdf($type, Adviser $adviser, $startDate, $endDate, Request $request)
+    {
+        $parameters = [
+            'type' => $type,
+            'adviser' => $adviser,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ];
 
-    $data = [
-      "adviser" => $adviser,
-      "date" => $date,
-      "date_range" => date('d/m/Y', strtotime($request->startDate)) . " - " . date('d/m/Y', strtotime($request->endDate)),
-      "subtitle" => ucwords($request->report_type),
-      "clients" => $clients,
-      "qa" => $qa,
-      "avg_rating" => $avg_rating,
-      "perc_cdc" => $perc_cdc,
-      "perc_cpm" => $perc_cpm,
-      "perc_cbr" => $perc_cbr,
-      "perc_cpco" => $perc_cpco,
-      "perc_cdrc" => $perc_cdrc,
-      "perc_errb" => $perc_errb,
-    ];
+        Validator::make($parameters, [
+            'type' => ['required', 'in:audit,survey'],
+            'start_date' => ['required', 'date_format:d-m-Y'],
+            'end_date' => ['required', 'date_format:d-m-Y'],
+        ], [], [
+            'type' => 'Report Type',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
+        ])->validate();
 
-    $pdf_title = $adviser->name.date('dmYgi', time()).'.pdf';
-    $options = new Options();
-    $options->set([
-      'defaultFont' => 'Helvetica'
-    ]);
+        $filename = $adviser->name . '_reports_' . Carbon::now()->timestamp . '.pdf';
 
-    $dompdf = new Dompdf($options);
+        $startDate = Carbon::createFromFormat('d-m-Y', $startDate);
 
-    $path = public_path('/pdfs/' . $pdf_title);
-    $pdf = PDF::loadView('reports.pdf', $data)->save($path);
-    $content = $pdf->download()->getOriginalContent();
-    Storage::put($pdf_title, $pdf->output());
-    return $pdf->stream($pdf_title);
-  }
+        $endDate = Carbon::createFromFormat('d-m-Y', $endDate);
 
-  function no_positive($array){
-    $total_avg = 0;
+        $data = [
+            'adviser' => $adviser,
+            'date' => date('D, jS F, Y h:i A'),
+            'start_date' => $startDate->copy()->format('d/m/Y'),
+            'end_date' => $endDate->copy()->format('d/m/Y'),
+            'total_clients' => $adviser->totalClients($startDate, $endDate),
+            'service_rating' => $adviser->serviceRating($startDate, $endDate),
+            'disclosure_percentage' => $adviser->disclosurePercentage($startDate, $endDate),
+            'payment_percentage' => $adviser->paymentPercentage($startDate, $endDate),
+            'policy_replaced_percentage' => $adviser->policyReplacedPercentage($startDate, $endDate),
+            'correct_occupation_percentage' => $adviser->correctOccupationPercentage($startDate, $endDate),
+            'compliance_percentage' => $adviser->compliancePercentage($startDate, $endDate),
+            'replacement_risks_percentage' => $adviser->replacementRisksPercentage($startDate, $endDate),
+        ];
 
-    foreach($array as $a){
-      if($a == "no"){
-        $total_avg++;
-      }
+        $pdf = Pdf::loadView('pdfs.audit-report', $data);
+
+        return $pdf->stream($filename);
     }
-
-    return $total_avg;
-  }
-
-  function yes_positive($array){
-    $total_avg = 0;
-
-    foreach($array as $a){
-      if($a == "yes"){
-        $total_avg++;
-      }
-    }
-
-    return $total_avg;
-  }
 }

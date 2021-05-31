@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Adviser;
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,28 +14,27 @@ class Audit extends Model
 
     protected $guarded = [];
 
-
-    public function clients(){
-      return $this->belongsToMany(Client::class)
-                  ->withPivot('weekOf', 'lead_source', 'pdf_title')
-                  ->withTimestamps();
-    }
-
-    public function advisers(){
-      return $this->hasMany(Adviser::class);    
-    }
+    protected $casts = [
+        'qa' => 'array',
+    ];
 
     public function adviser()
     {
-      return $this->belongsTo(Adviser::class);
+        return $this->belongsTo(Adviser::class);
     }
 
-    public function users(){
-      return $this->belongsTo(User::class);
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
-    public function caller() {
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
-      return $this->hasOne(User::class, 'id', 'user_id');
+    public function updator()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
