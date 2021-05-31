@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::redirect('/', '/home');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'auth.active'])->group(function () {
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Profile
-    Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
+    Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth.admin']], function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
 
         // Advisers
@@ -69,5 +69,5 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Users
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users', [UserController::class, 'index'])->middleware(['auth.admin'])->name('users.index');
 });
