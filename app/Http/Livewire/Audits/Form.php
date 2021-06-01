@@ -39,12 +39,21 @@ class Form extends Component
 
     public function getAdvisersProperty()
     {
-        return Adviser::orderBy('name')->get();
+        return Adviser::where('status', 'Active')
+            ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
+                $query->where('name', 'like', '%' . $this->input['adviser_name'] . '%');
+
+                return $query;
+            })->orderBy('name')->get();
     }
 
     public function getClientsProperty()
     {
-        return Client::orderBy('policy_holder')->get();
+        return Client::when(isset($this->input['client_policy_holder']) && $this->input['client_policy_holder'], function ($query) {
+            $query->where('policy_holder', 'like', '%' . $this->input['client_policy_holder'] . '%');
+
+            return $query;
+        })->orderBy('policy_holder')->get();
     }
 
     public function getClientProperty()
@@ -102,9 +111,13 @@ class Form extends Component
             'qa',
         ]);
 
+        $data['adviser_name'] = Adviser::find($data['adviser_id'])->name;
+        $data['client_policy_holder'] = Client::find($data['client_id'])->policy_holder;
         $data['is_new_client'] = 'no';
 
         $this->input = $data;
+
+        $this->dispatchBrowserEvent('edit-audit');
     }
 
     public function submit()

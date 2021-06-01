@@ -5,22 +5,15 @@
 
   <div class="form-group">
     <label for="adviser_id">Select an Adviser:</label>
-    <select class="form-control" id="adviser_id"
-      wire:model.lazy="input.adviser_id">
-      <option value="">-</option>
-      @foreach ($this->advisers as $adviser)
-        <option value="{{ $adviser->id }}">
-          {{ $adviser->name }}
-        </option>
-      @endforeach
-    </select>
+    <x-lookup id="survey_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
+      value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
     <x-input-error for="adviser_id" />
   </div>
 
   <div class="form-group">
-    <label for="is_new_client">Is this a new client?</label>
-    <select id="is_new_client" class="form-control"
-      wire:model.lazy="input.is_new_client">
+    <label for="surveyClient">Is this a new client?</label>
+    <select id="surveyClient" class="form-control"
+      wire:model.defer="input.is_new_client">
       <option value="">-</option>
       <option value="yes">Yes</option>
       <option value="no">No</option>
@@ -28,46 +21,38 @@
     <x-input-error for="is_new_client" />
   </div>
 
-  @if ($input['is_new_client'] == 'yes')
-    <div class="form-row" id="new">
-      <div class="form-group col-md-6">
-        <input type="text" placeholder="Policy Holder"
-          class="form-email form-control" id="policy_holder"
-          wire:model.lazy="input.policy_holder">
-        <x-input-error for="policy_holder" />
-      </div>
+  <div class="form-row" id="surveyNewClient" wire:ignore.self>
+    <div class="form-group col-md-6">
+      <input type="text" placeholder="Policy Holder"
+        class="form-email form-control" id="policy_holder"
+        wire:model.lazy="input.policy_holder">
+      <x-input-error for="policy_holder" />
+    </div>
 
-      <div class="form-group col-md-6">
-        <input type="text" id="policy_no"
-          placeholder="Policy No" class="form-control"
-          wire:model.lazy="input.policy_no">
-        <x-input-error for="policy_no" />
+    <div class="form-group col-md-6">
+      <input type="text" id="policy_no"
+        placeholder="Policy No" class="form-control"
+        wire:model.lazy="input.policy_no">
+      <x-input-error for="policy_no" />
+    </div>
+  </div>
+
+  <div class="form-row" id="surveyOldClient" wire:ignore.self>
+    <div class="form-group col-md-6">
+      <x-lookup id="survey_client_policy_holder" value-model="input.client_id"
+        label-model="input.client_policy_holder"
+        value-column="id" label-column="policy_holder" :items="$this->clients"
+        placeholder="Select a Client" />
+      <x-input-error for="client_id" />
+      <x-input-error for="client_id" />
+    </div>
+
+    <div class="form-group col-md-6">
+      <div class="form-control">
+        {{ $this->client ? $this->client->policy_no : '' }}
       </div>
     </div>
-  @endif
-
-  @if ($input['is_new_client'] == 'no')
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <select id="policy_holder" name="policy_holder"
-          class="form-control" wire:model.lazy="input.client_id">
-          <option value="">-</option>
-          @foreach ($this->clients as $client)
-            <option value="{{ $client->id }}">
-              {{ $client->policy_holder }}
-            </option>
-          @endforeach
-        </select>
-        <x-input-error for="client_id" />
-      </div>
-
-      <div class="form-group col-md-6">
-        <div class="form-control">
-          {{ $this->client ? $this->client->policy_no : '' }}
-        </div>
-      </div>
-    </div>
-  @endif
+  </div>
 
   @foreach (config('services.survey.questions') as $key => $question)
     @if ($key == 'adviser' && $input['sa']['cancellation_discussed'] != 'yes')
@@ -132,3 +117,41 @@
         class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $surveyId ? 'Save' : 'Submit' }}</button>
   </div>
 </form>
+
+@push('scripts')
+  <script type="text/javascript">
+    const handleSurveyFormLoad = () => {
+      const resetClient = () => {
+        $('#surveyNewClient').addClass('d-none');
+        $('#surveyOldClient').addClass('d-none');
+      }
+
+      const clientChange = () => {
+        resetClient();
+
+        if ($('#surveyClient').val() == 'yes') {
+          $('#surveyNewClient').removeClass('d-none');
+        } else if ($('#surveyClient').val() == 'no') {
+          $('#surveyOldClient').removeClass('d-none');
+        }
+      };
+
+      clientChange();
+
+      $('#surveyClient').change(function() {
+        clientChange();
+      });
+
+      $(document).on('survey-created', function() {
+        clientChange();
+      });
+
+      $(document).on('edit-survey', function() {
+        clientChange();
+      });
+    }
+
+    window.addEventListener('load', handleSurveyFormLoad);
+
+  </script>
+@endpush
