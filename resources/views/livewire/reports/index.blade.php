@@ -14,13 +14,8 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="adviser_id">Select an Adviser: </label>
-        <select class="form-control" id="adviser_id"
-          wire:model.lazy="input.adviser_id">
-          <option value="">Choose an option</option>
-          @foreach ($this->advisers as $adviser)
-            <option value={{ $adviser->id }}>{{ $adviser->name }}</option>
-          @endforeach
-        </select>
+        <x-lookup id="adviser_id" value-model="input.adviser_id" label-model="input.adviser_name"
+          value-column="id" label-column="name" :items="$this->advisers" placeholder="Choose an Adviser" />
         <x-input-error for="adviser_id" />
       </div>
       <div class="form-group col-md-6">

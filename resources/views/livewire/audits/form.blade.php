@@ -20,19 +20,13 @@
             {{ \Carbon\Carbon::now()->toFormattedDateString() }}</h5>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group col-lg-6 col-md-12">
-          <select class="form-control" name="adviser" id="adviser"
-            wire:model.defer="input.adviser_id">
-            <option value="" selected>Select an Adviser</option>
-            @foreach ($this->advisers as $adviser)
-              <option value="{{ $adviser->id }}">{{ $adviser->name }}
-              </option>
-            @endforeach
-          </select>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
+            value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
           <x-input-error for="adviser_id" />
         </div>
-        <div class="form-group col-lg-6 col-md-12">
+        <div class="form-group col-md-6">
           <select class="form-control" name="lead_source" id="lead_source"
             wire:model.defer="input.lead_source">
             <option value="">Select a Lead Source</option>
@@ -45,8 +39,8 @@
       </div>
       <div class="form-group">
         <label class="text-sm">Is this a new client?</label>
-        <select id="client-question" class="form-control"
-          wire:model.lazy="input.is_new_client">
+        <select id="auditClient" class="form-control"
+          wire:model.defer="input.is_new_client">
           <option value="">Choose an option</option>
           <option value="yes">Yes</option>
           <option value="no">No</option>
@@ -54,43 +48,35 @@
         <x-input-error for="is_new_client" />
       </div>
 
-      @if ($input['is_new_client'] == 'yes')
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <input type="text" class="form-control"
-              placeholder="Enter Policy Holder"
-              wire:model.lazy="input.policy_holder">
-            <x-input-error for="policy_holder" />
-          </div>
-          <div class="form-group col-md-6">
-            <input type="text" class="form-control"
-              placeholder="Enter Policy No."
-              wire:model.lazy="input.policy_no">
-            <x-input-error for="policy_no" />
-          </div>
+      <div class="form-row" id="auditNewClient" wire:ignore.self>
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control"
+            placeholder="Enter Policy Holder"
+            wire:model.defer="input.policy_holder">
+          <x-input-error for="policy_holder" />
         </div>
-      @endif
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control"
+            placeholder="Enter Policy No."
+            wire:model.defer="input.policy_no">
+          <x-input-error for="policy_no" />
+        </div>
+      </div>
 
-      @if ($input['is_new_client'] == 'no')
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <select class="form-control" wire:model.lazy="input.client_id">
-              <option value="">Select a Client</option>
-              @foreach ($this->clients as $client)
-                <option value="{{ $client->id }}">
-                  {{ $client->policy_holder }}
-                </option>
-              @endforeach
-            </select>
-            <x-input-error for="client_id" />
-          </div>
-          <div class="form-group col-md-6">
-            <div class="form-control">
-              {{ $this->client->policy_no ?? 'Policy Number' }}
-            </div>
+      <div class="form-row" id="auditOldClient" wire:ignore.self>
+        <div class="form-group col-md-6">
+          <x-lookup id="audit_client_policy_holder" value-model="input.client_id"
+            label-model="input.client_policy_holder"
+            value-column="id" label-column="policy_holder" :items="$this->clients"
+            placeholder="Select a Client" />
+          <x-input-error for="client_id" />
+        </div>
+        <div class="form-group col-md-6">
+          <div class="form-control">
+            {{ $this->client->policy_no ?? 'Policy Number' }}
           </div>
         </div>
-      @endif
+      </div>
 
       <hr>
 
@@ -136,3 +122,41 @@
     </div>
   </form>
 </div>
+
+@push('scripts')
+  <script type="text/javascript">
+    const handleAuditFormLoad = () => {
+      const resetClient = () => {
+        $('#auditNewClient').addClass('d-none');
+        $('#auditOldClient').addClass('d-none');
+      }
+
+      const clientChange = () => {
+        resetClient();
+
+        if ($('#auditClient').val() == 'yes') {
+          $('#auditNewClient').removeClass('d-none');
+        } else if ($('#auditClient').val() == 'no') {
+          $('#auditOldClient').removeClass('d-none');
+        }
+      };
+
+      clientChange();
+
+      $('#auditClient').change(function() {
+        clientChange();
+      });
+
+      $(document).on('audit-created', function() {
+        clientChange();
+      });
+
+      $(document).on('edit-audit', function() {
+        clientChange();
+      });
+    }
+
+    window.addEventListener('load', handleAuditFormLoad);
+
+  </script>
+@endpush
