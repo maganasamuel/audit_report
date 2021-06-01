@@ -13,11 +13,6 @@ class Client extends Model
 
     protected $guarded = [];
 
-    /**
-     * Conducted audits on client
-     *
-     * @return App\Models\Audit
-     */
     public function audits()
     {
         return $this->hasMany(Audit::class);
@@ -28,11 +23,6 @@ class Client extends Model
         return $this->hasMany(Survey::class);
     }
 
-    /**
-     * Path of client
-     *
-     * @return string
-     */
     public function path()
     {
         return '/profile/clients/' . $this->id;
