@@ -13,29 +13,14 @@ class Index extends Component
         'report_type' => 'audit',
     ];
 
-    public $start_date;
-
-    public $end_date;
-
-    public $adviser_id;
-
-    public $fsp_no;
-
-    protected $rules = [
-        'report_type' => 'required',
-        'start_date' => 'required',
-        'end_date' => 'required',
-        'adviser_id' => 'required',
-    ];
-
-    protected $listeners = [
-        'selectStartDate' => 'getStartDate',
-        'selectEndDate' => 'getEndDate',
-    ];
-
     public function getAdvisersProperty()
     {
-        return Adviser::orderBy('name', 'asc')->get();
+        return Adviser::where('status', 'Active')
+            ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
+                $query->where('name', 'like', '%' . $this->input['adviser_name'] . '%');
+
+                return $query;
+            })->orderBy('name', 'asc')->get();
     }
 
     public function getAdviserProperty()
@@ -46,23 +31,6 @@ class Index extends Component
     public function render()
     {
         return view('livewire.reports.index');
-    }
-
-    public function getStartDate($value)
-    {
-        $this->start_date = $value;
-    }
-
-    public function getEndDate($value)
-    {
-        $this->end_date = $value;
-    }
-
-    public function updatedAdviserId($value)
-    {
-        $this->adviser = Adviser::find($value);
-
-        $this->fsp_no = $this->adviser->fsp_no;
     }
 
     public function generateReport()
