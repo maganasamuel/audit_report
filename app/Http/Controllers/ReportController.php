@@ -40,7 +40,16 @@ class ReportController extends Controller
 
         $endDate = Carbon::createFromFormat('d-m-Y', $endDate);
 
-        $data = [
+        $data = $this->{$type . 'Data'}($adviser, $startDate, $endDate);
+
+        $pdf = Pdf::loadView('pdfs.' . $type . '-report', $data);
+
+        return $pdf->stream($filename);
+    }
+
+    public function auditData($adviser, $startDate, $endDate)
+    {
+        return [
             'adviser' => $adviser,
             'date' => date('D, jS F, Y h:i A'),
             'start_date' => $startDate->copy()->format('d/m/Y'),
@@ -54,9 +63,10 @@ class ReportController extends Controller
             'compliance_percentage' => $adviser->compliancePercentage($startDate, $endDate),
             'replacement_risks_percentage' => $adviser->replacementRisksPercentage($startDate, $endDate),
         ];
+    }
 
-        $pdf = Pdf::loadView('pdfs.audit-report', $data);
-
-        return $pdf->stream($filename);
+    public function surveyData($adviser, $startDate, $endDate)
+    {
+        return [];
     }
 }

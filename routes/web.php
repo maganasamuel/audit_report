@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,3 +74,20 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
     // Users
     Route::get('/users', [UserController::class, 'index'])->middleware(['auth.admin'])->name('users.index');
 });
+
+if ('production' != env('APP_ENV')) {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('upgrade', function () {
+            return view('pages.upgrade');
+        })->name('upgrade');
+        Route::get('map', function () {
+            return view('pages.maps');
+        })->name('map');
+        Route::get('icons', function () {
+            return view('pages.icons');
+        })->name('icons');
+        Route::get('table-list', function () {
+            return view('pages.tables');
+        })->name('table');
+    });
+}
