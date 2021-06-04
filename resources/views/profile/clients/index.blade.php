@@ -12,10 +12,6 @@
   <div class="container-fluid mt--7">
     @include('alerts.success')
     @include('alerts.error')
-    {{-- @include('extra.edit-client-pdf-modal')
-    @include('extra.edit-survey-pdf-modal')
-    @include('extra.delete-client-pdf-modal')
-    @include('extra.cancel-survey-pdf-modal') --}}
 
     @livewire('clients.edit')
 

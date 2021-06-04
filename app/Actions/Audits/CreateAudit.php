@@ -6,13 +6,19 @@ use App\Models\Audit;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CreateAudit
 {
     public function create($input)
     {
         $rules = [
-            'adviser_id' => ['required', 'exists:advisers,id'],
+            'adviser_id' => [
+                'required',
+                Rule::exists('advisers', 'id')->where(function ($query) {
+                    return $query->where('status', 'Active');
+                }),
+            ],
             'is_new_client' => ['required', 'in:yes,no'],
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],

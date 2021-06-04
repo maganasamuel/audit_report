@@ -1,8 +1,6 @@
 @extends('layouts.app', ['title' => __('Adviser Profiles')])
 
 @section('content')
-  {{-- @include('extra.edit-adviser-modal')
-  @include('extra.deactivate-adviser-modal') --}}
   @include('users.partials.header', [
   'title' => __('Advisers'),
   'description' => __('This is the Advisers table. You can see different

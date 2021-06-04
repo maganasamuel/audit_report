@@ -13,7 +13,6 @@
         </div>
         <div class="container">
           <form wire:submit.prevent="submit">
-            <div>{{ json_encode($errors->all()) }}</div>
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-prepend">
