@@ -38,6 +38,7 @@ class Index extends Component
     {
         $searchColumns = [
             'name',
+            'email',
             'fsp_no',
             'status',
         ];

@@ -17,6 +17,7 @@ class CreateAdvisersTable extends Migration
             $table->id();
 
             $table->string('name');
+            $table->string('email');
             $table->integer('fsp_no');
             $table->string('status'); // Active, Terminated;
 

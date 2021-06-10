@@ -12,15 +12,7 @@ class Adviser extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'fsp_no',
-        'status',
-    ];
-
-    protected $casts = [
-        'sa' => 'array',
-    ];
+    protected $guarded = [];
 
     public function audits()
     {

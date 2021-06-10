@@ -35,6 +35,19 @@
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                </div>
+                <input type="text" id="email" class="form-control"
+                  placeholder="E-Mail"
+                  wire:model.defer="input.email">
+              </div>
+              <x-input-error for="email" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
                     <i class="fa fa-hashtag"></i>
                   </span>
                 </div>
