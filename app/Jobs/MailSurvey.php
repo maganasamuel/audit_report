@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MailSurvey implements ShouldQueue
 {
@@ -36,6 +37,12 @@ class MailSurvey implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->survey->creator->email)->send(new SurveyMail($this->survey));
+        $cc = Str::of(config('services.mail.cc'))->explode(';');
+
+        $cc->push($this->survey->adviser->email);
+
+        Mail::to($this->survey->creator->email)
+            ->cc($cc->all())
+            ->send(new SurveyMail($this->survey));
     }
 }

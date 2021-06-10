@@ -15,12 +15,22 @@
         <tr>
 
           <th>#</th>
-          <th><a wire:click.prevent="sortBy('name')" href="#"
+          <th>
+            <a wire:click.prevent="sortBy('name')" href="#"
               role="button">
               Name
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="name" />
-            </a></th>
+            </a>
+          </th>
+          <th>
+            <a wire:click.prevent="sortBy('email')" href="#"
+              role="button">
+              E-Mail
+              <x-sort-indicator :sort-column="$sortColumn"
+                column-name="email" />
+            </a>
+          </th>
           <th><a wire:click.prevent="sortBy('fsp_no')" href="#"
               role="button">
               FSP Number
@@ -46,6 +56,7 @@
 
             <td>{{ $key + 1 }}</td>
             <td>{{ $adviser->name }}</td>
+            <td>{{ $adviser->email }}</td>
             <td>{{ $adviser->fsp_no }}</td>
             <td class="text-left">
               <span class="{{ $badgeClass[$adviser->status] }}">{{ $adviser->status }}</span>

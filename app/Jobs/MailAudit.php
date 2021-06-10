@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MailAudit implements ShouldQueue
 {
@@ -36,6 +37,12 @@ class MailAudit implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->audit->creator->email)->send(new AuditMail($this->audit));
+        $cc = Str::of(config('services.mail.cc'))->explode(';');
+
+        $cc->push($this->audit->adviser->email);
+
+        Mail::to($this->audit->creator->email)
+            ->cc($cc->all())
+            ->send(new AuditMail($this->audit));
     }
 }

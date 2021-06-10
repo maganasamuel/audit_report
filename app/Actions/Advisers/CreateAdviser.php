@@ -11,9 +11,11 @@ class CreateAdviser
     {
         $data = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'fsp_no' => ['required', 'integer', 'min:1', 'max:999999999'],
         ], [], [
             'name' => 'Name',
+            'email' => 'E-Mail',
             'fsp_no' => 'FSP Number',
         ])->validate();
 

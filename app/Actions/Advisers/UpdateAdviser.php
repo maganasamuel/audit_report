@@ -11,6 +11,7 @@ class UpdateAdviser
     {
         $data = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'fsp_no' => ['required', 'integer', 'min:1', 'max:999999999'],
             'status' => ['required', 'in:Active,Terminated'],
         ], [], [
