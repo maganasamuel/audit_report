@@ -38,6 +38,7 @@ class Form extends Component
 
         $this->input = $this->adviser->only([
             'name',
+            'email',
             'fsp_no',
             'status',
         ]);
