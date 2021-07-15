@@ -15,17 +15,10 @@
                 @endif
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent pb-3 text-center">
-                        <h1 style="font-weight: heavy;"><strong>{{ __('AUDIT | SURVEY') }}</strong></h1>
+                        <h1 style="font-weight: heavy;"><strong>{{ __('CLIENT FEEDBACK') }}</strong></h1>
                         <h1><strong>{{__('SOFTWARE') }}</strong></h1>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
-                        <div class="text-center text-muted mb-4">
-                            <small>
-                                    Sign in with these credentials:
-                                    <br>
-                                    Username <strong>admin@mail.com</strong> Password: <strong>secret</strong>
-                            </small>
-                        </div>
                         <form role="form" method="POST" action="{{ route('login') }}">
                             @csrf
 
