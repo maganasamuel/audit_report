@@ -134,7 +134,7 @@
               <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('calls.audit') ? 'active' : '' }}"
                   href="{{ route('calls.audit') }}">
-                  {{ __('Audit') }}
+                  {{ __('Client Feedback') }}
                 </a>
               </li>
               <li class="nav-item">

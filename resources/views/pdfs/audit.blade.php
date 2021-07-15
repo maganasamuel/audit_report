@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audit Report</title>
+  <title>Client Feedback Report</title>
 
   <link rel="stylesheet" href="/css/pdf.css" />
 
@@ -28,7 +28,7 @@
         <td class="header-image"><img
             src="{{ asset('assets/img/logo-only.png') }}"
             height="0.76in" /></td>
-        <td class="header-title">AUDIT REPORT</td>
+        <td class="header-title">CLIENT FEEDBACK REPORT</td>
         <td class="header-right-box">
           &nbsp;
         </td>

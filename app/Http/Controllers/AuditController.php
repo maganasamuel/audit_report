@@ -29,6 +29,6 @@ class AuditController extends Controller
             'client' => $client,
         ]);
 
-        return $pdf->stream(Str::slug('Audit Report - ' . $client->policy_holder . ' - ' . $audit->created_at->format('d-m-Y')) . '.pdf');
+        return $pdf->stream(Str::slug('Client Feedback Report - ' . $client->policy_holder . ' - ' . $audit->created_at->format('d-m-Y')) . '.pdf');
     }
 }

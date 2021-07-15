@@ -5,7 +5,7 @@
       <select class="form-control" id="report_type"
         wire:model.defer="input.report_type">
         <option value="">Choose an option.</option>
-        <option value="audit">Audit</option>
+        <option value="audit">Client Feedback</option>
         {{-- <option value="survey">Survey</option> --}}
       </select>
       <x-input-error for="report_type" />

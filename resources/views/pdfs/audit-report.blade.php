@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audit Report</title>
+  <title>Client Feedback Report</title>
 
   <link rel="stylesheet" href="/css/pdf.css" />
 
@@ -31,7 +31,7 @@
         <td class="header-image"><img
             src="{{ asset('assets/img/logo-only.png') }}"
             height="0.76in" /></td>
-        <td class="header-title">AUDIT REPORT</td>
+        <td class="header-title">CLIENT FEEDBACK REPORT</td>
         <td class="header-right-box">
           &nbsp;
         </td>
@@ -93,7 +93,7 @@
       </tr>
     </table>
     <div class="text-center">
-      <h2 class="font-bold underline">Audits</h2>
+      <h2 class="font-bold underline">Client Feedbacks</h2>
     </div>
 
     <table class="audits-table w-full border">
@@ -102,7 +102,7 @@
         <td class="border p-2 font-bold text-center bg-gray">Percentage %</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">No. of Clients Audited:</td>
+        <td class="border p-2 font-bold">No. of Client Feedbacks:</td>
         <td class="border p-2 text-center">{{ $total_clients }}</td>
       </tr>
       <tr>
