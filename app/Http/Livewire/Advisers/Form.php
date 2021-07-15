@@ -40,6 +40,12 @@ class Form extends Component
             'name',
             'email',
             'fsp_no',
+            'contact_number',
+            'address',
+            'fap_name',
+            'fap_email',
+            'fap_fsp_no',
+            'fap_contact_number',
             'status',
         ]);
     }
