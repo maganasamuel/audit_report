@@ -73,6 +73,10 @@
           @continue
         @endif
 
+        @if ($key == 'replacement_is_discussed' && $input['qa']['replace_policy'] != 'yes')
+          @continue
+        @endif
+
         @if ($key == 'occupation' && $input['qa']['confirm_occupation'] != 'no')
           @continue
         @endif

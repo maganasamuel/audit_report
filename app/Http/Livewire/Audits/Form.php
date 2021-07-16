@@ -107,6 +107,10 @@ class Form extends Component
             $this->input['qa']['medical_conditions'] = '';
         }
 
+        if ('input.qa.replace_policy' == $name && 'yes' != $value) {
+            $this->input['qa']['replacement_is_discussed'] = '';
+        }
+
         if ('input.qa.confirm_occupation' == $name && 'no' != $value) {
             $this->input['qa']['occupation'] = '';
         }
