@@ -78,16 +78,38 @@
     </div>
     <table class="header-table" class="w-full border">
       <tr>
-        <td class="border p-2"><span class="font-bold">Name:</span>
-          {{ $adviser->name }}</td>
-        <td class="border p-2"><span class="font-bold">FSP No.</span>
-          {{ $adviser->fsp_no }}</td>
+        <td class="p-2 w-quart border-b">Name of Financial Adviser:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->name }}</td>
+        <td class="p-2 w-quart border-b border-l">Finance Advice Provider Name:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->fap_name }}</td>
       </tr>
       <tr>
-        <td class="border p-2"><span class="font-bold">Date Generated:</span>
+        <td class="p-2 w-quart border-b">FSP Number:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->fsp_no }}</td>
+        <td class="p-2 w-quart border-b border-l">FAP FSP Number:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->fap_fsp_no }}</td>
+      </tr>
+      <tr>
+        <td class="p-2 w-quart border-b">Contact Number:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->contact_number }}</td>
+        <td class="p-2 w-quart border-b border-l">FAP Contact Number:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->fap_contact_number }}</td>
+      </tr>
+      <tr>
+        <td class="p-2 w-quart border-b">Email Address:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->email }}</td>
+        <td class="p-2 w-quart border-b border-l">FAP Email Address:</td>
+        <td class="p-2 w-quart border-b">{{ $adviser->fap_email }}</td>
+      </tr>
+      <tr>
+        <td class="p-2 w-quart border-b">Physical Address:</td>
+        <td class="p-2" colspan="3">{{ $adviser->address }}</td>
+      </tr>
+      <tr>
+        <td class="border p-2" colspan="2"><span class="font-bold">Date Generated:</span>
           {{ $date }}
         </td>
-        <td class="border p-2"><span class="font-bold">Period Covered:</span>
+        <td class="border p-2" colspan="2"><span class="font-bold">Period Covered:</span>
           {{ $start_date }} -
           {{ $end_date }}</td>
       </tr>
