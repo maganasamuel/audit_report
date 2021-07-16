@@ -104,9 +104,9 @@
                 <i class="far fa-edit"></i>
               </button>
               <button class="btn btn-primary btn-sm" title="Send Client Feedback"
-                wire:click="mailAudit({{ $audit->id }})" wire:loading.attr="disabled"
+                wire:click="mailAudit({{ $audit->id }})" wire:target="mailAudit({{ $audit->id }})" wire:loading.attr="disabled"
                 wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
-                <i class="far fa-envelope" wire:loading.class.remove="far far-envelope"
+                <i class="far fa-envelope" wire:target="mailAudit({{ $audit->id }})" wire:loading.class.remove="far far-envelope"
                   wire:loading.class="fas fa-spinner"></i>
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
