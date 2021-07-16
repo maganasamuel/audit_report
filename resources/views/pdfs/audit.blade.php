@@ -110,10 +110,6 @@
         <td class="p-2 w-quart">Physical Address:</td>
         <td class="p-2" colspan="3">{{ $audit->adviser->address }}</td>
       </tr>
-      <tr>
-        <td class="p-2 w-quart">Lead Source:</td>
-        <td class="p-2" colspan="3">{{ $audit->lead_source }}</td>
-      </tr>
       <tr style="background-color: white;">
         <th colspan="4" class="p-2 text-left font-bold"><br>Caller Information</th>
       </tr>

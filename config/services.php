@@ -41,7 +41,7 @@ return [
         'questions' => [
             'with_policy' => [
                 'type' => 'boolean',
-                'text' => '1. I understand you recently took out a policy with (fidelity, partners, aia) from one of our advisers Is that correct?',
+                'text' => '1. I understand you recently took out a policy with (insurance company) from one of our advisers Is that correct?',
             ],
             'confirm_adviser' => [
                 'type' => 'boolean',
@@ -49,7 +49,7 @@ return [
             ],
             'adviser_scale' => [
                 'type' => 'select',
-                'text' => '3. How would you describe the adviser\'s standard of service on a scale of 1-10? (10 is the highest)',
+                'text' => "3. How would you describe the adviser's standard of service on a scale of 1-10? (10 as the highest)",
                 'values' => [
                     ['value' => 1, 'label' => 1],
                     ['value' => 2, 'label' => 2],
@@ -88,6 +88,15 @@ return [
                 'type' => 'boolean',
                 'text' => '6. Did you take this policy to replace any other policy?',
             ],
+            'replacement_is_discussed' => [
+                'type' => 'select',
+                'text' => 'If replacement, were the risks of replacing this insurance policy explained to you?',
+                'values' => [
+                    ['value' => 'yes', 'label' => 'Yes'],
+                    ['value' => 'no', 'label' => 'No'],
+                    ['value' => 'n/a', 'label' => 'Not Applicable'],
+                ],
+            ],
             'confirm_occupation' => [
                 'type' => 'boolean',
                 'text' => '7. We have your occupation recorded as ________________. Is that correct?',
@@ -102,24 +111,16 @@ return [
             ],
             'received_copy' => [
                 'type' => 'boolean',
-                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you received these?',
+                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you receive these?',
             ],
             'further_comments' => [
                 'type' => 'text-optional',
                 'text' => '10. Do you have any further comments?',
             ],
-            'replacement_is_discussed' => [
-                'type' => 'select',
-                'text' => '11. If replacement, were the risks of replacing this insurance policy explained to you?',
-                'values' => [
-                    ['value' => 'yes', 'label' => 'Yes'],
-                    ['value' => 'no', 'label' => 'No'],
-                    ['value' => 'n/a', 'label' => 'Not Applicable'],
-                ],
-            ],
             'interviewer_completion' => [
                 'type' => 'text',
                 'text' => 'FOR INTERVIEWER TO COMPLETE',
+                'class' => 'font-weight-bold',
             ],
             'is_action_taken' => [
                 'type' => 'boolean',
@@ -174,13 +175,10 @@ return [
     ],
 
     'mail' => [
-        'receiver' => env('MAIL_RECEIVER', 'admin@eliteinsure.co.nz'),
         'cc' => env(
             'MAIL_CC',
             implode(';', [
-                'executive.admin@eliteinsure.co.nz',
                 'admin@eliteinsure.co.nz',
-                'qualitycontrol@eliteinsure.co.nz',
                 'gurjeet@eliteinsure.co.nz',
             ])
         ),

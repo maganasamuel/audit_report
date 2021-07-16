@@ -23,7 +23,6 @@ class UpdateAudit
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
-            'lead_source' => ['required', 'in:' . implode(',', config('services.lead_source'))],
         ];
 
         foreach (config('services.audit.questions') as $key => $question) {
@@ -39,6 +38,10 @@ class UpdateAudit
 
             if ('medical_conditions' == $key) {
                 $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes,not sure'];
+            }
+
+            if ('replacement_is_discussed' == $key) {
+                $rules['qa.' . $key] = ['required_if:qa.replace_policy,yes'];
             }
 
             if ('occupation' == $key) {
