@@ -147,7 +147,7 @@ table {
     border-bottom-width: 1px;
 }
 
-.border-l{
+.border-l {
     border-left-style: solid;
     border-left-width: 1px;
 }
@@ -164,8 +164,25 @@ table {
     margin-left: 2em;
 }
 
+.my-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.mt-0 {
+    margin-top: 0;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
 .mt-4 {
     margin-top: 1em;
+}
+
+.mt-8{
+    margin-top: 2em;
 }
 
 .mb-8 {
