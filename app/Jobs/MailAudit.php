@@ -41,7 +41,7 @@ class MailAudit implements ShouldQueue
 
         $cc->push($this->audit->adviser->email);
 
-        Mail::to($this->audit->creator->email)
+        Mail::to([$this->audit->creator->email, $this->audit->adviser->email])
             ->cc($cc->all())
             ->send(new AuditMail($this->audit));
     }

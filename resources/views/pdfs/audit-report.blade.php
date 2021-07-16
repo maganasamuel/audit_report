@@ -10,12 +10,12 @@
   <link rel="stylesheet" href="/css/pdf.css" />
 
   <style>
-    .audits-table tr:nth-child(even) {
-      background-color: #f2f2f2;
+    .table-striped {
+      border: 1px solid #f2f2f2;
     }
 
-    .bg-gray {
-      background-color: #adcdea;
+    .table-striped tr:nth-child(even) {
+      background-color: #f2f2f2;
     }
 
   </style>
@@ -73,96 +73,96 @@
   </htmlpagefooter>
 
   <div class="margin">
-    <div class="text-center bg-gray p-4 border border-2">
-      <h1 class="font-bold">Adviser Summary</h1>
-    </div>
-    <table class="header-table" class="w-full border">
+    <div class="section-title mb-4 text-center">Adviser Summary</div>
+    <table class="table-striped w-full">
       <tr>
-        <td class="p-2 w-quart border-b">Name of Financial Adviser:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->name }}</td>
-        <td class="p-2 w-quart border-b border-l">Finance Advice Provider Name:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->fap_name }}</td>
+        <td class="p-2 w-quart">Name of Financial Adviser:</td>
+        <td class="p-2 w-quart">{{ $adviser->name }}</td>
+        <td class="p-2 w-quart">Finance Advice Provider Name:</td>
+        <td class="p-2 w-quart">{{ $adviser->fap_name }}</td>
       </tr>
       <tr>
-        <td class="p-2 w-quart border-b">FSP Number:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->fsp_no }}</td>
-        <td class="p-2 w-quart border-b border-l">FAP FSP Number:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->fap_fsp_no }}</td>
+        <td class="p-2 w-quart">FSP Number:</td>
+        <td class="p-2 w-quart">{{ $adviser->fsp_no }}</td>
+        <td class="p-2 w-quart">FAP FSP Number:</td>
+        <td class="p-2 w-quart">{{ $adviser->fap_fsp_no }}</td>
       </tr>
       <tr>
-        <td class="p-2 w-quart border-b">Contact Number:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->contact_number }}</td>
-        <td class="p-2 w-quart border-b border-l">FAP Contact Number:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->fap_contact_number }}</td>
+        <td class="p-2 w-quart">Contact Number:</td>
+        <td class="p-2 w-quart">{{ $adviser->contact_number }}</td>
+        <td class="p-2 w-quart">FAP Contact Number:</td>
+        <td class="p-2 w-quart">{{ $adviser->fap_contact_number }}</td>
       </tr>
       <tr>
-        <td class="p-2 w-quart border-b">Email Address:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->email }}</td>
-        <td class="p-2 w-quart border-b border-l">FAP Email Address:</td>
-        <td class="p-2 w-quart border-b">{{ $adviser->fap_email }}</td>
+        <td class="p-2 w-quart">Email Address:</td>
+        <td class="p-2 w-quart">{{ $adviser->email }}</td>
+        <td class="p-2 w-quart">FAP Email Address:</td>
+        <td class="p-2 w-quart">{{ $adviser->fap_email }}</td>
       </tr>
       <tr>
-        <td class="p-2 w-quart border-b">Physical Address:</td>
-        <td class="p-2" colspan="3">{{ $adviser->address }}</td>
+        <td class="p-2 w-quart">Physical Address:</td>
+        <td class="p-2 w-quart" colspan="3">{{ $adviser->address }}</td>
       </tr>
       <tr>
-        <td class="border p-2" colspan="2"><span class="font-bold">Date Generated:</span>
-          {{ $date }}
-        </td>
-        <td class="border p-2" colspan="2"><span class="font-bold">Period Covered:</span>
+        <td class="p-2 w-quart font-bold">Date Generated:</td>
+        <td class="p-2 w-quart">{{ $date }}</td>
+        <td class="p-2 w-quart font-bold">Period Covered:</td>
+        <td class="p-2 w-quart">
           {{ $start_date }} -
-          {{ $end_date }}</td>
+          {{ $end_date }}
+        </td>
       </tr>
     </table>
-    <div class="text-center">
-      <h2 class="font-bold underline">Client Feedbacks</h2>
-    </div>
 
-    <table class="audits-table w-full border">
+    <p class="mt-4">&nbsp;</p>
+
+    <div class="section-title text-center mb-4 mt-8">Client Feedbacks</div>
+
+    <table class="table-striped w-full">
       <tr>
-        <td class="border p-2 font-bold text-center bg-gray">Title</td>
-        <td class="border p-2 font-bold text-center bg-gray">Percentage %</td>
+        <td class="p-2 font-bold text-center bg-gray">Title</td>
+        <td class="p-2 font-bold text-center bg-gray">Percentage %</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">No. of Client Feedbacks:</td>
-        <td class="border p-2 text-center">{{ $total_clients }}</td>
+        <td class="p-2 font-bold">No. of Client Feedbacks:</td>
+        <td class="p-2 text-center">{{ $total_clients }}</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Adviser Standard of Service Rating:
+        <td class="p-2 font-bold">Adviser Standard of Service Rating:
         </td>
-        <td class="border p-2 text-center">{{ round($service_rating) }}%</td>
+        <td class="p-2 text-center">{{ round($service_rating) }}%</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Complete Disclosure by Client:</td>
-        <td class="border p-2 text-center">
+        <td class="p-2 font-bold">Complete Disclosure by Client:</td>
+        <td class="p-2 text-center">
           {{ round($disclosure_percentage) }}%</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Client Payment Method has been Set:
+        <td class="p-2 font-bold">Client Payment Method has been Set:
         </td>
-        <td class="border p-2 text-center">{{ round($payment_percentage) }}%</td>
+        <td class="p-2 text-center">{{ round($payment_percentage) }}%</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Client Policy Being Replaced:</td>
-        <td class="border p-2 text-center">{{ round($policy_replaced_percentage) }}%
+        <td class="p-2 font-bold">Client Policy Being Replaced:</td>
+        <td class="p-2 text-center">{{ round($policy_replaced_percentage) }}%
         </td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Client Provided Correct Occupation:
+        <td class="p-2 font-bold">Client Provided Correct Occupation:
         </td>
-        <td class="border p-2 text-center">
+        <td class="p-2 text-center">
           {{ round($correct_occupation_percentage) }}%
         </td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Compliance Documents Received by
+        <td class="p-2 font-bold">Compliance Documents Received by
           Client:</td>
-        <td class="border p-2 text-center">{{ round($compliance_percentage) }}%</td>
+        <td class="p-2 text-center">{{ round($compliance_percentage) }}%</td>
       </tr>
       <tr>
-        <td class="border p-2 font-bold">Explanation of Risk in Replacement:
+        <td class="p-2 font-bold">Explanation of Risk in Replacement:
         </td>
-        <td class="border p-2 text-center">
+        <td class="p-2 text-center">
           {{ round($replacement_risks_percentage) }}%</td>
       </tr>
     </table>

@@ -20,7 +20,7 @@ class CreateAuditsTable extends Migration
             $table->foreignId('created_by');
             $table->foreignId('updated_by')->nullable();
 
-            $table->string('lead_source'); // Telemarketer, BDM, Self-Generated
+            $table->string('lead_source')->nullable(); // Telemarketer, BDM, Self-Generated
             $table->json('qa');
 
             $table->timestamps();
