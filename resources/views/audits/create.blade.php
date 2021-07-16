@@ -1,8 +1,8 @@
 @extends('layouts.app', ['title' => __('Adviser Profiles')])
 @section('content')
   @include('users.partials.header', [
-  'title' => __('Audit Questionnaire'),
-  'description' => __('This is the Audit Questionnaire. You can see different sets
+  'title' => __('Client Feedback Questionnaire'),
+  'description' => __('This is the Client Feedback Questionnaire. You can see different sets
   of questions.'),
   'class' => 'col-lg-12'
   ])
@@ -13,7 +13,7 @@
     <div class="card w-100 p-4">
       <div class="card-body">
         <div class="card-title">
-          <h3 class="mb-0">Audit Report</h3>
+          <h3 class="mb-0">Client Feedback Report</h3>
         </div>
         <div class="assessment-container">
           <div class="row">

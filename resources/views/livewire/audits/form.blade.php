@@ -82,33 +82,34 @@
 
       @foreach (config('services.audit.questions') as $key => $question)
         <div class="form-group">
-          <label for="{{ $key }}">{{ $question['text'] }}</label>
+          <label for="{{ $key }}">
+            {{ $question['text'] }}
+            @if ($question['type'] == 'boolean')
+              <select id="{{ $key }}" class="form-control form-control-sm d-inline-block w-auto ml-2"
+                wire:model.defer="input.qa.{{ $key }}">
+                <option value="">Select an Answer</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            @endif
+
+            @if ($question['type'] == 'select')
+              <select id="{{ $key }}" class="form-control form-control-sm d-inline-block w-auto ml-2"
+                wire:model.defer="input.qa.{{ $key }}">
+                <option value="">Select an Answer</option>
+                @foreach ($question['values'] as $value)
+                  <option value="{{ $value['value'] }}">
+                    {{ $value['label'] }}
+                  </option>
+                @endforeach
+              </select>
+            @endif
+          </label>
 
           @if (in_array($question['type'], ['text', 'text-optional']))
             <textarea id="{{ $key }}" class="form-control" rows="2"
               wire:model.defer="input.qa.{{ $key }}">
             </textarea>
-          @endif
-
-          @if ($question['type'] == 'boolean')
-            <select id="{{ $key }}" class="form-control"
-              wire:model.defer="input.qa.{{ $key }}">
-              <option value="">Select an Answer</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          @endif
-
-          @if ($question['type'] == 'select')
-            <select id="{{ $key }}" class="form-control"
-              wire:model.defer="input.qa.{{ $key }}">
-              <option value="">Select an Answer</option>
-              @foreach ($question['values'] as $value)
-                <option value="{{ $value['value'] }}">
-                  {{ $value['label'] }}
-                </option>
-              @endforeach
-            </select>
           @endif
 
           <x-input-error for="qa.{{ $key }}" />

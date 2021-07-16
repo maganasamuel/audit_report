@@ -19,7 +19,7 @@
             <a class="nav-link font-weight-bold px-4 py-2 active" id="auditsTab"
               data-toggle="tab"
               href="#auditsTabItem" role="tab" aria-controls="audits"
-              aria-selected="true">Audits</a>
+              aria-selected="true">Client Feedbacks</a>
           </li>
           <li class="nav-item">
             <a class="nav-link font-weight-bold px-4 py-2" id="surveysTab"

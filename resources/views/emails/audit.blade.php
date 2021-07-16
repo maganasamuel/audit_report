@@ -6,7 +6,7 @@
 
   # Hello {{ $audit->creator->name }},
 
-  Here's audit report of {{ $audit->client->policy_holder }} with policy number:
+  Here's client feedback report of {{ $audit->client->policy_holder }} with policy number:
   {{ $audit->client->policy_no }}.
 
   @component('mail::button', ['url' => config('app.url')])

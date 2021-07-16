@@ -25,6 +25,12 @@ class AdviserFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
             'fsp_no' => $this->faker->randomNumber(5),
+            'contact_number' => $this->faker->numerify('###########'),
+            'address' => $this->faker->address,
+            'fap_name' => $this->faker->name,
+            'fap_email' => $this->faker->safeEmail,
+            'fap_fsp_no' => $this->faker->randomNumber(5),
+            'fap_contact_number' => $this->faker->numerify('###########'),
             'status' => $this->faker->randomElement(['Active', 'Terminated']),
         ];
     }

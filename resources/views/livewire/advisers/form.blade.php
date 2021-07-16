@@ -57,6 +57,84 @@
               </div>
               <x-input-error for="fsp_no" />
             </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-phone"></i>
+                  </span>
+                </div>
+                <input type="text" id="contact_number" class="form-control"
+                  placeholder="Contact Number"
+                  wire:model.defer="input.contact_number">
+              </div>
+              <x-input-error for="contact_number" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </span>
+                </div>
+                <input type="text" id="address" class="form-control"
+                  placeholder="Address"
+                  wire:model.defer="input.address">
+              </div>
+              <x-input-error for="address" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-user"></i>
+                  </span>
+                </div>
+                <input type="text" id="fap_name" class="form-control"
+                  placeholder="FAP Name"
+                  wire:model.defer="input.fap_name">
+              </div>
+              <x-input-error for="fap_name" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                </div>
+                <input type="text" id="fap_email" class="form-control"
+                  placeholder="FAP Email"
+                  wire:model.defer="input.fap_email">
+              </div>
+              <x-input-error for="fap_email" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-hashtag"></i>
+                  </span>
+                </div>
+                <input type="text" id="fap_fsp_no" class="form-control"
+                  placeholder="FAP FSP Number"
+                  wire:model.defer="input.fap_fsp_no">
+              </div>
+              <x-input-error for="fap_fsp_no" />
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fas fa-phone"></i>
+                  </span>
+                </div>
+                <input type="text" id="fap_contact_number" class="form-control"
+                  placeholder="FAP Contact Number"
+                  wire:model.defer="input.fap_contact_number">
+              </div>
+              <x-input-error for="fap_contact_number" />
+            </div>
             @if ($adviserId)
               <div class="form-group">
                 <select wire:model.defer="input.status" class="form-control">

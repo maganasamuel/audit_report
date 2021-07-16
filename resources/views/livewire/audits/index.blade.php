@@ -5,7 +5,7 @@
     <x-page.range wire:model="perPage" />
     <div>
       <input wire:model.debounce="search" type="text" class="form-control"
-        placeholder="Search Audits">
+        placeholder="Search Client Feedbacks">
     </div>
   </div>
 
@@ -95,20 +95,22 @@
             <td class="text-right">
               <a href="{{ $clientId ? route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) : route('calls.audit.pdf', ['audit' => $audit->id]) }}"
                 target="_blank" class="btn btn-success btn-sm"
-                title="View Audit">
+                title="View Client Feedback">
                 <i class="fa fa-eye"></i>
               </a>
               <button class="btn btn-info btn-sm" data-toggle="modal"
-                data-target="#editAuditModal" title="Edit Audit"
+                data-target="#editAuditModal" title="Edit Client Feedback"
                 wire:click="$emitTo('audits.form', 'editAudit', {{ $audit->id }})">
                 <i class="far fa-edit"></i>
               </button>
-              <button class="btn btn-primary btn-sm" title="Send Audit"
-                wire:click="mailAudit({{ $audit->id }})">
-                <i class="far fa-envelope"></i>
+              <button class="btn btn-primary btn-sm" title="Send Client Feedback"
+                wire:click="mailAudit({{ $audit->id }})" wire:loading.attr="disabled"
+                wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
+                <i class="far fa-envelope" wire:loading.class.remove="far far-envelope"
+                  wire:loading.class="fas fa-spinner"></i>
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"
-                title="Delete Audit"
+                title="Delete Client Feedback"
                 wire:click="$emit('delete-audit', {{ $audit->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
@@ -119,7 +121,7 @@
     </table>
 
     <x-page.nav :paginator="$audits" :search="$search" on-each-side="1"
-      entity-name="audits" />
+      entity-name="client feedbacks" />
   </div>
 </div>
 
@@ -134,6 +136,5 @@
     }
 
     window.addEventListener('load', deleteAudit);
-
   </script>
 @endpush

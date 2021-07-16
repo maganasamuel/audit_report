@@ -132,7 +132,7 @@ class Form extends Component
 
         $action->create($this->input);
 
-        $this->dispatchBrowserEvent('audit-created', 'Successfully created audit.');
+        $this->dispatchBrowserEvent('audit-created', 'Successfully created client feedback.');
 
         $this->resetInput();
     }
@@ -145,6 +145,6 @@ class Form extends Component
 
         $this->emitTo('audits.index', 'auditUpdated');
 
-        $this->dispatchBrowserEvent('audit-updated', 'Succuessfully updated audit.');
+        $this->dispatchBrowserEvent('audit-updated', 'Succuessfully updated client feedback.');
     }
 }

@@ -9,7 +9,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>
-    {{ (isset($title) ? $title . ' | ' : '') . config('app.name', 'Survey Software') }}
+    {{ (isset($title) ? $title . ' | ' : '') . config('app.name', 'Client Feedback Software') }}
   </title>
 
   <!-- Favicon -->
