@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/css/pdf.css" />
 
   <style>
-    #questions {
+    .questions {
       background-color: #fff;
       color: #000;
     }
@@ -147,14 +147,15 @@
           <p>&nbsp;</p>
         @endif
 
-        <ul id="questions"
-          class="text-justify">
+        <ul class="questions text-justify mb-0 {{ $question['text'] ? 'mt-8' : 'mt-0' }}">
           <li class="list-none">
             {{ $question['text'] }}
-            <ol type="disc" class="font-bold">
-              <li class="mt-4">
-                {{ empty($audit->qa[$key]) ? 'N/A' : ucfirst($audit->qa[$key]) }}
-              </li>
+            <ol type="{{ $question['text'] ? 'disc' : 'none' }}" class="font-bold ">
+              @if (!empty($audit->qa[$key]))
+                <li class="{{ $question['text'] ? 'mt-4' : 'mt-0' }}">
+                  {{ ucfirst($audit->qa[$key]) }}
+                </li>
+              @endif
             </ol>
           </li>
         </ul>
