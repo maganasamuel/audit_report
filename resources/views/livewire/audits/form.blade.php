@@ -81,11 +81,11 @@
       <hr>
 
       @foreach (config('services.audit.questions') as $key => $question)
-        @if ($key == 'medical_conditions' && $input['qa']['medical_agreement'] != 'yes - refer to notes')
+        @if ($key == 'medical_conditions' && !in_array($input['qa']['medical_agreement'], ['yes', 'not sure']))
           @continue
         @endif
 
-        @if ($key == 'occupation' && $input['qa']['confirm_occupation'] != 'no - refer to notes')
+        @if ($key == 'occupation' && $input['qa']['confirm_occupation'] != 'no')
           @continue
         @endif
 
