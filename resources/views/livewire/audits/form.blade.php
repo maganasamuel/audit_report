@@ -20,22 +20,10 @@
             {{ \Carbon\Carbon::now()->toFormattedDateString() }}</h5>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
-            value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
-          <x-input-error for="adviser_id" />
-        </div>
-        <div class="form-group col-md-6">
-          <select class="form-control" name="lead_source" id="lead_source"
-            wire:model.defer="input.lead_source">
-            <option value="">Select a Lead Source</option>
-            @foreach (config('services.lead_source') as $leadSource)
-              <option value="{{ $leadSource }}">{{ $leadSource }}</option>
-            @endforeach
-          </select>
-          <x-input-error for="lead_source" />
-        </div>
+      <div class="form-group">
+        <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
+          value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
+        <x-input-error for="adviser_id" />
       </div>
       <div class="form-group">
         <label class="text-sm">Is this a new client?</label>

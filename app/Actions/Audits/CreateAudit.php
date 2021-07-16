@@ -23,7 +23,6 @@ class CreateAudit
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
-            'lead_source' => ['required', 'in:' . implode(',', config('services.lead_source'))],
         ];
 
         foreach (config('services.audit.questions') as $key => $question) {
