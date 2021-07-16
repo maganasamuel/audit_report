@@ -120,6 +120,7 @@ return [
             'interviewer_completion' => [
                 'type' => 'text',
                 'text' => 'FOR INTERVIEWER TO COMPLETE',
+                'class' => 'font-weight-bold',
             ],
             'is_action_taken' => [
                 'type' => 'boolean',

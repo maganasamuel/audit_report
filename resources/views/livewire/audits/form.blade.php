@@ -83,7 +83,7 @@
 
         <div class="form-group">
           @if ($question['text'])
-            <label for="{{ $key }}">
+            <label for="{{ $key }}" class="{{ $question['class'] ?? '' }}">
               {{ $question['text'] }}
               @if ($question['type'] == 'boolean')
                 <select id="{{ $key }}"
