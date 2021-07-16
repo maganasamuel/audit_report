@@ -103,11 +103,11 @@ class Form extends Component
 
     public function updated($name, $value)
     {
-        if ('input.qa.medical_agreement' == $name && 'yes - refer to notes' != $value) {
+        if ('input.qa.medical_agreement' == $name && ! in_array($value, ['yes', 'not sure'])) {
             $this->input['qa']['medical_conditions'] = '';
         }
 
-        if ('input.qa.confirm_occupation' == $name && 'no - refer to notes' != $value) {
+        if ('input.qa.confirm_occupation' == $name && 'no' != $value) {
             $this->input['qa']['occupation'] = '';
         }
     }
