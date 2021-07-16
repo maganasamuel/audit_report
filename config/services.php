@@ -67,9 +67,9 @@ return [
                 'type' => 'select',
                 'text' => '4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place, we have noted your current pre-existing medical conditions are ____________________________. Is there anything else apart from this not stated?',
                 'values' => [
-                    ['value' => 'yes - refer to notes', 'label' => 'Yes - Refer to Notes'],
+                    ['value' => 'yes', 'label' => 'Yes'],
                     ['value' => 'no', 'label' => 'No'],
-                    ['value' => 'not sure - refer to notes', 'label' => 'Not Sure - Refer to Notes'],
+                    ['value' => 'not sure', 'label' => 'Not Sure'],
                 ],
             ],
             'medical_conditions' => [
@@ -89,12 +89,8 @@ return [
                 'text' => '6. Did you take this policy to replace any other policy?',
             ],
             'confirm_occupation' => [
-                'type' => 'select',
+                'type' => 'boolean',
                 'text' => '7. We have your occupation recorded as ________________. Is that correct?',
-                'values' => [
-                    ['value' => 'yes', 'label' => 'Yes'],
-                    ['value' => 'no - refer to notes', 'label' => 'No - Refer to Notes'],
-                ],
             ],
             'occupation' => [
                 'type' => 'text',
