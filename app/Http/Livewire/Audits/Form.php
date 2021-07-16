@@ -101,6 +101,17 @@ class Form extends Component
         ];
     }
 
+    public function updated($name, $value)
+    {
+        if ('input.qa.medical_agreement' == $name && 'yes - refer to notes' != $value) {
+            $this->input['qa']['medical_conditions'] = '';
+        }
+
+        if ('input.qa.confirm_occupation' == $name && 'no - refer to notes' != $value) {
+            $this->input['qa']['occupation'] = '';
+        }
+    }
+
     public function editAudit($auditId)
     {
         $this->auditId = $auditId;

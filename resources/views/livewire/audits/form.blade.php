@@ -20,6 +20,7 @@
             {{ \Carbon\Carbon::now()->toFormattedDateString() }}</h5>
         </div>
       </div>
+      <div>@json($errors)</div>
       <div class="form-row">
         <div class="form-group col-md-6">
           <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
@@ -81,30 +82,42 @@
       <hr>
 
       @foreach (config('services.audit.questions') as $key => $question)
-        <div class="form-group">
-          <label for="{{ $key }}">
-            {{ $question['text'] }}
-            @if ($question['type'] == 'boolean')
-              <select id="{{ $key }}" class="form-control form-control-sm d-inline-block w-auto ml-2"
-                wire:model.defer="input.qa.{{ $key }}">
-                <option value="">Select an Answer</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            @endif
+        @if ($key == 'medical_conditions' && $input['qa']['medical_agreement'] != 'yes - refer to notes')
+          @continue
+        @endif
 
-            @if ($question['type'] == 'select')
-              <select id="{{ $key }}" class="form-control form-control-sm d-inline-block w-auto ml-2"
-                wire:model.defer="input.qa.{{ $key }}">
-                <option value="">Select an Answer</option>
-                @foreach ($question['values'] as $value)
-                  <option value="{{ $value['value'] }}">
-                    {{ $value['label'] }}
-                  </option>
-                @endforeach
-              </select>
-            @endif
-          </label>
+        @if ($key == 'occupation' && $input['qa']['confirm_occupation'] != 'no - refer to notes')
+          @continue
+        @endif
+
+        <div class="form-group">
+          @if ($question['text'])
+            <label for="{{ $key }}">
+              {{ $question['text'] }}
+              @if ($question['type'] == 'boolean')
+                <select id="{{ $key }}"
+                  class="form-control form-control-sm d-inline-block w-auto ml-2"
+                  wire:model.lazy="input.qa.{{ $key }}">
+                  <option value="">Select an Answer</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              @endif
+
+              @if ($question['type'] == 'select')
+                <select id="{{ $key }}"
+                  class="form-control form-control-sm d-inline-block w-auto ml-2"
+                  wire:model.lazy="input.qa.{{ $key }}">
+                  <option value="">Select an Answer</option>
+                  @foreach ($question['values'] as $value)
+                    <option value="{{ $value['value'] }}">
+                      {{ $value['label'] }}
+                    </option>
+                  @endforeach
+                </select>
+              @endif
+            </label>
+          @endif
 
           @if (in_array($question['type'], ['text', 'text-optional']))
             <textarea id="{{ $key }}" class="form-control" rows="2"
@@ -158,6 +171,5 @@
     }
 
     window.addEventListener('load', handleAuditFormLoad);
-
   </script>
 @endpush

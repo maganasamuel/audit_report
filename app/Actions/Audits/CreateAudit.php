@@ -36,6 +36,14 @@ class CreateAudit
             } elseif ('select' == $question['type']) {
                 $rules['qa.' . $key] = ['required', 'in:' . collect($question['values'])->pluck('value')->implode(',')];
             }
+
+            if ('medical_conditions' == $key) {
+                $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes - refer to notes'];
+            }
+
+            if ('occupation' == $key) {
+                $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no - refer to notes'];
+            }
         }
 
         $data = Validator::make(
@@ -43,6 +51,7 @@ class CreateAudit
             $rules,
             [
                 'qa.*.required' => 'This answer is required.',
+                'qa.*.required_if' => 'This answer is required.',
                 'qa.*.in' => 'This answer is invalid.',
             ],
             [

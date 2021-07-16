@@ -72,10 +72,10 @@ return [
                     ['value' => 'not sure - refer to notes', 'label' => 'Not Sure - Refer to Notes'],
                 ],
             ],
-            /* 'medical_conditions' => [
+            'medical_conditions' => [
                 'type' => 'text',
-                'text' => '4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place, we have noted your current pre-existing medical conditions are',
-            ], */
+                'text' => '',
+            ],
             'bank_account_agreement' => [
                 'type' => 'select',
                 'text' => '5. We have received authority for all future payments to be direct debited from your bank account? Is this correct?',
@@ -88,10 +88,6 @@ return [
                 'type' => 'boolean',
                 'text' => '6. Did you take this policy to replace any other policy?',
             ],
-            /* 'occupation' => [
-                'type' => 'text',
-                'text' => '7. We have your occupation recorded as',
-            ], */
             'confirm_occupation' => [
                 'type' => 'select',
                 'text' => '7. We have your occupation recorded as ________________. Is that correct?',
@@ -99,6 +95,10 @@ return [
                     ['value' => 'yes', 'label' => 'Yes'],
                     ['value' => 'no - refer to notes', 'label' => 'No - Refer to Notes'],
                 ],
+            ],
+            'occupation' => [
+                'type' => 'text',
+                'text' => '',
             ],
             'policy_understanding' => [
                 'type' => 'text',
