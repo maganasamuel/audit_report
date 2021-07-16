@@ -175,7 +175,6 @@ return [
     ],
 
     'mail' => [
-        'receiver' => env('MAIL_RECEIVER', 'admin@eliteinsure.co.nz'),
         'cc' => env(
             'MAIL_CC',
             implode(';', [
