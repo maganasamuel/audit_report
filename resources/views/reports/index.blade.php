@@ -3,8 +3,8 @@
 @section('content')
   @include('users.partials.header', [
   'title' => __('Reports'),
-  'description' => __('This is Reports . You can see data from the previous audits
-  and surveys we generated.'),
+  'description' => __('This is Reports . You can see data from the previous client feedbacks and surveys we
+  generated.'),
   'class' => 'col-lg-12'
   ])
 

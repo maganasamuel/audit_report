@@ -110,6 +110,10 @@ table {
     width: 50%;
 }
 
+.w-quart {
+    width: 25%;
+}
+
 .p {
     padding: 0.25em;
 }
@@ -120,6 +124,14 @@ table {
 
 .p-4 {
     padding: 1em;
+}
+
+.whitespace-nowrap {
+    white-space: nowrap;
+}
+
+.bg-white {
+    background-color: white;
 }
 
 .border {
@@ -133,6 +145,11 @@ table {
 .border-b {
     border-bottom-style: solid;
     border-bottom-width: 1px;
+}
+
+.border-l{
+    border-left-style: solid;
+    border-left-width: 1px;
 }
 
 .border-white {

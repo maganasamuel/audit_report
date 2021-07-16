@@ -142,6 +142,6 @@ class Index extends Component
     {
         Audit::find($this->auditId)->delete();
 
-        $this->dispatchBrowserEvent('audit-deleted', 'Successfully deleted audit.');
+        $this->dispatchBrowserEvent('audit-deleted', 'Successfully deleted client feedback.');
     }
 }

@@ -29,6 +29,6 @@ class PdfMail extends Mailable
     public function build()
     {
         $test = $this->details;
-        return $this->subject('EliteInsure Ltd.: Audit Report')->view('mails.audit-mail')->attach($this->details['pdf_title']);
+        return $this->subject('EliteInsure Ltd.: Client Feedback Report')->view('mails.audit-mail')->attach($this->details['pdf_title']);
     }
 }

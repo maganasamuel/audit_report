@@ -32,7 +32,7 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
 
     // Calls
     Route::group(['prefix' => 'calls', 'as' => 'calls.'], function () {
-        Route::group(['prefix' => 'audit', 'as' => 'audit'], function () {
+        Route::group(['prefix' => 'client-feedback', 'as' => 'audit'], function () {
             Route::get('/', [AuditController::class, 'create']);
             Route::get('{audit}/pdf', [AuditController::class, 'pdf'])->name('.pdf');
         });
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
                 Route::get('/', [ClientController::class, 'index'])->name('index');
                 Route::group(['prefix' => '{client}'], function () {
                     Route::get('/', [ClientController::class, 'show'])->name('show');
-                    Route::get('audits/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
+                    Route::get('client-feedbacks/{audit}/pdf', [AuditController::class, 'pdf'])->name('audits.pdf');
                     Route::get('surveys/{survey}/pdf', [SurveyController::class, 'pdf'])->name('surveys.pdf');
                 });
             });

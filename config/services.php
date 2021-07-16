@@ -63,19 +63,19 @@ return [
                     ['value' => 10, 'label' => 10],
                 ],
             ],
-            'medical_conditions' => [
-                'type' => 'text',
-                'text' => '4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place, we have noted your current pre-existing medical conditions are',
-            ],
             'medical_agreement' => [
                 'type' => 'select',
-                'text' => 'Is there anything else apart from this not stated?',
+                'text' => '4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place, we have noted your current pre-existing medical conditions are ____________________________. Is there anything else apart from this not stated?',
                 'values' => [
                     ['value' => 'yes - refer to notes', 'label' => 'Yes - Refer to Notes'],
                     ['value' => 'no', 'label' => 'No'],
                     ['value' => 'not sure - refer to notes', 'label' => 'Not Sure - Refer to Notes'],
                 ],
             ],
+            /* 'medical_conditions' => [
+                'type' => 'text',
+                'text' => '4. As you are aware, non disclosure can lead to non payment of claim. To make sure the correct underwriting takes place, we have noted your current pre-existing medical conditions are',
+            ], */
             'bank_account_agreement' => [
                 'type' => 'select',
                 'text' => '5. We have received authority for all future payments to be direct debited from your bank account? Is this correct?',
@@ -88,13 +88,13 @@ return [
                 'type' => 'boolean',
                 'text' => '6. Did you take this policy to replace any other policy?',
             ],
-            'occupation' => [
+            /* 'occupation' => [
                 'type' => 'text',
                 'text' => '7. We have your occupation recorded as',
-            ],
+            ], */
             'confirm_occupation' => [
                 'type' => 'select',
-                'text' => 'Is that correct?',
+                'text' => '7. We have your occupation recorded as ________________. Is that correct?',
                 'values' => [
                     ['value' => 'yes', 'label' => 'Yes'],
                     ['value' => 'no - refer to notes', 'label' => 'No - Refer to Notes'],
@@ -106,7 +106,7 @@ return [
             ],
             'received_copy' => [
                 'type' => 'boolean',
-                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you received them?',
+                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you received these?',
             ],
             'further_comments' => [
                 'type' => 'text-optional',
@@ -121,9 +121,13 @@ return [
                     ['value' => 'n/a', 'label' => 'Not Applicable'],
                 ],
             ],
+            'interviewer_completion' => [
+                'type' => 'text',
+                'text' => 'FOR INTERVIEWER TO COMPLETE',
+            ],
             'is_action_taken' => [
                 'type' => 'boolean',
-                'text' => '12. Remedial Action Taken Or Proposed:',
+                'text' => 'Remedial Action Taken Or Proposal:',
             ],
             'notes' => [
                 'type' => 'text-optional',

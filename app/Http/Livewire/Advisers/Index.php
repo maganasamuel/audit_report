@@ -111,7 +111,7 @@ class Index extends Component
         Session::forget('cannotDelete');
 
         if ($this->adviser->audits()->count()) {
-            Session::put('cannotDelete', 'Cannot delete adviser. Please make sure that there are no audits with this adviser.');
+            Session::put('cannotDelete', 'Cannot delete adviser. Please make sure that there are no client feedbacks with this adviser.');
 
             return false;
         }

@@ -89,7 +89,7 @@ class Index extends Component
         Session::forget('cannotDelete');
 
         if ($this->client->audits()->count()) {
-            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no audits with this client.');
+            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no client feedbacks with this client.');
 
             return false;
         }
