@@ -40,6 +40,10 @@ class UpdateAudit
                 $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes,not sure'];
             }
 
+            if ('replacement_is_discussed' == $key) {
+                $rules['qa.' . $key] = ['required_if:qa.replace_policy,yes'];
+            }
+
             if ('occupation' == $key) {
                 $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no'];
             }
