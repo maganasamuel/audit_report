@@ -20,7 +20,6 @@
             {{ \Carbon\Carbon::now()->toFormattedDateString() }}</h5>
         </div>
       </div>
-      <div>@json($errors)</div>
       <div class="form-row">
         <div class="form-group col-md-6">
           <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
