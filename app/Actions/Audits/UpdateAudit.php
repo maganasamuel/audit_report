@@ -38,11 +38,11 @@ class UpdateAudit
             }
 
             if ('medical_conditions' == $key) {
-                $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes - refer to notes'];
+                $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes,not sure'];
             }
 
             if ('occupation' == $key) {
-                $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no - refer to notes'];
+                $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no'];
             }
         }
 
