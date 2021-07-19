@@ -5,7 +5,7 @@
         INTRODUCTION: Mr/ Mrs Policyholder, my name is <span
           class="text-uppercase"><ins>{{ auth()->user()->name }}</ins></span>.
         I
-        am the Client Relationship manager with EliteInsure Ltd.. The reason for
+        am a financial adviser of EliteInsure Ltd.. The reason for
         my SPECIAL call is to inspect the standard of service provided by our
         adviser, ( mention name), and also to ensure that high quality of
         service and advise was given to you. It should take approx 5 mins. Would

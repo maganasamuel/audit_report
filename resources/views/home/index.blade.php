@@ -21,12 +21,14 @@
               href="#auditsTabItem" role="tab" aria-controls="audits"
               aria-selected="true">Client Feedbacks</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link font-weight-bold px-4 py-2" id="surveysTab"
-              data-toggle="tab"
-              href="#surveysTabItem"
-              role="tab" aria-controls="surveys" aria-selected="false">Surveys</a>
-          </li>
+          @if (auth()->user()->is_admin)
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold px-4 py-2" id="surveysTab"
+                data-toggle="tab"
+                href="#surveysTabItem"
+                role="tab" aria-controls="surveys" aria-selected="false">Surveys</a>
+            </li>
+          @endif
         </ul>
         <div class="tab-content" id="clientDetailsTab">
           <div class="tab-pane fade show active" id="auditsTabItem"
@@ -34,10 +36,12 @@
             aria-labelledby="auditsTab">
             @livewire('audits.index')
           </div>
-          <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
-            aria-labelledby="surveysTab">
-            @livewire('surveys.index')
-          </div>
+          @if (auth()->user()->is_admin)
+            <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
+              aria-labelledby="surveysTab">
+              @livewire('surveys.index')
+            </div>
+          @endif
         </div>
       </div>
     </div>
@@ -90,6 +94,5 @@
     }
 
     window.addEventListener('load', handleHomeLoad);
-
   </script>
 @endpush
