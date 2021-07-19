@@ -57,6 +57,15 @@
                   column-name="creator_name" />
               </a>
             </th>
+          @elseif(auth()->user()->is_admin)
+            <th>
+              <a wire:click.prevent="sortBy('creator_name')" href="#"
+                role="button">
+                Caller
+                <x-sort-indicator :sort-column="$sortColumn"
+                  column-name="creator_name" />
+              </a>
+            </th>
           @endif
           <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
@@ -80,6 +89,8 @@
             @endif
             <td>{{ $survey->created_at->format('d/m/Y') }}</td>
             @if ($clientId)
+              <td>{{ $survey->creator_name }}</td>
+            @elseif(auth()->user()->is_admin)
               <td>{{ $survey->creator_name }}</td>
             @endif
             <td>{{ $survey->updator_name }}</td>

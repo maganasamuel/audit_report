@@ -46,13 +46,17 @@ class Index extends Component
         if ($this->clientId) {
             $query = $this->client->audits();
         } else {
-            $query = auth()->user()->createdAudits();
+            if (auth()->user()->is_admin) {
+                $query = Audit::query();
+            } else {
+                $query = auth()->user()->createdAudits();
+            }
         }
 
         $query->select(
             'audits.id',
             'adviser.name as adviser_name',
-            'audits.lead_source',
+            // 'audits.lead_source',
             'audits.created_at',
             'creator.name as creator_name',
             'updator.name as updator_name',
@@ -65,7 +69,7 @@ class Index extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('adviser.name', 'like', '%' . $this->search . '%')
-                        ->orWhere('audits.lead_source', 'like', '%' . $this->search . '%')
+                        // ->orWhere('audits.lead_source', 'like', '%' . $this->search . '%')
                         ->when(strtotime($this->search), function ($query) {
                             $query->orWhereBetween('audits.created_at', [
                                 Carbon::parse($this->search)->startOfDay()->toDateTimeString(),
