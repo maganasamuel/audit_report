@@ -22,14 +22,14 @@
                 column-name="adviser_name" />
             </a>
           </th>
-          <th>
+          {{-- <th>
             <a wire:click.prevent="sortBy('lead_source')" href="#"
               role="button">
               Lead Source
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="lead_source" />
             </a>
-          </th>
+          </th> --}}
           @if (!$clientId)
             <th>
               <a wire:click.prevent="sortBy('policy_holder')" href="#"
@@ -65,6 +65,15 @@
                   column-name="creator_name" />
               </a>
             </th>
+          @elseif(auth()->user()->is_admin)
+            <th>
+              <a wire:click.prevent="sortBy('creator_name')" href="#"
+                role="button">
+                Caller
+                <x-sort-indicator :sort-column="$sortColumn"
+                  column-name="creator_name" />
+              </a>
+            </th>
           @endif
           <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
@@ -82,13 +91,15 @@
           <tr wire:key="{{ $audit->id }}">
             <td>{{ $key + 1 }}</td>
             <td>{{ $audit->adviser_name }}</td>
-            <td>{{ $audit->lead_source }}</td>
+            {{-- <td>{{ $audit->lead_source }}</td> --}}
             @if (!$clientId)
               <td>{{ $audit->policy_holder }}</td>
               <td>{{ $audit->policy_no }}</td>
             @endif
             <td>{{ $audit->created_at->format('d/m/Y') }}</td>
             @if ($clientId)
+              <td>{{ $audit->creator_name }}</td>
+            @elseif(auth()->user()->is_admin)
               <td>{{ $audit->creator_name }}</td>
             @endif
             <td>{{ $audit->updator_name }}</td>
