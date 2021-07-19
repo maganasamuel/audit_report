@@ -37,7 +37,7 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
             Route::get('{audit}/pdf', [AuditController::class, 'pdf'])->name('.pdf');
         });
 
-        Route::group(['prefix' => 'survey', 'as' => 'survey'], function () {
+        Route::group(['prefix' => 'survey', 'middleware' => ['auth.admin'], 'as' => 'survey'], function () {
             Route::get('/', [SurveyController::class, 'create']);
             Route::get('{survey}/pdf', [SurveyController::class, 'pdf'])->name('.pdf');
         });

@@ -137,12 +137,14 @@
                   {{ __('Client Feedback') }}
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('calls.survey') ? 'active' : '' }}"
-                  href="{{ route('calls.survey') }}">
-                  {{ __('Survey') }}
-                </a>
-              </li>
+              @if(auth()->user()->is_admin)
+                <li class="nav-item">
+                  <a class="nav-link {{ request()->routeIs('calls.survey') ? 'active' : '' }}"
+                    href="{{ route('calls.survey') }}">
+                    {{ __('Survey') }}
+                  </a>
+                </li>
+              @endif
             </ul>
           </div>
         </li>
