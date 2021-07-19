@@ -46,7 +46,11 @@ class Index extends Component
         if ($this->clientId) {
             $query = $this->client->surveys();
         } else {
-            $query = auth()->user()->createdSurveys();
+            if (auth()->user()->is_admin) {
+                $query = Survey::query();
+            } else {
+                $query = auth()->user()->createdSurveys();
+            }
         }
 
         $query->select(
