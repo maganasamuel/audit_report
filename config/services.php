@@ -41,7 +41,7 @@ return [
         'questions' => [
             'with_policy' => [
                 'type' => 'boolean',
-                'text' => '1. I understand you recently took out a policy with (insurance company) from one of our advisers Is that correct?',
+                'text' => '1. I understand you recently took out a policy with (insurance company) from one of our advisers, is that correct?',
             ],
             'confirm_adviser' => [
                 'type' => 'boolean',
@@ -77,12 +77,8 @@ return [
                 'text' => '',
             ],
             'bank_account_agreement' => [
-                'type' => 'select',
+                'type' => 'boolean',
                 'text' => '5. We have received authority for all future payments to be direct debited from your bank account? Is this correct?',
-                'values' => [
-                    ['value' => 'yes', 'label' => 'Yes'],
-                    ['value' => 'no - refer to notes', 'label' => 'No - Refer to Notes'],
-                ],
             ],
             'replace_policy' => [
                 'type' => 'boolean',
@@ -90,7 +86,7 @@ return [
             ],
             'replacement_is_discussed' => [
                 'type' => 'select',
-                'text' => 'If replacement, were the risks of replacing this insurance policy explained to you?',
+                'text' => 'Were the risks of replacing this insurance policy explained to you?',
                 'values' => [
                     ['value' => 'yes', 'label' => 'Yes'],
                     ['value' => 'no', 'label' => 'No'],
@@ -111,7 +107,7 @@ return [
             ],
             'received_copy' => [
                 'type' => 'boolean',
-                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was given to you and your insurance planner and or plan/copy of your LAT was e mailed to e mail address John@eliteinsure..co.nz . Did you receive these?',
+                'text' => '9. It specified in the authority to proceed that a copy of the disclosure statement was sent to you along with your insurance planner and plan to the email address example@abc.co.nz. Did you receive these?',
             ],
             'further_comments' => [
                 'type' => 'text-optional',
@@ -121,6 +117,7 @@ return [
                 'type' => 'text',
                 'text' => 'FOR INTERVIEWER TO COMPLETE',
                 'class' => 'font-weight-bold',
+                'pdf_class' => 'section-title text-center font-bold',
             ],
             'is_action_taken' => [
                 'type' => 'boolean',
