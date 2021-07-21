@@ -117,7 +117,7 @@ return [
                 'type' => 'text',
                 'text' => 'FOR INTERVIEWER TO COMPLETE',
                 'class' => 'font-weight-bold',
-                'pdf_class' => 'section-title text-center font-bold',
+                'pdf_class' => 'bg-info font-bold p-2',
             ],
             'is_action_taken' => [
                 'type' => 'boolean',

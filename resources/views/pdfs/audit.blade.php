@@ -23,6 +23,10 @@
       background-color: #f2f2f2;
     }
 
+    .bg-info {
+      background-color: #f2f2f2;
+    }
+
   </style>
 </head>
 
