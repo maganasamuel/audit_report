@@ -117,7 +117,7 @@
         <td class="p-2 w-quart">Name of Caller:</td>
         <td class="p-2 w-quart">{{ $audit->creator->name }}</td>
         <td class="p-2 w-quart">Email Address:</td>
-        <td class="p-2 w-quart">{{ $audit->creator->name }}</td>
+        <td class="p-2 w-quart">{{ $audit->creator->email }}</td>
       </tr>
       <tr>
         <td class="p-2 w-quart">Date of the Call:</td>
@@ -145,7 +145,7 @@
 
         <ul class="questions text-justify mb-0 {{ $question['text'] ? 'mt-8' : 'mt-0' }}">
           <li class="list-none">
-            {{ $question['text'] }}
+            <div class="{{ $question['pdf_class'] ?? '' }}">{{ $question['text'] }}</div>
             <ol type="{{ $question['text'] ? 'disc' : 'none' }}" class="font-bold ">
               @if (!empty($audit->qa[$key]))
                 <li class="{{ $question['text'] ? 'mt-4' : 'mt-0' }}">
