@@ -26,7 +26,7 @@
             <th>
               <a wire:click.prevent="sortBy('policy_holder')" href="#"
                 role="button">
-                Polich Holder
+                Policy Holder
                 <x-sort-indicator :sort-column="$sortColumn"
                   column-name="policy_holder" />
               </a>
