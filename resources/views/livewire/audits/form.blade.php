@@ -8,7 +8,7 @@
         am a financial adviser of EliteInsure Ltd.. The reason for
         my SPECIAL call is to inspect the standard of service provided by our
         adviser, ( mention name), and also to ensure that high quality of
-        service and advise was given to you. It should take approx 5 mins. Would
+        service advise was given to you. It should take approx 5 mins. Would
         that be alright?
       </p>
     </div>
