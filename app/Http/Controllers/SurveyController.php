@@ -18,9 +18,11 @@ class SurveyController extends Controller
     {
         if ($client) {
             $survey = $client->surveys()->where('id', $survey->id)->firstOrFail();
-        } else {
+        } elseif (! auth()->user()->is_admin) {
             $survey = auth()->user()->createdSurveys()->where('id', $survey->id)->firstOrFail();
+        }
 
+        if (! $client) {
             $client = $survey->client;
         }
 
