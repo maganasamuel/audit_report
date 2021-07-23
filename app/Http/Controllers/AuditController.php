@@ -18,9 +18,11 @@ class AuditController extends Controller
     {
         if ($client) {
             $audit = $client->audits()->where('id', $audit->id)->firstOrFail();
-        } else {
+        } elseif (! auth()->user()->is_admin) {
             $audit = auth()->user()->createdAudits()->where('id', $audit->id)->firstOrFail();
+        }
 
+        if (! $client) {
             $client = $audit->client;
         }
 
