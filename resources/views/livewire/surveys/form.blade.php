@@ -56,7 +56,7 @@
 
   <div class="form-group">
     <label>Did the client answer the call?
-      <select id="client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
+      <select id="survey_client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
         wire:model.lazy="input.client_answered">
         <option value="">Select an Answer</option>
         <option value="1">Yes</option>
@@ -171,6 +171,12 @@
         }
       };
 
+      const initializeDateTimePicker = () => {
+        $('.datetimepicker').flatpickr();
+
+        $('.datetimepicker').removeAttr('readonly');
+      }
+
       clientChange();
 
       $('#surveyClient').change(function() {
@@ -183,12 +189,12 @@
 
       $(document).on('edit-survey', function() {
         clientChange();
+
+        initializeDateTimePicker();
       });
 
       $(document).on('client-not-answered', function() {
-        $('.datetimepicker').flatpickr();
-
-        $('.datetimepicker').removeAttr('readonly');
+        initializeDateTimePicker();
       });
     }
 

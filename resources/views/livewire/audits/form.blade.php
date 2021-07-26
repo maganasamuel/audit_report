@@ -68,7 +68,7 @@
 
       <div class="form-group">
         <label>Did the client answer the call?
-          <select id="client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
+          <select id="audit_client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
             wire:model.lazy="input.client_answered">
             <option value="">Select an Answer</option>
             <option value="1">Yes</option>
@@ -80,7 +80,7 @@
 
       @if (($input['client_answered'] ?? null) == '0')
         <div class="form-row">
-          @foreach ($input['call_attempts'] ?? [] as $index => $callAttempt)
+          @foreach ($this->input['call_attempts'] as $index => $callAttempt)
             <div class="form-group col-md-4">
               <label
                 for="call_attempt_{{ $index }}">{{ ordinalNumber($index + 1) }}
@@ -162,6 +162,8 @@
 @endpush
 
 @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+
   <script type="text/javascript">
     const handleAuditFormLoad = () => {
       const resetClient = () => {
@@ -179,6 +181,12 @@
         }
       };
 
+      const initializeDateTimePicker = () => {
+        $('.datetimepicker').flatpickr();
+
+        $('.datetimepicker').removeAttr('readonly');
+      }
+
       clientChange();
 
       $('#auditClient').change(function() {
@@ -191,17 +199,15 @@
 
       $(document).on('edit-audit', function() {
         clientChange();
+
+        initializeDateTimePicker();
       });
 
       $(document).on('client-not-answered', function() {
-        $('.datetimepicker').flatpickr();
-
-        $('.datetimepicker').removeAttr('readonly');
+        initializeDateTimePicker();
       });
     }
 
     window.addEventListener('load', handleAuditFormLoad);
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 @endpush
