@@ -76,6 +76,12 @@
             </th>
           @endif
           <th>
+            <a wire:click.prevent="sortBy('client_answered')" href="#" role="button">
+              Client Answered
+              <x-sort-indicator :sort-column="$sortColumn" column-name="client_answered" />
+            </a>
+          </th>
+          <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
               role="button">
               Last Updated By
@@ -102,6 +108,9 @@
             @elseif(auth()->user()->is_admin)
               <td>{{ $audit->creator_name }}</td>
             @endif
+            <td class="text-center">
+              <input type="checkbox" {{ $audit->client_answered ? 'checked' : '' }} onclick="return false" />
+            </td>
             <td>{{ $audit->updator_name }}</td>
             <td class="text-right">
               <a href="{{ $clientId ? route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) : route('calls.audit.pdf', ['audit' => $audit->id]) }}"
@@ -115,9 +124,11 @@
                 <i class="far fa-edit"></i>
               </button>
               <button class="btn btn-primary btn-sm" title="Send Client Feedback"
-                wire:click="mailAudit({{ $audit->id }})" wire:target="mailAudit({{ $audit->id }})" wire:loading.attr="disabled"
+                wire:click="mailAudit({{ $audit->id }})" wire:target="mailAudit({{ $audit->id }})"
+                wire:loading.attr="disabled"
                 wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
-                <i class="far fa-envelope" wire:target="mailAudit({{ $audit->id }})" wire:loading.class.remove="far far-envelope"
+                <i class="far fa-envelope" wire:target="mailAudit({{ $audit->id }})"
+                  wire:loading.class.remove="far far-envelope"
                   wire:loading.class="fas fa-spinner"></i>
               </button>
               <button class="btn btn-danger btn-sm" data-toggle="modal"

@@ -60,6 +60,7 @@ class Index extends Component
             'audits.created_at',
             'creator.name as creator_name',
             'updator.name as updator_name',
+            'audits.client_answered',
             'client.policy_holder',
             'client.policy_no'
         )->leftJoin('advisers as adviser', 'adviser.id', 'audits.adviser_id')
