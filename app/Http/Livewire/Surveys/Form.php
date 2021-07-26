@@ -6,6 +6,7 @@ use App\Actions\Surveys\CreateSurvey;
 use App\Actions\Surveys\UpdateSurvey;
 use App\Models\Adviser;
 use App\Models\Client;
+use App\Models\Survey;
 use Livewire\Component;
 
 class Form extends Component
@@ -31,6 +32,10 @@ class Form extends Component
 
         if ($this->profileClientId) {
             return $this->profileClient->surveys()->findOrFail($this->surveyId);
+        }
+
+        if (auth()->user()->is_admin) {
+            return Survey::findOrFail($this->surveyId);
         }
 
         return auth()->user()->createdSurveys()->findOrFail($this->surveyId);
