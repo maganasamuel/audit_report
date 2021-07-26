@@ -16,6 +16,7 @@ class Survey extends Model
 
     protected $casts = [
         'sa' => 'array',
+        'call_attempts' => 'array',
     ];
 
     public function adviser()
