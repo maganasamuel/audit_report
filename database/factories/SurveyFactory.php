@@ -42,6 +42,7 @@ class SurveyFactory extends Factory
             'created_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'sa' => $sa,
+            'client_answered' => 1,
         ];
     }
 }

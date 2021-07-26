@@ -43,6 +43,7 @@ class AuditFactory extends Factory
             'updated_by' => User::count() ? User::inRandomOrder()->first()->id : User::factory(),
             'lead_source' => $this->faker->randomElement(['Telemarketer', 'BDM', 'Self-Generated']),
             'qa' => $qa,
+            'client_answered' => 1
         ];
     }
 }
