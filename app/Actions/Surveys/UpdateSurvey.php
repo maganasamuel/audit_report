@@ -93,6 +93,12 @@ class UpdateSurvey
 
         unset($data['is_new_client'], $data['policy_holder'], $data['policy_no']);
 
+        if ($data['client_answered']) {
+            $data['call_attempts'] = null;
+        } else {
+            $data['sa'] = null;
+        }
+
         $data['updated_by'] = Auth::user()->id;
 
         $survey->update($data);

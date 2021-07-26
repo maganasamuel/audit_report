@@ -82,6 +82,12 @@ class UpdateAudit
 
         unset($data['is_new_client'], $data['policy_holder'], $data['policy_no']);
 
+        if ($data['client_answered']) {
+            $data['call_attempts'] = null;
+        } else {
+            $data['qa'] = null;
+        }
+
         $data['updated_by'] = Auth::user()->id;
 
         $audit->update($data);
