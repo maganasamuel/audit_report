@@ -141,26 +141,37 @@
     </table>
     <br>
 
-    @foreach (config('services.audit.questions') as $key => $question)
-      <div style="page-break-inside: avoid;">
-        @if ($key == 'notes')
-          <p>&nbsp;</p>
-        @endif
 
-        <ul class="questions text-justify mb-0 {{ $question['text'] ? 'mt-8' : 'mt-0' }}">
-          <li class="list-none">
-            <div class="{{ $question['pdf_class'] ?? '' }}">{{ $question['text'] }}</div>
-            <ol type="{{ $question['text'] ? 'disc' : 'none' }}" class="font-bold ">
-              @if (!empty($audit->qa[$key]))
-                <li class="{{ $question['text'] ? 'mt-4' : 'mt-0' }}">
-                  {{ ucfirst($audit->qa[$key]) }}
-                </li>
-              @endif
-            </ol>
-          </li>
-        </ul>
-      </div>
-    @endforeach
+
+    @if ($audit->client_answered)
+      @foreach (config('services.audit.questions') as $key => $question)
+        <div style="page-break-inside: avoid;">
+          @if ($key == 'notes')
+            <p>&nbsp;</p>
+          @endif
+
+          <ul class="questions text-justify mb-0 {{ $question['text'] ? 'mt-8' : 'mt-0' }}">
+            <li class="list-none">
+              <div class="{{ $question['pdf_class'] ?? '' }}">{{ $question['text'] }}</div>
+              <ol type="{{ $question['text'] ? 'disc' : 'none' }}" class="font-bold ">
+                @if (!empty($audit->qa[$key]))
+                  <li class="{{ $question['text'] ? 'mt-4' : 'mt-0' }}">
+                    {{ ucfirst($audit->qa[$key]) }}
+                  </li>
+                @endif
+              </ol>
+            </li>
+          </ul>
+        </div>
+      @endforeach
+    @else
+      <p>The adviser attempted to call the client on the following dates:</p>
+      <ul>
+        @foreach ($audit->call_attempts as $call_attempt)
+          <li>{{ $call_attempt }}</li>
+        @endforeach
+      </ul>
+    @endif
   </div>
 </body>
 
