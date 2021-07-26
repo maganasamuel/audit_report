@@ -165,10 +165,10 @@
         </div>
       @endforeach
     @else
-      <p>The adviser attempted to call the client on the following dates:</p>
+      <p>The adviser attempted to call the client on the following:</p>
       <ul>
-        @foreach ($audit->call_attempts as $call_attempt)
-          <li>{{ $call_attempt }}</li>
+        @foreach ($audit->call_attempts as $index => $call_attempt)
+          <li>{{ ordinalNumber($index + 1) }} attempt: {{ $call_attempt }}</li>
         @endforeach
       </ul>
     @endif
