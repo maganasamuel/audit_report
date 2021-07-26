@@ -85,23 +85,23 @@
 
   @if (($input['client_answered'] ?? 0) == 1)
     @foreach (config('services.survey.questions') as $key => $question)
-      @if ($key == 'adviser' && $input['sa']['cancellation_discussed'] != 'yes')
+      @if ($key == 'adviser' && ($input['sa']['cancellation_discussed'] ?? '') != 'yes')
         @continue
       @endif
 
-      @if ($key == 'policy_explained' && $input['sa']['policy_replaced'] != 'yes')
+      @if ($key == 'policy_explained' && ($input['sa']['policy_replaced'] ?? '') != 'yes')
         @continue
       @endif
 
-      @if ($key == 'risk_explained' && $input['sa']['policy_replaced'] != 'yes')
+      @if ($key == 'risk_explained' && ($input['sa']['policy_replaced'] ?? '') != 'yes')
         @continue
       @endif
 
-      @if ($key == 'benefits_discussed' && $input['sa']['cancellation_discussed'] != 'yes')
+      @if ($key == 'benefits_discussed' && ($input['sa']['cancellation_discussed'] ?? '') != 'yes')
         @continue
       @endif
 
-      @if ($key == 'insurer' && $input['sa']['policy_replaced'] != 'yes')
+      @if ($key == 'insurer' && ($input['sa']['policy_replaced'] ?? '') != 'yes')
         @continue
       @endif
 
