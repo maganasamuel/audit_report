@@ -34,6 +34,10 @@ class Form extends Component
             return $this->profileClient->audits()->findOrFail($this->auditId);
         }
 
+        if (auth()->user()->is_admin) {
+            return Audit::findOrFail($this->auditId);
+        }
+
         return auth()->user()->createdAudits()->findOrFail($this->auditId);
     }
 
