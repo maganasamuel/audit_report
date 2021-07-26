@@ -68,6 +68,12 @@
             </th>
           @endif
           <th>
+            <a wire:click.prevent="sortBy('client_answered')" href="#" role="button">
+              Client Answered
+              <x-sort-indicator :sort-column="$sortColumn" column-name="client_answered" />
+            </a>
+          </th>
+          <th>
             <a wire:click.prevent="sortBy('updator_name')" href="#"
               role="button">
               Last Updated By
@@ -93,6 +99,10 @@
             @elseif(auth()->user()->is_admin)
               <td>{{ $survey->creator_name }}</td>
             @endif
+            <td class="text-center">
+              <input type="checkbox" {{ $survey->client_answered ? 'checked' : '' }}
+                onclick="return false" />
+            </td>
             <td>{{ $survey->updator_name }}</td>
             <td class="text-right">
               <a href="{{ $clientId ? route('profile.clients.surveys.pdf', ['client' => $this->client->id, 'survey' => $survey->id]) : route('calls.survey.pdf', ['survey' => $survey->id]) }}"
@@ -135,6 +145,5 @@
       });
     }
     window.addEventListener('load', deleteSurvey);
-
   </script>
 @endpush
