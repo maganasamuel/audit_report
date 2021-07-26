@@ -59,6 +59,7 @@ class Index extends Component
             'surveys.created_at',
             'creator.name as creator_name',
             'updator.name as updator_name',
+            'surveys.client_answered',
             'client.policy_holder',
             'client.policy_no'
         )->leftJoin('advisers as adviser', 'adviser.id', 'surveys.adviser_id')
