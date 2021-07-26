@@ -25,7 +25,7 @@ class CreateAudit
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
         ];
 
-        foreach (config('services.audit.questions') as $key => $question) {
+        /* foreach (config('services.audit.questions') as $key => $question) {
             if ('text' == $question['type']) {
                 $rules['qa.' . $key] = ['required', 'string'];
             } elseif ('text-optional' == $question['type']) {
@@ -47,7 +47,7 @@ class CreateAudit
             if ('occupation' == $key) {
                 $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no'];
             }
-        }
+        } */
 
         $data = Validator::make(
             $input,
