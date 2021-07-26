@@ -1,6 +1,5 @@
 <div>
-  <div class="modal right fade" id="editSurveyModal"
-    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal right fade" id="editSurveyModal" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
