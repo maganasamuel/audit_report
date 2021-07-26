@@ -16,6 +16,7 @@ class Audit extends Model
 
     protected $casts = [
         'qa' => 'array',
+        'call_attempts' => 'array',
     ];
 
     public function adviser()

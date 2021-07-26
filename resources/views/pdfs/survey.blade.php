@@ -94,21 +94,30 @@
     </table>
     <br>
 
-    @foreach (config('services.survey.questions') as $key => $question)
-      <div style="page-break-inside: avoid;">
-        <ul id="questions"
-          class="text-justify">
-          <li class="list-circle">
-            {{ $question['text'] }}
-            <ol type="disc" class="font-bold">
-              <li class="mt-4">
-                {{ empty($survey->sa[$key]) ? 'N/A' : ucfirst($survey->sa[$key]) }}
-              </li>
-            </ol>
-          </li>
-        </ul>
-      </div>
-    @endforeach
+    @if ($survey->client_answered)
+      @foreach (config('services.survey.questions') as $key => $question)
+        <div style="page-break-inside: avoid;">
+          <ul id="questions"
+            class="text-justify">
+            <li class="list-circle">
+              {{ $question['text'] }}
+              <ol type="disc" class="font-bold">
+                <li class="mt-4">
+                  {{ empty($survey->sa[$key]) ? 'N/A' : ucfirst($survey->sa[$key]) }}
+                </li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+      @endforeach
+    @else
+      <p>The adviser attempted to call the client on the following dates:</p>
+      <ul>
+        @foreach ($survey->call_attempts as $call_attempt)
+          <li>{{ $call_attempt }}</li>
+        @endforeach
+      </ul>
+    @endif
   </div>
 </body>
 

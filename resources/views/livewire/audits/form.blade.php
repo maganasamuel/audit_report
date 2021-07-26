@@ -66,59 +66,88 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label>Did the client answer the call?
+          <select id="audit_client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
+            wire:model.lazy="input.client_answered">
+            <option value="">Select an Answer</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+          <x-input-error for="client_answered" />
+        </label>
+      </div>
+
+      @if (($input['client_answered'] ?? null) == '0')
+        <div class="form-row">
+          @foreach ($this->input['call_attempts'] as $index => $callAttempt)
+            <div class="form-group col-md-4">
+              <label
+                for="call_attempt_{{ $index }}">{{ ordinalNumber($index + 1) }}
+                Attempt</label>
+              <input type="text" class="form-control datetimepicker" data-enable-time="true"
+                data-date-format="d/m/Y G:i K" wire:model.defer="input.call_attempts.{{ $index }}" />
+              <x-input-error for="call_attempts.{{ $index }}" />
+            </div>
+          @endforeach
+        </div>
+      @endif
+
       <hr>
 
-      @foreach (config('services.audit.questions') as $key => $question)
-        @if ($key == 'medical_conditions' && !in_array($input['qa']['medical_agreement'], ['yes', 'not sure']))
-          @continue
-        @endif
-
-        @if ($key == 'replacement_is_discussed' && $input['qa']['replace_policy'] != 'yes')
-          @continue
-        @endif
-
-        @if ($key == 'occupation' && $input['qa']['confirm_occupation'] != 'no')
-          @continue
-        @endif
-
-        <div class="form-group">
-          @if ($question['text'])
-            <label for="{{ $key }}" class="{{ $question['class'] ?? '' }}">
-              {{ $question['text'] }}
-              @if ($question['type'] == 'boolean')
-                <select id="{{ $key }}"
-                  class="form-control form-control-sm d-inline-block w-auto ml-2"
-                  wire:model.lazy="input.qa.{{ $key }}">
-                  <option value="">Select an Answer</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              @endif
-
-              @if ($question['type'] == 'select')
-                <select id="{{ $key }}"
-                  class="form-control form-control-sm d-inline-block w-auto ml-2"
-                  wire:model.lazy="input.qa.{{ $key }}">
-                  <option value="">Select an Answer</option>
-                  @foreach ($question['values'] as $value)
-                    <option value="{{ $value['value'] }}">
-                      {{ $value['label'] }}
-                    </option>
-                  @endforeach
-                </select>
-              @endif
-            </label>
+      @if (($input['client_answered'] ?? 0) == 1)
+        @foreach (config('services.audit.questions') as $key => $question)
+          @if ($key == 'medical_conditions' && !in_array($input['qa']['medical_agreement'] ?? '', ['yes', 'not sure']))
+            @continue
           @endif
 
-          @if (in_array($question['type'], ['text', 'text-optional']))
-            <textarea id="{{ $key }}" class="form-control" rows="2"
-              wire:model.defer="input.qa.{{ $key }}">
-            </textarea>
+          @if ($key == 'replacement_is_discussed' && ($input['qa']['replace_policy'] ?? '') != 'yes')
+            @continue
           @endif
 
-          <x-input-error for="qa.{{ $key }}" />
-        </div>
-      @endforeach
+          @if ($key == 'occupation' && ($input['qa']['confirm_occupation'] ?? '') != 'no')
+            @continue
+          @endif
+
+          <div class="form-group">
+            @if ($question['text'])
+              <label for="{{ $key }}" class="{{ $question['class'] ?? '' }}">
+                {{ $question['text'] }}
+                @if ($question['type'] == 'boolean')
+                  <select id="{{ $key }}"
+                    class="form-control form-control-sm d-inline-block w-auto ml-2"
+                    wire:model.lazy="input.qa.{{ $key }}">
+                    <option value="">Select an Answer</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                @endif
+
+                @if ($question['type'] == 'select')
+                  <select id="{{ $key }}"
+                    class="form-control form-control-sm d-inline-block w-auto ml-2"
+                    wire:model.lazy="input.qa.{{ $key }}">
+                    <option value="">Select an Answer</option>
+                    @foreach ($question['values'] as $value)
+                      <option value="{{ $value['value'] }}">
+                        {{ $value['label'] }}
+                      </option>
+                    @endforeach
+                  </select>
+                @endif
+              </label>
+            @endif
+
+            @if (in_array($question['type'], ['text', 'text-optional']))
+              <textarea id="{{ $key }}" class="form-control" rows="2"
+                wire:model.defer="input.qa.{{ $key }}">
+              </textarea>
+            @endif
+
+            <x-input-error for="qa.{{ $key }}" />
+          </div>
+        @endforeach
+      @endif
     </div>
 
     <div class="form-group mt-4">
@@ -128,7 +157,13 @@
   </form>
 </div>
 
+@push('styles')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+
 @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+
   <script type="text/javascript">
     const handleAuditFormLoad = () => {
       const resetClient = () => {
@@ -146,6 +181,12 @@
         }
       };
 
+      const initializeDateTimePicker = () => {
+        $('.datetimepicker').flatpickr();
+
+        $('.datetimepicker').removeAttr('readonly');
+      }
+
       clientChange();
 
       $('#auditClient').change(function() {
@@ -158,6 +199,12 @@
 
       $(document).on('edit-audit', function() {
         clientChange();
+
+        initializeDateTimePicker();
+      });
+
+      $(document).on('client-not-answered', function() {
+        initializeDateTimePicker();
       });
     }
 

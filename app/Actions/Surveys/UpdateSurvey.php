@@ -23,17 +23,20 @@ class UpdateSurvey
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
+            'client_answered' => ['required', 'in:0,1'],
+            'call_attempts' => ['required_if:client_answered,0', 'array', 'min:3', 'max:3'],
+            'call_attempts.*' => ['required_if:client_answered,0', 'date_format:d/m/Y h:i A'],
         ];
 
         foreach (config('services.survey.questions') as $key => $question) {
             if ('text' == $question['type']) {
-                $rules['sa.' . $key] = ['required', 'string'];
+                $rules['sa.' . $key] = ['required_if:client_answered,1', 'string'];
             } elseif ('text-optional' == $question['type']) {
                 $rules['sa.' . $key] = ['nullable', 'string'];
             } elseif ('boolean' == $question['type']) {
-                $rules['sa.' . $key] = ['required', 'in:yes,no'];
+                $rules['sa.' . $key] = ['required_if:client_answered,1', 'in:yes,no'];
             } elseif ('select' == $question['type']) {
-                $rules['sa.' . $key] = ['required', 'in:' . collect($question['values'])->pluck('value')->implode(',')];
+                $rules['sa.' . $key] = ['required_if:client_answered,1', 'in:' . collect($question['values'])->pluck('value')->implode(',')];
             }
 
             if ('adviser' == $key) {
@@ -64,6 +67,8 @@ class UpdateSurvey
                 'sa.*.required' => 'This answer is required.',
                 'sa.*.required_if' => 'This answer is required.',
                 'sa.*.in' => 'This answer is invalid.',
+                'call_attempts.*.required_if' => 'This answer is required.',
+                'call_attempts.*.date_format' => 'This answer is invalid date format.',
             ],
             [
                 'adviser_id' => 'Adviser',
@@ -71,6 +76,7 @@ class UpdateSurvey
                 'client_id' => 'Client',
                 'policy_holder' => 'Policy Holder',
                 'policy_no' => 'Policy Number',
+                'client_answered' => 'Client Answered',
                 'sa' => 'Answers',
                 'sa.*' => 'Answer',
             ]
@@ -86,6 +92,12 @@ class UpdateSurvey
         }
 
         unset($data['is_new_client'], $data['policy_holder'], $data['policy_no']);
+
+        if ($data['client_answered']) {
+            $data['call_attempts'] = null;
+        } else {
+            $data['sa'] = null;
+        }
 
         $data['updated_by'] = Auth::user()->id;
 
