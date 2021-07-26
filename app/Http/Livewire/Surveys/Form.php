@@ -79,6 +79,16 @@ class Form extends Component
 
     public function updated($name, $value)
     {
+        if ('input.client_answered' == $name) {
+            if (1 == $this->input['client_answered']) {
+                unset($this->input['call_attempts']);
+            } elseif (0 == $this->input['client_answered']) {
+                $this->input['call_attempts'] = ['', '', ''];
+                unset($this->input['qa']);
+                $this->dispatchBrowserEvent('client-not-answered');
+            }
+        }
+
         if ('input.sa.cancellation_discussed' == $name) {
             $this->input['sa']['adviser'] = '';
             $this->input['sa']['benefits_discussed'] = '';
@@ -117,6 +127,8 @@ class Form extends Component
             'adviser_id',
             'client_id',
             'sa',
+            'client_answered',
+            'call_attempts',
         ]);
 
         $data['adviser_name'] = Adviser::find($data['adviser_id'])->name;

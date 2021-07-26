@@ -54,69 +54,104 @@
     </div>
   </div>
 
-  @foreach (config('services.survey.questions') as $key => $question)
-    @if ($key == 'adviser' && $input['sa']['cancellation_discussed'] != 'yes')
-      @continue
-    @endif
+  <div class="form-group">
+    <label>Did the client answer the call?
+      <select id="survey_client_answered" class="form-control form-control-sm d-inline-block w-auto ml-2"
+        wire:model.lazy="input.client_answered">
+        <option value="">Select an Answer</option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+      </select>
+      <x-input-error for="client_answered" />
+    </label>
+  </div>
 
-    @if ($key == 'policy_explained' && $input['sa']['policy_replaced'] != 'yes')
-      @continue
-    @endif
-
-    @if ($key == 'risk_explained' && $input['sa']['policy_replaced'] != 'yes')
-      @continue
-    @endif
-
-    @if ($key == 'benefits_discussed' && $input['sa']['cancellation_discussed'] != 'yes')
-      @continue
-    @endif
-
-    @if ($key == 'insurer' && $input['sa']['policy_replaced'] != 'yes')
-      @continue
-    @endif
-
-    <div class="form-group">
-      <label for="{{ $key }}">
-        {{ $question['text'] }}
-      </label>
-
-      @if (in_array($question['type'], ['text', 'text-optional']))
-        <textarea id="{{ $key }}" type="text"
-          class="form-control" rows="2"
-          wire:model.defer="input.sa.{{ $key }}">
-        </textarea>
-      @endif
-
-      @if ($question['type'] == 'boolean')
-        <select id="{{ $key }}" class="form-control"
-          wire:model.lazy="input.sa.{{ $key }}">
-          <option value="">Select an Answer</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
-      @endif
-
-      @if ($question['type'] == 'select')
-        <select id="{{ $key }}" class="form-control"
-          wire:model.defer="input.sa.{{ $key }}">
-          <option value="">Select an Answer</option>
-          @foreach ($question['values'] as $value)
-            <option value="{{ $value['value'] }}">
-              {{ $value['label'] }}
-            </option>
-          @endforeach
-        </select>
-      @endif
-
-      <x-input-error for="sa.{{ $key }}" />
+  @if (($input['client_answered'] ?? null) == '0')
+    <div class="form-row">
+      @foreach ($input['call_attempts'] ?? [] as $index => $callAttempt)
+        <div class="form-group col-md-4">
+          <label
+            for="call_attempt_{{ $index }}">{{ ordinalNumber($index + 1) }}
+            Attempt</label>
+          <input type="text" class="form-control datetimepicker" data-enable-time="true"
+            data-date-format="d/m/Y G:i K" wire:model.defer="input.call_attempts.{{ $index }}" />
+          <x-input-error for="call_attempts.{{ $index }}" />
+        </div>
+      @endforeach
     </div>
-  @endforeach
+  @endif
+
+  <hr>
+
+  @if (($input['client_answered'] ?? 0) == 1)
+    @foreach (config('services.survey.questions') as $key => $question)
+      @if ($key == 'adviser' && $input['sa']['cancellation_discussed'] != 'yes')
+        @continue
+      @endif
+
+      @if ($key == 'policy_explained' && $input['sa']['policy_replaced'] != 'yes')
+        @continue
+      @endif
+
+      @if ($key == 'risk_explained' && $input['sa']['policy_replaced'] != 'yes')
+        @continue
+      @endif
+
+      @if ($key == 'benefits_discussed' && $input['sa']['cancellation_discussed'] != 'yes')
+        @continue
+      @endif
+
+      @if ($key == 'insurer' && $input['sa']['policy_replaced'] != 'yes')
+        @continue
+      @endif
+
+      <div class="form-group">
+        <label for="{{ $key }}">
+          {{ $question['text'] }}
+        </label>
+
+        @if (in_array($question['type'], ['text', 'text-optional']))
+          <textarea id="{{ $key }}" type="text"
+            class="form-control" rows="2"
+            wire:model.defer="input.sa.{{ $key }}">
+        </textarea>
+        @endif
+
+        @if ($question['type'] == 'boolean')
+          <select id="{{ $key }}" class="form-control"
+            wire:model.lazy="input.sa.{{ $key }}">
+            <option value="">Select an Answer</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        @endif
+
+        @if ($question['type'] == 'select')
+          <select id="{{ $key }}" class="form-control"
+            wire:model.defer="input.sa.{{ $key }}">
+            <option value="">Select an Answer</option>
+            @foreach ($question['values'] as $value)
+              <option value="{{ $value['value'] }}">
+                {{ $value['label'] }}
+              </option>
+            @endforeach
+          </select>
+        @endif
+
+        <x-input-error for="sa.{{ $key }}" />
+      </div>
+    @endforeach
+  @endif
 
   <div class="form-group mt-4">
     <button type="submit" class="btn btn-primary"><i
         class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $surveyId ? 'Save' : 'Submit' }}</button>
   </div>
 </form>
+
+@push('styles')
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
 
 @push('scripts')
   <script type="text/javascript">
@@ -136,6 +171,12 @@
         }
       };
 
+      const initializeDateTimePicker = () => {
+        $('.datetimepicker').flatpickr();
+
+        $('.datetimepicker').removeAttr('readonly');
+      }
+
       clientChange();
 
       $('#surveyClient').change(function() {
@@ -148,10 +189,17 @@
 
       $(document).on('edit-survey', function() {
         clientChange();
+
+        initializeDateTimePicker();
+      });
+
+      $(document).on('client-not-answered', function() {
+        initializeDateTimePicker();
       });
     }
 
     window.addEventListener('load', handleSurveyFormLoad);
-
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 @endpush
