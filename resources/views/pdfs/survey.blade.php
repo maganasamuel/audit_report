@@ -111,9 +111,9 @@
         </div>
       @endforeach
     @else
-      <p>The adviser attempted to call the client on the following:</p>
+      <p>The Caller attempted to call the client three times however, the client did not answer the call. The date and time of those three attempts are as provided below:</p>
       <ul>
-        @foreach ($survey->call_attempts as $index => $call_attempt)
+        @foreach ($survey->call_attempts ?? [] as $index => $call_attempt)
           <li>{{ ordinalNumber($index + 1) }} attempt: {{ $call_attempt }}</li>
         @endforeach
       </ul>
