@@ -96,6 +96,25 @@
 
     @if ($survey->client_answered)
       @foreach (config('services.survey.questions') as $key => $question)
+        @if ($key == 'adviser' && ($survey->sa['cancellation_discussed'] ?? '') != 'yes')
+          @continue
+        @endif
+
+        @if ($key == 'policy_explained' && ($survey->sa['policy_replaced'] ?? '') != 'yes')
+          @continue
+        @endif
+
+        @if ($key == 'risk_explained' && ($survey->sa['policy_replaced'] ?? '') != 'yes')
+          @continue
+        @endif
+
+        @if ($key == 'benefits_discussed' && ($survey->sa['cancellation_discussed'] ?? '') != 'yes')
+          @continue
+        @endif
+
+        @if ($key == 'insurer' && ($survey->sa['policy_replaced'] ?? '') != 'yes')
+          @continue
+        @endif
         <div style="page-break-inside: avoid;">
           <ul id="questions"
             class="text-justify">
@@ -111,7 +130,8 @@
         </div>
       @endforeach
     @else
-      <p>The Caller attempted to call the client three times however, the client did not answer the call. The date and time of those three attempts are as provided below:</p>
+      <p>The Caller attempted to call the client three times however, the client did not answer the call. The
+        date and time of those three attempts are as provided below:</p>
       <ul>
         @foreach ($survey->call_attempts ?? [] as $index => $call_attempt)
           <li>{{ ordinalNumber($index + 1) }} attempt: {{ $call_attempt }}</li>

@@ -145,6 +145,18 @@
 
     @if ($audit->client_answered)
       @foreach (config('services.audit.questions') as $key => $question)
+        @if ($key == 'medical_conditions' && !in_array($audit->qa['medical_agreement'] ?? '', ['yes', 'not sure']))
+          @continue
+        @endif
+
+        @if ($key == 'replacement_is_discussed' && ($audit->qa['replace_policy'] ?? '') != 'yes')
+          @continue
+        @endif
+
+        @if ($key == 'occupation' && ($audit->qa['confirm_occupation'] ?? '') != 'no')
+          @continue
+        @endif
+
         <div style="page-break-inside: avoid;">
           @if ($key == 'notes')
             <p>&nbsp;</p>
@@ -165,7 +177,8 @@
         </div>
       @endforeach
     @else
-      <p>The Caller attempted to call the client three times however, the client did not answer the call. The date and time of those three attempts are as provided below:</p>
+      <p>The Caller attempted to call the client three times however, the client did not answer the call. The
+        date and time of those three attempts are as provided below:</p>
       <ul>
         @foreach ($audit->call_attempts ?? [] as $index => $call_attempt)
           <li>{{ ordinalNumber($index + 1) }} attempt: {{ $call_attempt }}</li>
