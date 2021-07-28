@@ -142,6 +142,12 @@ class Form extends Component
             'call_attempts',
         ]);
 
+        if (1 == $data['client_answered']) {
+            unset($data['call_attempts']);
+        } else {
+            unset($data['qa']);
+        }
+
         $data['adviser_name'] = Adviser::find($data['adviser_id'])->name;
         $data['client_policy_holder'] = Client::find($data['client_id'])->policy_holder;
         $data['is_new_client'] = 'no';
