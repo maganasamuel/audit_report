@@ -1,4 +1,4 @@
-<form wire:submit.prevent="submit">
+<form>
   <div class="form-group">
     <div class="form-control">{{ date('d-m-Y') }}</div>
   </div>
@@ -81,6 +81,8 @@
     </div>
   @endif
 
+  <x-input-error for="completed" />
+
   <hr>
 
   @if (($input['client_answered'] ?? 0) == 1)
@@ -144,8 +146,10 @@
   @endif
 
   <div class="form-group mt-4">
-    <button type="submit" class="btn btn-primary"><i
+    <button type="button" class="btn btn-primary" wire:click="submit"><i
         class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $surveyId ? 'Save' : 'Submit' }}</button>
+    <button type="button" class="btn btn-primary" wire:click="submitDraft"><i
+        class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $surveyId ? 'Edit Draft' : 'Save as Draft' }}</button>
   </div>
 </form>
 
@@ -183,7 +187,7 @@
         clientChange();
       });
 
-      $(document).on('survey-created', function() {
+      $(document).on('survey-created draft-survey-created', function() {
         clientChange();
       });
 

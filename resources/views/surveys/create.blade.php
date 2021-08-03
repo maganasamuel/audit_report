@@ -25,7 +25,7 @@
   @push('scripts')
     <script type="text/javascript">
       const handleCreateSurveyLoad = () => {
-        $(document).on('survey-created', function(event) {
+        $(document).on('survey-created draft-survey-created', function(event) {
           $('#success').removeClass('d-none').addClass('d-block');
           $('#success-text').text(event.detail);
 
@@ -34,7 +34,6 @@
       }
 
       window.addEventListener('load', handleCreateSurveyLoad);
-
     </script>
   @endpush
 @endsection

@@ -27,6 +27,8 @@ class Index extends Component
 
     public $surveyId;
 
+    public $completed = 1;
+
     protected $listeners = ['surveyUpdated' => 'render', 'delete-survey' => 'deleteSurvey'];
 
     protected $paginationTheme = 'bootstrap';
@@ -61,11 +63,13 @@ class Index extends Component
             'updator.name as updator_name',
             'surveys.client_answered',
             'client.policy_holder',
-            'client.policy_no'
+            'client.policy_no',
+            'surveys.completed',
         )->leftJoin('advisers as adviser', 'adviser.id', 'surveys.adviser_id')
             ->leftJoin('users as creator', 'creator.id', 'surveys.created_by')
             ->leftJoin('users as updator', 'updator.id', 'surveys.updated_by')
             ->leftJoin('clients as client', 'client.id', 'surveys.client_id')
+            ->where('completed', $this->completed)
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('adviser.name', 'like', '%' . $this->search . '%')
@@ -131,6 +135,8 @@ class Index extends Component
 
     public function mailSurvey(Survey $survey)
     {
+        abort_unless($survey->completed, 403, 'Could not send mail. Please make sure that this survey is complete.');
+
         MailSurvey::dispatch($survey);
 
         $this->dispatchBrowserEvent('survey-mailed', 'Successfully sent email to manager');
