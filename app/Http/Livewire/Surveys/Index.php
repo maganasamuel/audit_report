@@ -7,12 +7,15 @@ use App\Models\Client;
 use App\Models\Survey;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Index extends Component
 {
     use WithPagination;
+
+    public $componentId;
 
     public $clientId;
 
@@ -40,6 +43,8 @@ class Index extends Component
 
     public function mount($clientId = null)
     {
+        $this->componentId = Str::random(10);
+
         $this->clientId = $clientId;
     }
 
