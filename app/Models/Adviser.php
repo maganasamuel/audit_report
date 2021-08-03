@@ -26,10 +26,14 @@ class Adviser extends Model
 
     public function filterAudits($dateStart, $dateEnd)
     {
-        return $this->audits()->whereBetween('created_at', [
-            Carbon::parse($dateStart)->startOfDay()->format('Y-m-d H:i:s'),
-            Carbon::parse($dateEnd)->endOfDay()->format('Y-m-d H:i:s'),
-        ]);
+        return $this->audits()->where(function ($query) use ($dateStart, $dateEnd) {
+            $query->where('client_answered', 1)
+                ->where('completed', 1)
+                ->whereBetween('created_at', [
+                    Carbon::parse($dateStart)->startOfDay()->format('Y-m-d H:i:s'),
+                    Carbon::parse($dateEnd)->endOfDay()->format('Y-m-d H:i:s'),
+                ]);
+        });
     }
 
     public function totalClients($dateStart, $dateEnd)
