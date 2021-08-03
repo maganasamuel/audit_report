@@ -148,12 +148,12 @@ class Form extends Component
 
     public function submit()
     {
-        $this->surveyId ? $this->updateSurvey() : $this->createSurvey();
+        $this->surveyId ? $this->updateSurvey(new UpdateSurvey()) : $this->createSurvey(new CreateSurvey());
     }
 
-    public function createSurvey()
+    public function createSurvey(CreateSurvey $action)
     {
-        $action = new CreateSurvey();
+        $this->input['completed'] = 1;
 
         $action->create($this->input);
 
@@ -162,14 +162,41 @@ class Form extends Component
         $this->resetInput();
     }
 
-    public function updateSurvey()
+    public function updateSurvey(UpdateSurvey $action)
     {
-        $action = new UpdateSurvey();
+        $this->input['completed'] = 1;
 
         $action->update($this->input, $this->survey);
 
         $this->emitTo('surveys.index', 'surveyUpdated');
 
         $this->dispatchBrowserEvent('survey-updated', 'Successfully updated survey.');
+    }
+
+    public function submitDraft()
+    {
+        $this->surveyId ? $this->updateDraftSurvey(new UpdateSurvey()) : $this->createDraftSurvey(new CreateSurvey());
+    }
+
+    public function createDraftSurvey(CreateSurvey $action)
+    {
+        $this->input['completed'] = 0;
+
+        $action->create($this->input);
+
+        $this->dispatchBrowserEvent('draft-survey-created', 'Survey has been saved as draft.');
+
+        $this->resetInput();
+    }
+
+    public function updateDraftSurvey(UpdateSurvey $action)
+    {
+        $this->input['completed'] = 0;
+
+        $action->update($this->input, $this->survey);
+
+        $this->emitTo('surveys.index', 'surveyUpdated');
+
+        $this->dispatchBrowserEvent('draft-survey-updated', 'Draft survey has been updated.');
     }
 }

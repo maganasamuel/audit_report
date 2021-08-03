@@ -32,7 +32,7 @@
 @push('scripts')
   <script type="text/javascript">
     const handleCreateAuditLoad = () => {
-      $(document).on('audit-created', function(event) {
+      $(document).on('audit-created draft-audit-created', function(event) {
         $('#success').removeClass('d-none').addClass('d-block');
         $('#success-text').text(event.detail);
 
@@ -41,6 +41,5 @@
     }
 
     window.addEventListener('load', handleCreateAuditLoad);
-
   </script>
 @endpush

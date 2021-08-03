@@ -159,12 +159,12 @@ class Form extends Component
 
     public function submit()
     {
-        $this->auditId ? $this->updateAudit() : $this->createAudit();
+        $this->auditId ? $this->updateAudit(new UpdateAudit()) : $this->createAudit(new CreateAudit());
     }
 
-    public function createAudit()
+    public function createAudit(CreateAudit $action)
     {
-        $action = new CreateAudit();
+        $this->input['completed'] = 1;
 
         $action->create($this->input);
 
@@ -173,14 +173,41 @@ class Form extends Component
         $this->resetInput();
     }
 
-    public function updateAudit()
+    public function updateAudit(UpdateAudit $action)
     {
-        $action = new UpdateAudit();
+        $this->input['completed'] = 1;
 
         $action->update($this->input, $this->audit);
 
         $this->emitTo('audits.index', 'auditUpdated');
 
         $this->dispatchBrowserEvent('audit-updated', 'Succuessfully updated client feedback.');
+    }
+
+    public function submitDraft()
+    {
+        $this->auditId ? $this->updateDraftAudit(new UpdateAudit()) : $this->createDraftAudit(new CreateAudit());
+    }
+
+    public function createDraftAudit(CreateAudit $action)
+    {
+        $this->input['completed'] = 0;
+
+        $action->create($this->input);
+
+        $this->dispatchBrowserEvent('draft-audit-created', 'Client feedback has been saved as draft.');
+
+        $this->resetInput();
+    }
+
+    public function updateDraftAudit(UpdateAudit $action)
+    {
+        $this->input['completed'] = 0;
+
+        $action->update($this->input, $this->audit);
+
+        $this->emitTo('audits.index', 'draftAuditUpdated');
+
+        $this->dispatchBrowserEvent('draft-audit-updated', 'Draft client feedback has been updated.');
     }
 }

@@ -22,6 +22,8 @@ class AuditController extends Controller
             $audit = auth()->user()->createdAudits()->where('id', $audit->id)->firstOrFail();
         }
 
+        abort_unless($audit->completed, 403, 'Could not view pdf file. Please make sure that this client feedback is complete.');
+
         if (! $client) {
             $client = $audit->client;
         }

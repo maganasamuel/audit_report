@@ -22,6 +22,8 @@ class SurveyController extends Controller
             $survey = auth()->user()->createdSurveys()->where('id', $survey->id)->firstOrFail();
         }
 
+        abort_unless($survey->completed, 403, 'Could not view pdf file. Please make sure that this survey is complete.');
+
         if (! $client) {
             $client = $survey->client;
         }

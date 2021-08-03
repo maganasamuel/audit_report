@@ -1,5 +1,5 @@
 <div>
-  <form wire:submit.prevent="submit">
+  <form>
     <div class="form-top mb-4">
       <p>
         INTRODUCTION: Mr/ Mrs Policyholder, my name is <span
@@ -93,6 +93,8 @@
         </div>
       @endif
 
+      <x-input-error for="completed" />
+
       <hr>
 
       @if (($input['client_answered'] ?? 0) == 1)
@@ -151,8 +153,10 @@
     </div>
 
     <div class="form-group mt-4">
-      <button type="submit" class="btn btn-primary"><i
+      <button type="button" class="btn btn-primary" wire:click="submit"><i
           class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $auditId ? 'Save' : 'Submit' }}</button>
+      <button type="button" class="btn btn-primary" wire:click="submitDraft"><i
+          class="fa fa-circle-o-notch fa-spin d-none m-1"></i>{{ $auditId ? 'Edit Draft' : 'Save as Draft' }}</button>
     </div>
   </form>
 </div>
@@ -193,7 +197,7 @@
         clientChange();
       });
 
-      $(document).on('audit-created', function() {
+      $(document).on('audit-created draft-audit-created', function() {
         clientChange();
       });
 
