@@ -1,5 +1,5 @@
 <div>
-  @include('alerts.delete-modal', ['id' => 'deleteSurveyModal'])
+  <x-delete-modal id="deleteSurveyModal{{ $componentId }}" />
 
   <div class="d-flex justify-content-between pt-4">
     <x-page.range wire:model="perPage" />
@@ -129,7 +129,7 @@
               @endif
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 title="Delete Survey"
-                wire:click="$emit('delete-survey', {{ $survey->id }})">
+                wire:click="$emit('delete-survey-{{ $componentId }}', {{ $survey->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
             </td>
@@ -145,13 +145,20 @@
 
 @push('scripts')
   <script type="text/javascript">
-    const deleteSurvey = () => {
-      window.livewire.on('delete-survey', (surveyId) => {
+    const deleteSurvey{{ $componentId }} = () => {
+      window.livewire.on('delete-survey-{{ $componentId }}', (surveyId) => {
         @this.set('surveyId', surveyId);
 
-        $('#deleteSurveyModal').modal('show');
+        $('#deleteSurveyModal{{ $componentId }}').modal('show');
+      });
+
+      $(document).on('survey-deleted', function(event) {
+        $('#deleteSurveyModal{{ $componentId }}').modal('hide');
+
+        $('#success').removeClass('d-none').addClass('d-block');
+        $('#success-text').text(event.detail);
       });
     }
-    window.addEventListener('load', deleteSurvey);
+    window.addEventListener('load', deleteSurvey{{ $componentId }});
   </script>
 @endpush

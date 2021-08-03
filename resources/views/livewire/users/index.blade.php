@@ -85,7 +85,7 @@
       entity-name="users" />
   </div>
 
-  @include('alerts.delete-modal')
+  <x-delete-modal />
 </div>
 
 @push('scripts')
@@ -118,7 +118,6 @@
     }
 
     window.addEventListener('load', handleUserLoad);
-
   </script>
 @endpush
 

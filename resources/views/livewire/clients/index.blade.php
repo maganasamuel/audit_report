@@ -69,7 +69,7 @@
       entity-name="clients" />
   </div>
 
-  @include('alerts.delete-modal')
+  <x-delete-modal />
 </div>
 
 @push('scripts')
@@ -89,6 +89,5 @@
       $('#success').removeClass('d-none').addClass('d-block');
       $('#success-text').text(data);
     });
-
   </script>
 @endpush
