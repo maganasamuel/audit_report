@@ -85,7 +85,7 @@
       entity-name="advisers" />
   </div>
 
-  @include('alerts.delete-modal')
+  <x-delete-modal />
 </div>
 
 @push('scripts')
@@ -118,6 +118,5 @@
     }
 
     window.addEventListener('load', handleAdviserLoad);
-
   </script>
 @endpush

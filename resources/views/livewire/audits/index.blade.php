@@ -1,5 +1,5 @@
 <div>
-  @include('alerts.delete-modal', ['id' => 'deleteAuditModal'])
+  <x-delete-modal id="deleteAuditModal{{ $componentId }}" />
 
   <div class="d-flex justify-content-between pt-4">
     <x-page.range wire:model="perPage" />
@@ -138,7 +138,7 @@
               @endif
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 title="Delete Client Feedback"
-                wire:click="$emit('delete-audit', {{ $audit->id }})">
+                wire:click="$emit('delete-audit-{{ $componentId }}', {{ $audit->id }})">
                 <i class="far fa-trash-alt"></i>
               </button>
             </td>
@@ -154,14 +154,21 @@
 
 @push('scripts')
   <script type="text/javascript">
-    const deleteAudit = () => {
-      window.livewire.on('delete-audit', (auditId) => {
+    const deleteAudit{{ $componentId }} = () => {
+      window.livewire.on('delete-audit-{{ $componentId }}', (auditId) => {
         @this.set('auditId', auditId);
 
-        $('#deleteAuditModal').modal('show');
+        $('#deleteAuditModal{{ $componentId }}').modal('show');
+      });
+
+      $(document).on('audit-deleted', function(event) {
+        $('#deleteAuditModal{{ $componentId }}').modal('hide');
+
+        $('#success').removeClass('d-none').addClass('d-block');
+        $('#success-text').text(event.detail);
       });
     }
 
-    window.addEventListener('load', deleteAudit);
+    window.addEventListener('load', deleteAudit{{ $componentId }});
   </script>
 @endpush

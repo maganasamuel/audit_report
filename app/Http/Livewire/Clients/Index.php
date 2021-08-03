@@ -86,16 +86,14 @@ class Index extends Component
 
     public function canDeleteClient()
     {
-        Session::forget('cannotDelete');
-
         if ($this->client->audits()->count()) {
-            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no client feedbacks with this client.');
+            Session::flash('cannotDelete', 'Cannot delete client. Please make sure that there are no client feedbacks with this client.');
 
             return false;
         }
 
         if ($this->client->surveys()->count()) {
-            Session::put('cannotDelete', 'Cannot delete client. Please make sure that there are no surveys with this client.');
+            Session::flash('cannotDelete', 'Cannot delete client. Please make sure that there are no surveys with this client.');
 
             return false;
         }

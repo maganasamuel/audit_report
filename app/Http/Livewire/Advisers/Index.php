@@ -108,16 +108,14 @@ class Index extends Component
 
     public function canDeleteAdviser()
     {
-        Session::forget('cannotDelete');
-
         if ($this->adviser->audits()->count()) {
-            Session::put('cannotDelete', 'Cannot delete adviser. Please make sure that there are no client feedbacks with this adviser.');
+            Session::flash('cannotDelete', 'Cannot delete adviser. Please make sure that there are no client feedbacks with this adviser.');
 
             return false;
         }
 
         if ($this->adviser->surveys()->count()) {
-            Session::put('cannotDelete', 'Cannot delete adviser. Please make sure that there are no surveys with this adviser.');
+            Session::flash('cannotDelete', 'Cannot delete adviser. Please make sure that there are no surveys with this adviser.');
         }
 
         return true;
