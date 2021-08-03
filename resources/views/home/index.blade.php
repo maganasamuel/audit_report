@@ -86,13 +86,6 @@
         $('#success-text').text(event.detail);
       });
 
-      $(document).on('audit-deleted', function(event) {
-        $('#deleteAuditModal').modal('hide');
-
-        $('#success').removeClass('d-none').addClass('d-block');
-        $('#success-text').text(event.detail);
-      });
-
       $(document).on('survey-updated draft-survey-updated', function(event) {
         $('#editSurveyModal').modal('hide');
 
@@ -101,13 +94,6 @@
       });
 
       $(document).on('survey-mailed', function(event) {
-        $('#success').removeClass('d-none').addClass('d-block');
-        $('#success-text').text(event.detail);
-      });
-
-      $(document).on('survey-deleted', function(event) {
-        $('#deleteSurveyModal').modal('hide');
-
         $('#success').removeClass('d-none').addClass('d-block');
         $('#success-text').text(event.detail);
       });
