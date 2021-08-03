@@ -21,6 +21,12 @@
               href="#auditsTabItem" role="tab" aria-controls="audits"
               aria-selected="true">Client Feedbacks</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link font-weight-bold px-4 py-2" id="draftAuditsTab"
+              data-toggle="tab"
+              href="#draftAuditsTabItem" role="tab" aria-controls="draftAudits"
+              aria-selected="false">Draft Client Feedbacks</a>
+          </li>
           @if (auth()->user()->is_admin)
             <li class="nav-item">
               <a class="nav-link font-weight-bold px-4 py-2" id="surveysTab"
@@ -28,18 +34,33 @@
                 href="#surveysTabItem"
                 role="tab" aria-controls="surveys" aria-selected="false">Surveys</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold px-4 py-2" id="draftSurveysTab"
+                data-toggle="tab"
+                href="#draftSurveysTabItem"
+                role="tab" aria-controls="draftSurveys" aria-selected="false">Draft Surveys</a>
+            </li>
           @endif
         </ul>
         <div class="tab-content" id="clientDetailsTab">
           <div class="tab-pane fade show active" id="auditsTabItem"
             role="tabpanel"
             aria-labelledby="auditsTab">
-            @livewire('audits.index')
+            @livewire('audits.index', ['completed' => 1])
+          </div>
+          <div class="tab-pane fade" id="draftAuditsTabItem"
+            role="tabpanel"
+            aria-labelledby="draftAuditsTab">
+            @livewire('audits.index', ['completed' => 0])
           </div>
           @if (auth()->user()->is_admin)
             <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
               aria-labelledby="surveysTab">
-              @livewire('surveys.index')
+              @livewire('surveys.index', ['completed' => 1])
+            </div>
+            <div class="tab-pane fade" id="draftSurveysTabItem" role="tabpanel"
+              aria-labelledby="draftSurveysTab">
+              @livewire('surveys.index', ['completed' => 0])
             </div>
           @endif
         </div>
@@ -53,8 +74,7 @@
 @push('scripts')
   <script type="text/javascript">
     const handleHomeLoad = () => {
-      $(document).on('audit-updated', function(event) {
-        console.log('audit-updated');
+      $(document).on('audit-updated draft-audit-updated', function(event) {
         $('#editAuditModal').modal('hide');
 
         $('#success').removeClass('d-none').addClass('d-block');
@@ -73,7 +93,7 @@
         $('#success-text').text(event.detail);
       });
 
-      $(document).on('survey-updated', function(event) {
+      $(document).on('survey-updated draft-survey-updated', function(event) {
         $('#editSurveyModal').modal('hide');
 
         $('#success').removeClass('d-none').addClass('d-block');

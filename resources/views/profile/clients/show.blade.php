@@ -26,21 +26,42 @@
               aria-selected="true">Client Feedbacks</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link font-weight-bold px-4 py-2" id="draftAuditsTab"
+              data-toggle="tab"
+              href="#draftAuditsTabItem" role="tab" aria-controls="draftAudits"
+              aria-selected="false">Draft Client Feedbacks</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link font-weight-bold px-4 py-2" id="surveysTab"
               data-toggle="tab"
               href="#surveysTabItem"
               role="tab" aria-controls="surveys" aria-selected="false">Surveys</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link font-weight-bold px-4 py-2" id="draftSurveysTab"
+              data-toggle="tab"
+              href="#draftSurveysTabItem"
+              role="tab" aria-controls="draftSurveys" aria-selected="false">Draft Surveys</a>
           </li>
         </ul>
         <div class="tab-content" id="clientDetailsTab">
           <div class="tab-pane fade show active" id="auditsTabItem"
             role="tabpanel"
             aria-labelledby="auditsTab">
-            @livewire('audits.index', ['clientId' => $client->id])
+            @livewire('audits.index', ['clientId' => $client->id, 'completed' => 1])
+          </div>
+          <div class="tab-pane fade" id="draftAuditsTabItem"
+            role="tabpanel"
+            aria-labelledby="draftAuditsTab">
+            @livewire('audits.index', ['clientId' => $client->id, 'completed' => 0])
           </div>
           <div class="tab-pane fade" id="surveysTabItem" role="tabpanel"
             aria-labelledby="surveysTab">
-            @livewire('surveys.index', ['clientId' => $client->id])
+            @livewire('surveys.index', ['clientId' => $client->id, 'completed' => 1])
+          </div>
+          <div class="tab-pane fade" id="draftSurveysTabItem" role="tabpanel"
+            aria-labelledby="draftSurveysTab">
+            @livewire('surveys.index', ['clientId' => $client->id, 'completed' => 0])
           </div>
         </div>
       </div>
@@ -53,8 +74,7 @@
 @push('scripts')
   <script type="text/javascript">
     const handleClientDetailLoad = () => {
-      $(document).on('audit-updated', function(event) {
-        console.log('audit-updated');
+      $(document).on('audit-updated draft-audit-updated', function(event) {
         $('#editAuditModal').modal('hide');
 
         $('#success').removeClass('d-none').addClass('d-block');
@@ -94,6 +114,5 @@
     }
 
     window.addEventListener('load', handleClientDetailLoad);
-
   </script>
 @endpush
