@@ -27,7 +27,9 @@ class Index extends Component
 
     public $auditId;
 
-    protected $listeners = ['auditUpdated' => 'render', 'delete-audit' => 'deleteAudit'];
+    public $completed = 1;
+
+    protected $listeners = ['auditUpdated' => 'render', 'draftAuditUpdated' => 'render', 'delete-audit' => 'deleteAudit'];
 
     protected $paginationTheme = 'bootstrap';
 
@@ -62,11 +64,13 @@ class Index extends Component
             'updator.name as updator_name',
             'audits.client_answered',
             'client.policy_holder',
-            'client.policy_no'
+            'client.policy_no',
+            'audits.completed',
         )->leftJoin('advisers as adviser', 'adviser.id', 'audits.adviser_id')
             ->leftJoin('users as creator', 'creator.id', 'audits.created_by')
             ->leftJoin('users as updator', 'updator.id', 'audits.updated_by')
             ->leftJoin('clients as client', 'client.id', 'audits.client_id')
+            ->where('completed', $this->completed)
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
                     $query->where('adviser.name', 'like', '%' . $this->search . '%')
@@ -133,6 +137,8 @@ class Index extends Component
 
     public function mailAudit(Audit $audit)
     {
+        abort_unless($audit->completed, 403, 'Could not send mail. Please make sure that this client feedback is complete.');
+
         MailAudit::dispatch($audit);
 
         $this->dispatchBrowserEvent('audit-mailed', 'Successfully sent email to manager.');

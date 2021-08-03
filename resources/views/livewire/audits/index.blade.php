@@ -109,28 +109,33 @@
               <td>{{ $audit->creator_name }}</td>
             @endif
             <td class="text-center">
-              <input type="checkbox" {{ $audit->client_answered ? 'checked' : '' }} onclick="return false" />
+              <input type="checkbox" {{ $audit->client_answered ? 'checked' : '' }}
+                onclick="return false" />
             </td>
             <td>{{ $audit->updator_name }}</td>
             <td class="text-right">
-              <a href="{{ $clientId ? route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) : route('calls.audit.pdf', ['audit' => $audit->id]) }}"
-                target="_blank" class="btn btn-success btn-sm"
-                title="View Client Feedback">
-                <i class="fa fa-eye"></i>
-              </a>
+              @if ($audit->completed)
+                <a href="{{ $clientId ? route('profile.clients.audits.pdf', ['client' => $this->client->id, 'audit' => $audit->id]) : route('calls.audit.pdf', ['audit' => $audit->id]) }}"
+                  target="_blank" class="btn btn-success btn-sm"
+                  title="View Client Feedback">
+                  <i class="fa fa-eye"></i>
+                </a>
+              @endif
               <button class="btn btn-info btn-sm" data-toggle="modal"
                 data-target="#editAuditModal" title="Edit Client Feedback"
                 wire:click="$emitTo('audits.form', 'editAudit', {{ $audit->id }})">
                 <i class="far fa-edit"></i>
               </button>
-              <button class="btn btn-primary btn-sm" title="Send Client Feedback"
-                wire:click="mailAudit({{ $audit->id }})" wire:target="mailAudit({{ $audit->id }})"
-                wire:loading.attr="disabled"
-                wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
-                <i class="far fa-envelope" wire:target="mailAudit({{ $audit->id }})"
-                  wire:loading.class.remove="far far-envelope"
-                  wire:loading.class="fas fa-spinner"></i>
-              </button>
+              @if ($audit->completed)
+                <button class="btn btn-primary btn-sm" title="Send Client Feedback"
+                  wire:click="mailAudit({{ $audit->id }})" wire:target="mailAudit({{ $audit->id }})"
+                  wire:loading.attr="disabled"
+                  wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
+                  <i class="far fa-envelope" wire:target="mailAudit({{ $audit->id }})"
+                    wire:loading.class.remove="far far-envelope"
+                    wire:loading.class="fas fa-spinner"></i>
+                </button>
+              @endif
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 title="Delete Client Feedback"
                 wire:click="$emit('delete-audit', {{ $audit->id }})">

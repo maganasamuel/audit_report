@@ -105,20 +105,28 @@
             </td>
             <td>{{ $survey->updator_name }}</td>
             <td class="text-right">
-              <a href="{{ $clientId ? route('profile.clients.surveys.pdf', ['client' => $this->client->id, 'survey' => $survey->id]) : route('calls.survey.pdf', ['survey' => $survey->id]) }}"
-                target="_blank" class="btn btn-success btn-sm"
-                title="View Survey">
-                <i class="fa fa-eye"></i>
-              </a>
+              @if ($survey->completed)
+                <a href="{{ $clientId ? route('profile.clients.surveys.pdf', ['client' => $this->client->id, 'survey' => $survey->id]) : route('calls.survey.pdf', ['survey' => $survey->id]) }}"
+                  target="_blank" class="btn btn-success btn-sm"
+                  title="View Survey">
+                  <i class="fa fa-eye"></i>
+                </a>
+              @endif
               <button class="btn btn-info btn-sm" data-toggle="modal"
                 data-target="#editSurveyModal" title="Edit Survey"
                 wire:click="$emitTo('surveys.form', 'editSurvey', {{ $survey->id }})">
                 <i class="far fa-edit"></i>
               </button>
-              <button class="btn btn-primary btn-sm" title="Send Survey"
-                wire:click="mailSurvey({{ $survey->id }})">
-                <i class="far fa-envelope"></i>
-              </button>
+              @if ($survey->completed)
+                <button class="btn btn-primary btn-sm" title="Send Survey"
+                  wire:click="mailSurvey({{ $survey->id }})" wire:target="mailSurvey({{ $survey->id }})"
+                  wire:loading.attr="disabled"
+                  wire:loading.class.remove="btn-primary" wire:loading.class="btn-default">
+                  <i class="far fa-envelope" wire:target="mailSurvey({{ $survey->id }})"
+                    wire:loading.class.remove="far far-envelope"
+                    wire:loading.class="fas fa-spinner"></i>
+                </button>
+              @endif
               <button class="btn btn-danger btn-sm" data-toggle="modal"
                 title="Delete Survey"
                 wire:click="$emit('delete-survey', {{ $survey->id }})">
