@@ -12,6 +12,13 @@ class UpdateSurvey
 {
     public function update($input, Survey $survey)
     {
+        Validator::make($input, [
+            'completed' => ['required', 'in:0,1'],
+        ], [
+            'completed.required' => 'Call is not specified if draft or complete.',
+            'completed.in' => 'Call is not specified if draft or complete.',
+        ])->validate();
+
         $rules = [
             'adviser_id' => [
                 'required',
@@ -23,40 +30,40 @@ class UpdateSurvey
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
-            'client_answered' => ['required', 'in:0,1'],
-            'call_attempts' => ['required_if:client_answered,0', 'array', 'min:3', 'max:3'],
-            'call_attempts.*' => ['required_if:client_answered,0', 'date_format:d/m/Y h:i A'],
+            'client_answered' => [($input['completed'] ? 'required' : 'nullable'), 'in:0,1'],
+            'call_attempts' => [($input['completed'] ? 'required_if:client_answered,0' : 'nullable'), 'array', 'min:3', 'max:3'],
+            'call_attempts.*' => [($input['completed'] ? 'required_if:client_answered,0' : 'nullable'), 'date_format:d/m/Y h:i A'],
         ];
 
         foreach (config('services.survey.questions') as $key => $question) {
             if ('text' == $question['type']) {
-                $rules['sa.' . $key] = ['required_if:client_answered,1', 'string'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'string'];
             } elseif ('text-optional' == $question['type']) {
                 $rules['sa.' . $key] = ['nullable', 'string'];
             } elseif ('boolean' == $question['type']) {
-                $rules['sa.' . $key] = ['required_if:client_answered,1', 'in:yes,no'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'in:yes,no'];
             } elseif ('select' == $question['type']) {
-                $rules['sa.' . $key] = ['required_if:client_answered,1', 'in:' . collect($question['values'])->pluck('value')->implode(',')];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'in:' . collect($question['values'])->pluck('value')->implode(',')];
             }
 
             if ('adviser' == $key) {
-                $rules['sa.' . $key] = ['required_if:sa.cancellation_discussed,yes', 'string'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:sa.cancellation_discussed,yes' : 'nullable'), 'string'];
             }
 
             if ('policy_explained' == $key) {
-                $rules['sa.' . $key] = ['required_if:sa.policy_replaced,yes', 'in:yes,no'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:sa.policy_replaced,yes' : 'nullable'), 'in:yes,no'];
             }
 
             if ('risk_explained' == $key) {
-                $rules['sa.' . $key] = ['required_if:sa.policy_replaced,yes', 'in:yes,no'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:sa.policy_replaced,yes' : 'nullable'), 'in:yes,no'];
             }
 
             if ('benefits_discussed' == $key) {
-                $rules['sa.' . $key] = ['required_if:sa.cancellation_discussed,yes', 'in:yes,no'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:sa.cancellation_discussed,yes' : 'nullable'), 'in:yes,no'];
             }
 
             if ('insurer' == $key) {
-                $rules['sa.' . $key] = ['required_if:sa.policy_replaced,yes', 'string'];
+                $rules['sa.' . $key] = [($input['completed'] ? 'required_if:sa.policy_replaced,yes' : 'nullable'), 'string'];
             }
         }
 
@@ -100,6 +107,8 @@ class UpdateSurvey
         }
 
         $data['updated_by'] = Auth::user()->id;
+
+        $data['completed'] = $input['completed'];
 
         $survey->update($data);
 

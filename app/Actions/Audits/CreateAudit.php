@@ -12,6 +12,13 @@ class CreateAudit
 {
     public function create($input)
     {
+        Validator::make($input, [
+            'completed' => ['required', 'in:0,1'],
+        ], [
+            'completed.required' => 'Call is not specified if draft or complete.',
+            'completed.in' => 'Call is not specified if draft or complete.',
+        ])->validate();
+
         $rules = [
             'adviser_id' => [
                 'required',
@@ -23,32 +30,32 @@ class CreateAudit
             'client_id' => ['required_if:is_new_client,no', 'exists:clients,id'],
             'policy_holder' => ['required_if:is_new_client,yes', 'string'],
             'policy_no' => ['required_if:is_new_client,yes', 'string'],
-            'client_answered' => ['required', 'in:0,1'],
-            'call_attempts' => ['required_if:client_answered,0', 'array', 'min:3', 'max:3'],
-            'call_attempts.*' => ['required_if:client_answered,0', 'date_format:d/m/Y h:i A'],
+            'client_answered' => [($input['completed'] ? 'required' : 'nullable'), 'in:0,1'],
+            'call_attempts' => [($input['completed'] ? 'required_if:client_answered,0' : 'nullable'), 'array', 'min:3', 'max:3'],
+            'call_attempts.*' => [($input['completed'] ? 'required_if:client_answered,0' : 'nullable'), 'date_format:d/m/Y h:i A'],
         ];
 
         foreach (config('services.audit.questions') as $key => $question) {
             if ('text' == $question['type']) {
-                $rules['qa.' . $key] = ['required_if:client_answered,1', 'string'];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'string'];
             } elseif ('text-optional' == $question['type']) {
                 $rules['qa.' . $key] = ['nullable', 'string'];
             } elseif ('boolean' == $question['type']) {
-                $rules['qa.' . $key] = ['required_if:client_answered,1', 'in:yes,no'];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'in:yes,no'];
             } elseif ('select' == $question['type']) {
-                $rules['qa.' . $key] = ['required_if:client_answered,1', 'in:' . collect($question['values'])->pluck('value')->implode(',')];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:client_answered,1' : 'nullable'), 'in:' . collect($question['values'])->pluck('value')->implode(',')];
             }
 
             if ('medical_conditions' == $key) {
-                $rules['qa.' . $key] = ['required_if:qa.medical_agreement,yes,not sure'];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:qa.medical_agreement,yes,not sure' : 'nullable')];
             }
 
             if ('replacement_is_discussed' == $key) {
-                $rules['qa.' . $key] = ['required_if:qa.replace_policy,yes'];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:qa.replace_policy,yes' : 'nullable')];
             }
 
             if ('occupation' == $key) {
-                $rules['qa.' . $key] = ['required_if:qa.confirm_occupation,no'];
+                $rules['qa.' . $key] = [($input['completed'] ? 'required_if:qa.confirm_occupation,no' : 'nullable')];
             }
         }
 
@@ -84,6 +91,8 @@ class CreateAudit
 
         $data['created_by'] = Auth::user()->id;
         $data['updated_by'] = Auth::user()->id;
+
+        $data['completed'] = $input['completed'];
 
         $audit = Audit::create($data);
 
