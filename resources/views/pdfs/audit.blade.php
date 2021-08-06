@@ -89,7 +89,7 @@
       <tr>
         <td class="p-2 w-quart">Name of Financial Adviser:</td>
         <td class="p-2 w-quart">{{ $audit->adviser->name }}</td>
-        <td class="p-2 w-quart">Finance Advice Provider Name:</td>
+        <td class="p-2 w-quart">Financial Advice Provider Name:</td>
         <td class="p-2 w-quart">{{ $audit->adviser->fap_name }}</td>
       </tr>
       <tr>
