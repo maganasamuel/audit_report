@@ -12,6 +12,8 @@ class Survey extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
+
     protected $guarded = [];
 
     protected $casts = [
@@ -21,7 +23,7 @@ class Survey extends Model
 
     public function adviser()
     {
-        return $this->belongsTo(Adviser::class);
+        return $this->belongsTo(Adviser::class, 'adviser_id', 'id_user');
     }
 
     public function client()
@@ -31,11 +33,11 @@ class Survey extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by', 'id_user');
     }
 
     public function updator()
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by', 'id_user');
     }
 }
