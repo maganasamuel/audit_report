@@ -23,7 +23,7 @@ class UpdateSurvey
             'adviser_id' => [
                 'required',
                 Rule::exists('advisers', 'id')->where(function ($query) {
-                    return $query->where('status', 'Active');
+                    return $query->where('status', 1);
                 }),
             ],
             'is_new_client' => ['required', 'in:yes,no'],
