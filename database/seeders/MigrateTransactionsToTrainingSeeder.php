@@ -22,7 +22,7 @@ class MigrateTransactionsToTrainingSeeder extends Seeder
             $adviser = DB::connection('mysql_training')
                 ->table('ta_user')
                 ->where('email_address', $email)
-                ->whereNotIn('id_user_type', [1, 3, 7, 8])
+                ->whereNotIn('id_user_type', config('services.not_adviser_types'))
                 ->first();
 
             return [$adviserId => [
@@ -39,14 +39,14 @@ class MigrateTransactionsToTrainingSeeder extends Seeder
 
             $user = DB::connection('mysql_training')
                 ->table('ta_user')
-                ->whereIn('id_user_type', [1, 7, 8])
+                ->whereIn('id_user_type', config('services.user_types'))
                 ->where('email_address', $email)
                 ->first();
 
             return [$userId => [
                 'id' => $user->id_user ?? 190,
                 'email' => $user->email_address ?? $email,
-                'user_type' => in_array(($user->id_user_type ?? 0), [1, 7, 8]) ? 'correct user' : ($user->id_user_type ?? 'user not found'),
+                'user_type' => in_array(($user->id_user_type ?? 0), config('services.user_types')) ? 'correct user' : ($user->id_user_type ?? 'user not found'),
             ]];
         });
 

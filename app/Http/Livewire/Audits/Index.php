@@ -71,9 +71,12 @@ class Index extends Component
             'client.policy_holder',
             'client.policy_no',
             'audits.completed',
-        )->leftJoin('advisers as adviser', 'adviser.id', 'audits.adviser_id')
-            ->leftJoin('users as creator', 'creator.id', 'audits.created_by')
-            ->leftJoin('users as updator', 'updator.id', 'audits.updated_by')
+        )->leftJoin('mysql_training.ta_user as adviser', function($join){
+            $join->on('adviser.id_user','audits.adviser_id')
+            ->whereNotIn('adviser.id_user_type', config('services.not_adviser_types'));
+        })
+            ->leftJoin('mysql_training.ta_user as creator', 'creator.id_user', 'audits.created_by')
+            ->leftJoin('mysql_training.ta-user as updator', 'updator.id_user', 'audits.updated_by')
             ->leftJoin('clients as client', 'client.id', 'audits.client_id')
             ->where('completed', $this->completed)
             ->when($this->search, function ($query) {
