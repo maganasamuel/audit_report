@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::redirect('/', '/home');
+
+Route::get('/login-from-training', [LoginController::class, 'loginFromTraining'])->name('loginFromTraining');
 
 Route::middleware(['auth', 'auth.active'])->group(function () {
     // Dashboard
