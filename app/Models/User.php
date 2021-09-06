@@ -4,51 +4,55 @@ namespace App\Models;
 
 use App\Models\Audit;
 use App\Models\Survey;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    protected $connection = 'mysql_training';
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'status',
-        'is_admin',
-        'email_verified_at',
-    ];
+    protected $table = 'ta_user';
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $primaryKey = 'id_user';
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $hidden = ['password'];
+
+    protected $guarded = ['password'];
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return 1 == $this->id_user_type;
+    }
 
     public function createdAudits()
     {
-        return $this->hasMany(Audit::class, 'created_by');
+        return $this->hasMany(Audit::class, 'created_by', 'id_user');
     }
 
     public function updatedAudits()
     {
-        return $this->hasMany(Audit::class, 'updated_by');
+        return $this->hasMany(Audit::class, 'updated_by', 'id_user');
     }
 
     public function createdSurveys()
     {
-        return $this->hasMany(Survey::class, 'created_by');
+        return $this->hasMany(Survey::class, 'created_by', 'id_user');
     }
 
     public function updatedSurveys()
     {
-        return $this->hasMany(Survey::class, 'updated_by');
+        return $this->hasMany(Survey::class, 'updated_by', 'id_user');
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('admin_sadr_adr', function (Builder $builder) {
+            $builder->whereIn('id_user_type', [1, 7, 8]);
+        });
     }
 }

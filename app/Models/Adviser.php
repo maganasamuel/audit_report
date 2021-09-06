@@ -4,24 +4,35 @@ namespace App\Models;
 
 use App\Models\Audit;
 use App\Models\Survey;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class Adviser extends Model
 {
-    use HasFactory;
+    protected $connection = 'mysql_training';
 
-    protected $guarded = [];
+    protected $table = 'ta_user';
+
+    protected $primaryKey = 'id_user';
+
+    protected $hidden = ['password'];
+
+    protected $guarded = ['password'];
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
     public function audits()
     {
-        return $this->hasMany(Audit::class);
+        return $this->hasMany(Audit::class, 'adviser_id', 'id_user');
     }
 
     public function surveys()
     {
-        return $this->hasMany(Survey::class);
+        return $this->hasMany(Survey::class, 'adviser_id', 'id_user');
     }
 
     public function filterAudits($dateStart, $dateEnd)
@@ -116,5 +127,12 @@ class Adviser extends Model
         $count = $audits->where('qa->replacement_is_discussed', 'yes')->count();
 
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('adviser', function (Builder $builder) {
+            $builder->whereNotIn('id_user_type', [1, 3, 7, 8]);
+        });
     }
 }
