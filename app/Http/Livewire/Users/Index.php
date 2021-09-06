@@ -16,17 +16,26 @@ class Index extends Component
     public $search;
 
     public $sortColumn = [
-        'name' => 'name',
+        'name' => 'user_name',
         'direction' => 'asc',
     ];
 
     public $userId;
 
-    public $badgeClass = [
-        'Active' => 'badge bg-success text-white',
-        'Deactivated' => 'badge bg-danger text-white',
-        '0' => 'badge bg-success text-white',
+    public $typeBadgeClass = [
         '1' => 'badge bg-primary text-white',
+        '7' => 'badge bg-success text-white',
+        '8' => 'badge bg-success text-white',
+    ];
+
+    public $statusBadgeClass = [
+        '0' => 'badge bg-danger text-white',
+        '1' => 'badge bg-success text-white',
+    ];
+
+    public $statusLabel = [
+        '0' => 'Inactive',
+        '1' => 'Active',
     ];
 
     protected $paginationTheme = 'bootstrap';
@@ -37,26 +46,28 @@ class Index extends Component
             return;
         }
 
-        return User::where('id', '!=', auth()->user()->id)->where('id', $this->userId)->firstOrFail();
+        return User::where('id_user', '!=', auth()->user()->id_user)->where('id_user', $this->userId)->firstOrFail();
     }
 
     public function render()
     {
         $searchColumns = [
-            'name',
-            'email',
-            'status',
+            'concat(first_name, " ", last_name)',
+            'email_address',
         ];
 
-        $query = User::withTrashed()
-            ->where('id', '!=', auth()->user()->id)
+        $query = User::select([
+            'id_user',
+            DB::raw('concat(first_name, " ", last_name) as user_name'),
+            'email_address',
+            'id_user_type',
+            'status',
+        ])->where('id_user', '!=', auth()->user()->id_user)
             ->when($this->search, function ($query) use ($searchColumns) {
                 $query->where(function ($query) use ($searchColumns) {
                     foreach ($searchColumns as $column) {
-                        $query->orWhere($column, 'like', '%' . $this->search . '%');
+                        $query->orWhereRaw($column . ' like ?', '%' . $this->search . '%');
                     }
-
-                    $query->orWhereRaw('(case when is_admin then "Admin" else "User" end) like ?', '%' . $this->search . '%');
                 });
 
                 return $query;
@@ -65,7 +76,7 @@ class Index extends Component
         if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
         } else {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('id_user', 'desc');
         }
 
         $users = $query->paginate($this->perPage);
