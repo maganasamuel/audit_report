@@ -43,12 +43,15 @@ class Form extends Component
 
     public function getAdvisersProperty()
     {
-        return Adviser::where('status', 'Active')
+        return Adviser::where('status', 1)
             ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
-                $query->where('name', 'like', '%' . $this->input['adviser_name'] . '%');
+                $query->where('first_name', 'like', '%' . $this->input['adviser_name'] . '%')
+                    ->orWhere('last_name', 'like', '%' . $this->input['adviser_name'] . '%');
 
                 return $query;
-            })->orderBy('name')->get();
+            })->orderBy('first_name')
+            ->orderBy('last_name')
+            ->get();
     }
 
     public function getClientsProperty()

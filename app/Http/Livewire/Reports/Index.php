@@ -15,7 +15,7 @@ class Index extends Component
 
     public function getAdvisersProperty()
     {
-        return Adviser::where('status', 'Active')
+        return Adviser::where('status', 1)
             ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
                 $query->where('name', 'like', '%' . $this->input['adviser_name'] . '%');
 
