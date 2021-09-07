@@ -24,19 +24,19 @@
             </a>
           </th>
           <th>
-            <a wire:click.prevent="sortBy('email')" href="#"
+            <a wire:click.prevent="sortBy('email_address')" href="#"
               role="button">
               E-Mail
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="email" />
+                column-name="email_address" />
             </a>
           </th>
-          <th><a wire:click.prevent="sortBy('fsp_no')" href="#"
+          <th><a wire:click.prevent="sortBy('ssf_number')" href="#"
               role="button">
               FSP Number
               &nbsp;
               <x-sort-indicator :sort-column="$sortColumn"
-                column-name="fsp_no" />
+                column-name="ssf_number" />
             </a></th>
           <th class="text-left"><a wire:click.prevent="sortBy('status')" href="#"
               role="button">
@@ -45,23 +45,22 @@
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="status" />
             </a></th>
-          <th class="text-right">Actions</th>
-
+          {{-- <th class="text-right">Actions</th> --}}
         </tr>
       </thead>
 
       <tbody>
         @foreach ($advisers as $key => $adviser)
-          <tr wire:key="{{ $adviser->id }}">
+          <tr wire:key="{{ $adviser->id_user }}">
 
             <td>{{ $key + 1 }}</td>
             <td>{{ $adviser->name }}</td>
-            <td>{{ $adviser->email }}</td>
-            <td>{{ $adviser->fsp_no }}</td>
+            <td>{{ $adviser->email_address }}</td>
+            <td>{{ $adviser->ssf_number }}</td>
             <td class="text-left">
-              <span class="{{ $badgeClass[$adviser->status] }}">{{ $adviser->status }}</span>
+              <span class="{{ $badgeClass[$adviser->status] }}">{{ $statusLabel[$adviser->status] }}</span>
             </td>
-            <td class="text-right">
+            {{-- <td class="text-right">
               <button class="btn btn-info btn-sm" data-toggle="modal"
                 data-target="#adviserFormModal" title="Edit Adviser"
                 wire:click="$emitTo('advisers.form', 'editAdviser', {{ $adviser->id }})">
@@ -75,7 +74,7 @@
                 <i class="far fa-trash-alt"></i>
               </button>
 
-            </td>
+            </td> --}}
           </tr>
         @endforeach
       </tbody>
