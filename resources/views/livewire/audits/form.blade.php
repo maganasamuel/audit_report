@@ -22,7 +22,7 @@
       </div>
       <div class="form-group">
         <x-lookup id="audit_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
-          value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
+          value-column="id_user" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
         <x-input-error for="adviser_id" />
       </div>
       <div class="form-group">
