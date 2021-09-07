@@ -22,7 +22,7 @@ class MigrateTransactionsToTrainingSeeder extends Seeder
             $adviser = DB::connection('mysql_training')
                 ->table('ta_user')
                 ->where('email_address', $email)
-                ->whereNotIn('id_user_type', config('services.not_adviser_types'))
+                ->whereNotIn('id_user_type', config('services.not_user_types'))
                 ->first();
 
             return [$adviserId => [

@@ -73,7 +73,7 @@ class Index extends Component
             'surveys.completed',
         ])->leftJoin(config('database.connections.mysql_training.database') . '.ta_user as adviser', function ($join) {
             $join->on('adviser.id_user', 'surveys.adviser_id')
-                ->whereNotIn('adviser.id_user_type', config('services.not_adviser_types'));
+                ->whereNotIn('adviser.id_user_type', config('services.not_user_types'));
         })->leftJoin(config('database.connections.mysql_training.database') . '.ta_user as creator', function ($join) {
             $join->on('creator.id_user', 'surveys.created_by')
                 ->whereIn('creator.id_user_type', config('services.user_types'));

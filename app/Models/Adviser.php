@@ -127,7 +127,7 @@ class Adviser extends Model
     protected static function booted()
     {
         static::addGlobalScope('adviser', function (Builder $builder) {
-            $builder->whereNotIn('id_user_type', config('services.not_adviser_types'));
+            $builder->whereNotIn('id_user_type', config('services.not_user_types'));
         });
     }
 }
