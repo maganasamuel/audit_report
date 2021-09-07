@@ -19,11 +19,6 @@ class User extends Authenticatable
 
     protected $guarded = ['password'];
 
-    public function getNameAttribute()
-    {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
     public function getIsAdminAttribute()
     {
         return 1 == $this->id_user_type;

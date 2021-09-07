@@ -20,11 +20,6 @@ class Adviser extends Model
 
     protected $guarded = ['password'];
 
-    public function getNameAttribute()
-    {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
     public function audits()
     {
         return $this->hasMany(Audit::class, 'adviser_id', 'id_user');
