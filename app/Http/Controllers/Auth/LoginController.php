@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LoginController extends Controller
 {
@@ -43,7 +44,13 @@ class LoginController extends Controller
     public function loginFromTraining()
     {
         $validator = Validator::make(request()->all(), [
-            'token' => ['required', 'string', 'exists:mysql_training.ta_user,access_token'],
+            'token' => [
+                'required',
+                'string',
+                Rule::exists('mysql_training.ta_user', 'access_token')->where(function ($query) {
+                    return $query->whereIn('id_user_type', config('services.user_types'));
+                }),
+            ],
         ]);
 
         if ($validator->fails()) {
