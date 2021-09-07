@@ -48,7 +48,7 @@ Route::middleware(['auth', 'auth.active'])->group(function () {
 
     // Profile
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        // Route::get('/', [ProfileController::class, 'edit'])->name('edit');
 
         Route::group(['middleware' => ['auth.admin']], function () {
             // Advisers
