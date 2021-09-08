@@ -62,7 +62,7 @@ class LoginController extends Controller
 
             auth()->login($user);
 
-            return redirect('/');
+            return redirect(route('home'));
         }
     }
 }

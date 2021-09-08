@@ -23,9 +23,17 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Auth::routes();
+Auth::routes([
+    'login' => false,
+    'register' => false,
+    'reset' => false,
+    'confirm' => false,
+    'verify' => false,
+]);
 
-Route::redirect('/', '/home');
+Route::get('/', function () {
+    return view('auth.login');
+})->name('index');
 
 Route::get('/login-from-training', [LoginController::class, 'loginFromTraining'])->name('loginFromTraining');
 
