@@ -77,13 +77,13 @@
     <table class="table-striped w-full">
       <tr>
         <td class="p-2 w-quart">Name of Financial Adviser:</td>
-        <td class="p-2 w-quart">{{ $adviser->name }}</td>
+        <td class="p-2 w-quart">{{ $adviser->first_name . ' ' . $adviser->last_name }}</td>
         <td class="p-2 w-quart">Financial Advice Provider Name:</td>
         <td class="p-2 w-quart">{{ $adviser->fap_name }}</td>
       </tr>
       <tr>
         <td class="p-2 w-quart">FSP Number:</td>
-        <td class="p-2 w-quart">{{ $adviser->fsp_no }}</td>
+        <td class="p-2 w-quart">{{ $adviser->ssf_number }}</td>
         <td class="p-2 w-quart">FAP FSP Number:</td>
         <td class="p-2 w-quart">{{ $adviser->fap_fsp_no }}</td>
       </tr>
@@ -95,7 +95,7 @@
       </tr>
       <tr>
         <td class="p-2 w-quart">Email Address:</td>
-        <td class="p-2 w-quart">{{ $adviser->email }}</td>
+        <td class="p-2 w-quart">{{ $adviser->email_address }}</td>
         <td class="p-2 w-quart">FAP Email Address:</td>
         <td class="p-2 w-quart">{{ $adviser->fap_email }}</td>
       </tr>

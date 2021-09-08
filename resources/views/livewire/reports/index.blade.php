@@ -15,13 +15,13 @@
       <div class="form-group col-md-6">
         <label for="adviser_id">Select an Adviser: </label>
         <x-lookup id="adviser_id" value-model="input.adviser_id" label-model="input.adviser_name"
-          value-column="id" label-column="name" :items="$this->advisers" placeholder="Choose an Adviser" />
+          value-column="id_user" label-column="name" :items="$this->advisers" placeholder="Choose an Adviser" />
         <x-input-error for="adviser_id" />
       </div>
       <div class="form-group col-md-6">
         <label for="fsp_no">FSP Number:</label>
         <div id="fsp_no" class="form-control">
-          {{ $this->adviser->fsp_no ?? '' }}
+          {{ $this->adviser->ssf_number ?? '' }}
         </div>
       </div>
     </div>
@@ -78,6 +78,5 @@
     }
 
     window.addEventListener('load', handleReportLoad);
-
   </script>
 @endpush

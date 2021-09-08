@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Reports;
 
 use App\Models\Adviser;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class Index extends Component
@@ -15,9 +17,12 @@ class Index extends Component
 
     public function getAdvisersProperty()
     {
-        return Adviser::where('status', 1)
+        return Adviser::select([
+            'id_user',
+            DB::raw('concat(first_name, " ", last_name) as name'),
+        ])->where('status', 1)
             ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
-                $query->where('name', 'like', '%' . $this->input['adviser_name'] . '%');
+                $query->whereRaw('concat(first_name, " ", last_name) like ?', '%' . $this->input['adviser_name'] . '%');
 
                 return $query;
             })->orderBy('name', 'asc')->get();
@@ -37,7 +42,12 @@ class Index extends Component
     {
         $data = Validator::make($this->input, [
             'report_type' => ['required', 'in:audit,survey'],
-            'adviser_id' => ['required', 'exists:advisers,id'],
+            'adviser_id' => [
+                'required',
+                Rule::exists('mysql_training.ta_user', 'id_user', function ($query) {
+                    return $query->whereNotIn('id_user_type', config('services.not_user_types'));
+                }),
+            ],
             'start_date' => ['required', 'date_format:d/m/Y'],
             'end_date' => ['required', 'date_format:d/m/Y'],
         ], [], [
