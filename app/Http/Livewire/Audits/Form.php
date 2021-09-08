@@ -52,8 +52,7 @@ class Form extends Component
                 $query->whereRaw('concat(first_name, " ", last_name) like ?', '%' . $this->input['adviser_name'] . '%');
 
                 return $query;
-            })->orderBy('first_name')
-            ->orderBy('last_name')
+            })->orderBy('name')
             ->get();
     }
 
