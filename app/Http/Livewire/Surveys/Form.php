@@ -7,6 +7,7 @@ use App\Actions\Surveys\UpdateSurvey;
 use App\Models\Adviser;
 use App\Models\Client;
 use App\Models\Survey;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Form extends Component
@@ -43,14 +44,15 @@ class Form extends Component
 
     public function getAdvisersProperty()
     {
-        return Adviser::where('status', 1)
+        return Adviser::select([
+            'id_user',
+            DB::raw('concat(first_name, " ", last_name) as name'),
+        ])->where('status', 1)
             ->when(isset($this->input['adviser_name']) && $this->input['adviser_name'], function ($query) {
-                $query->where('first_name', 'like', '%' . $this->input['adviser_name'] . '%')
-                    ->orWhere('last_name', 'like', '%' . $this->input['adviser_name'] . '%');
+                $query->whereRaw('concat(first_name, " ", last_name) like ?', '%' . $this->input['adviser_name'] . '%');
 
                 return $query;
-            })->orderBy('first_name')
-            ->orderBy('last_name')
+            })->orderBy('name')
             ->get();
     }
 
@@ -140,7 +142,9 @@ class Form extends Component
             unset($data['sa']);
         }
 
-        $data['adviser_name'] = Adviser::find($data['adviser_id'])->name;
+        $adviser = Adviser::find($data['adviser_id']);
+
+        $data['adviser_name'] = $adviser ? ($adviser->first_name . ' ' . $adviser->last_name) : '';
         $data['client_policy_holder'] = Client::find($data['client_id'])->policy_holder;
         $data['is_new_client'] = 'no';
 
