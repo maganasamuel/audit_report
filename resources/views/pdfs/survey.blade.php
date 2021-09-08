@@ -79,17 +79,17 @@
       </tr>
       <tr>
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Adviser:
-          {{ $survey->adviser->name }} </th>
+          {{ $survey->adviser->first_name . ' ' . $survey->adviser->last_name }} </th>
         <th class="p-2 text-left border-b border-white">Policy Holder:
           {{ $survey->client->policy_holder }}
         </th>
       </tr>
       <tr>
         <th class="p-2 text-left border-b border-white">&nbsp;&nbsp;Caller Name:
-          {{ $survey->creator->name }}
+          {{ $survey->creator->first_name . ' ' . $survey->creator->last_name }}
         </th>
         <th class="p-2 text-left border-b border-white">Caller Email Address:
-          {{ $survey->creator->email }}</th>
+          {{ $survey->creator->email_address }}</th>
       </tr>
     </table>
     <br>
