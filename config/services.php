@@ -188,6 +188,7 @@ return [
                 'gurjeet@eliteinsure.co.nz',
             ])
         ),
+        'domain' => env('MAIL_DOMAIN'),
     ],
 
 ];
