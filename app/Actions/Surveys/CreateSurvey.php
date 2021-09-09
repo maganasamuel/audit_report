@@ -22,8 +22,9 @@ class CreateSurvey
         $rules = [
             'adviser_id' => [
                 'required',
-                Rule::exists('advisers', 'id')->where(function ($query) {
-                    return $query->where('status', 'Active');
+                Rule::exists('mysql_training.ta_user', 'id_user')->where(function ($query) {
+                    return $query->whereNotIn('id_user_type', config('services.not_user_types'))
+                        ->where('status', 1);
                 }),
             ],
             'is_new_client' => ['required', 'in:yes,no'],
@@ -100,10 +101,14 @@ class CreateSurvey
 
         unset($data['is_new_client'], $data['policy_holder'], $data['policy_no']);
 
-        $data['created_by'] = Auth::user()->id;
-        $data['updated_by'] = Auth::user()->id;
+        $data['created_by'] = Auth::user()->id_user;
+        $data['updated_by'] = Auth::user()->id_user;
 
         $data['completed'] = $input['completed'];
+
+        if (! isset($data['client_answered']) || '' === $data['client_answered']) {
+            $data['client_answered'] = null;
+        }
 
         $survey = Survey::create($data);
 

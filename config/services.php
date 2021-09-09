@@ -35,6 +35,15 @@ return [
         'url' => env('COMPANY_URL', 'https://eliteinsure.co.nz'),
     ],
 
+    'training' => [
+        'web' => env('TRAINING_WEB'),
+        'url' => env('TRAINING_URL'),
+    ],
+
+    'not_user_types' => [1, 3, 7, 8],
+
+    'user_types' => [1, 7, 8],
+
     'lead_source' => ['Telemarketer', 'BDM', 'Self-Generated'],
 
     'audit' => [
@@ -179,6 +188,7 @@ return [
                 'gurjeet@eliteinsure.co.nz',
             ])
         ),
+        'domain' => env('MAIL_DOMAIN'),
     ],
 
 ];

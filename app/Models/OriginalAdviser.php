@@ -4,31 +4,24 @@ namespace App\Models;
 
 use App\Models\Audit;
 use App\Models\Survey;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
-class Adviser extends Model
+class OriginalAdviser extends Model
 {
-    protected $connection = 'mysql_training';
+    use HasFactory;
 
-    protected $table = 'ta_user';
-
-    protected $primaryKey = 'id_user';
-
-    protected $hidden = ['password'];
-
-    protected $guarded = ['password'];
+    protected $guarded = [];
 
     public function audits()
     {
-        return $this->hasMany(Audit::class, 'adviser_id', 'id_user');
+        return $this->hasMany(Audit::class);
     }
 
     public function surveys()
     {
-        return $this->hasMany(Survey::class, 'adviser_id', 'id_user');
+        return $this->hasMany(Survey::class);
     }
 
     public function filterAudits($dateStart, $dateEnd)
@@ -123,13 +116,5 @@ class Adviser extends Model
         $count = $audits->where('qa->replacement_is_discussed', 'yes')->count();
 
         return 0 == $count ? 0 : ($count / $auditCount) * 100;
-    }
-
-    protected static function booted()
-    {
-        static::addGlobalScope('adviser', function (Builder $builder) {
-            $builder->whereRaw('right(email_address, ' . Str::length(config('services.mail.domain')) . ') = ?', config('services.mail.domain'))
-                ->whereNotIn('id_user_type', config('services.not_user_types'));
-        });
     }
 }

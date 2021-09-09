@@ -22,8 +22,9 @@ class UpdateAudit
         $rules = [
             'adviser_id' => [
                 'required',
-                Rule::exists('advisers', 'id')->where(function ($query) {
-                    return $query->where('status', 'Active');
+                Rule::exists('mysql_training.ta_user', 'id_user')->where(function ($query) {
+                    return $query->whereNotIn('id_user_type', config('services.not_user_types'))
+                        ->where('status', 1);
                 }),
             ],
             'is_new_client' => ['required', 'in:yes,no'],
@@ -89,6 +90,10 @@ class UpdateAudit
 
         unset($data['is_new_client'], $data['policy_holder'], $data['policy_no']);
 
+        if (! isset($data['client_answered']) || '' === $data['client_answered']) {
+            $data['client_answered'] = null;
+        }
+
         if ($data['client_answered']) {
             $data['call_attempts'] = null;
         } else {
@@ -98,6 +103,8 @@ class UpdateAudit
         $data['updated_by'] = Auth::user()->id;
 
         $data['completed'] = $input['completed'];
+
+        $data['updated_by'] = Auth::user()->id_user;
 
         $audit->update($data);
 

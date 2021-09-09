@@ -6,7 +6,7 @@
   <div class="form-group">
     <label for="adviser_id">Select an Adviser:</label>
     <x-lookup id="survey_adviser_name" value-model="input.adviser_id" label-model="input.adviser_name"
-      value-column="id" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
+      value-column="id_user" label-column="name" :items="$this->advisers" placeholder="Select an Adviser" />
     <x-input-error for="adviser_id" />
   </div>
 

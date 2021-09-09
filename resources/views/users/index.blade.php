@@ -9,11 +9,11 @@
 
     <div class="card w-100">
       <div class="card-body">
-        <div class="card-title d-flex">
+        {{-- <div class="card-title d-flex">
           <div class="button-container">
             @livewire('users.form')
           </div>
-        </div>
+        </div> --}}
 
         @livewire('users.index')
       </div>
