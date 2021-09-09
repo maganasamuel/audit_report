@@ -32,6 +32,10 @@ Auth::routes([
 ]);
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect(route('home'));
+    }
+
     return view('auth.login');
 })->name('index');
 
