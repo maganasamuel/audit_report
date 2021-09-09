@@ -39,9 +39,9 @@ class MailSurvey implements ShouldQueue
     {
         $cc = Str::of(config('services.mail.cc'))->explode(';');
 
-        $cc->push($this->survey->adviser->email);
+        $cc->push($this->survey->adviser->email_address);
 
-        Mail::to($this->survey->creator->email)
+        Mail::to($this->survey->creator->email_address)
             ->cc($cc->all())
             ->send(new SurveyMail($this->survey));
     }

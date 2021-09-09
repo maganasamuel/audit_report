@@ -6,6 +6,7 @@ use App\Jobs\MailAudit;
 use App\Models\Audit;
 use App\Models\Client;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -60,25 +61,31 @@ class Index extends Component
             }
         }
 
-        $query->select(
+        $query->select([
             'audits.id',
-            'adviser.name as adviser_name',
+            DB::raw('concat(adviser.first_name, " ", adviser.last_name) as adviser_name'),
             // 'audits.lead_source',
             'audits.created_at',
-            'creator.name as creator_name',
-            'updator.name as updator_name',
+            DB::raw('concat(creator.first_name, " ", creator.last_name) as creator_name'),
+            DB::raw('concat(updator.first_name, " ", updator.last_name) as updator_name'),
             'audits.client_answered',
             'client.policy_holder',
             'client.policy_no',
             'audits.completed',
-        )->leftJoin('advisers as adviser', 'adviser.id', 'audits.adviser_id')
-            ->leftJoin('users as creator', 'creator.id', 'audits.created_by')
-            ->leftJoin('users as updator', 'updator.id', 'audits.updated_by')
-            ->leftJoin('clients as client', 'client.id', 'audits.client_id')
+        ])->leftJoin(config('database.connections.mysql_training.database') . '.ta_user as adviser', function ($join) {
+            $join->on('adviser.id_user', 'audits.adviser_id')
+                ->whereNotIn('adviser.id_user_type', config('services.not_user_types'));
+        })->leftJoin(config('database.connections.mysql_training.database') . '.ta_user as creator', function ($join) {
+            $join->on('creator.id_user', 'audits.created_by')
+                ->whereIn('creator.id_user_type', config('services.user_types'));
+        })->leftJoin(config('database.connections.mysql_training.database') . '.ta_user as updator', function ($join) {
+            $join->on('updator.id_user', 'audits.updated_by')
+                ->whereIn('updator.id_user_type', config('services.user_types'));
+        })->leftJoin('clients as client', 'client.id', 'audits.client_id')
             ->where('completed', $this->completed)
             ->when($this->search, function ($query) {
                 $query->where(function ($query) {
-                    $query->where('adviser.name', 'like', '%' . $this->search . '%')
+                    $query->whereRaw('concat(adviser.first_name, " ", adviser.last_name) like ?', '%' . $this->search . '%')
                         // ->orWhere('audits.lead_source', 'like', '%' . $this->search . '%')
                         ->when(strtotime($this->search), function ($query) {
                             $query->orWhereBetween('audits.created_at', [
@@ -88,10 +95,10 @@ class Index extends Component
 
                             return $query;
                         })->when($this->clientId, function ($query) {
-                            $query->orWhere('creator.name', 'like', '%' . $this->search . '%');
+                            $query->orWhereRaw('concat(creator.first_name, " ", creator.last_name) like ?', '%' . $this->search . '%');
 
                             return $query;
-                        })->orWhere('updator.name', 'like', '%' . $this->search . '%')
+                        })->orWhereRaw('concat(updator.first_name, " ", updator.last_name) like ?', '%' . $this->search . '%')
                         ->when(! $this->clientId, function ($query) {
                             $query->orWhere('client.policy_holder', 'like', '%' . $this->search . '%')
                                 ->orWhere('client.policy_no', 'like', '%' . $this->search . '%');

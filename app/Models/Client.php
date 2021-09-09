@@ -11,6 +11,8 @@ class Client extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
+
     protected $guarded = [];
 
     public function audits()

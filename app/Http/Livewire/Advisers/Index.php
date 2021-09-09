@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Advisers;
 
 use App\Models\Adviser;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -23,8 +24,13 @@ class Index extends Component
     public $adviserId;
 
     public $badgeClass = [
-        'Active' => 'badge bg-success text-white',
-        'Terminated' => 'badge bg-danger text-white',
+        '0' => 'badge bg-danger text-white',
+        '1' => 'badge bg-success text-white',
+    ];
+
+    public $statusLabel = [
+        '0' => 'Inactive',
+        '1' => 'Active',
     ];
 
     protected $paginationTheme = 'bootstrap';
@@ -37,15 +43,21 @@ class Index extends Component
     public function render()
     {
         $searchColumns = [
-            'name',
-            'email',
-            'fsp_no',
+            'concat(first_name, " ", last_name)',
+            'email_address',
+            'ssf_number',
             'status',
         ];
 
-        $query = Adviser::when($this->search, function ($query) use ($searchColumns) {
+        $query = Adviser::select([
+            'id_user',
+            DB::raw('concat(first_name, " ", last_name) as name'),
+            'email_address',
+            'ssf_number',
+            'status',
+        ])->when($this->search, function ($query) use ($searchColumns) {
             foreach ($searchColumns as $column) {
-                $query->orWhere($column, 'like', '%' . $this->search . '%');
+                $query->orWhereRaw($column . ' like ?', '%' . $this->search . '%');
             }
 
             return $query;
