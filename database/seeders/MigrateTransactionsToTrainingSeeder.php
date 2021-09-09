@@ -52,11 +52,9 @@ class MigrateTransactionsToTrainingSeeder extends Seeder
             ]];
         });
 
-        /* Log::info($advisers);
+        Log::info($advisers);
 
         Log::info($users);
-
-        return; */
 
         foreach ($advisers as $adviser_id => $adviser) {
             Audit::where('adviser_id', $adviser_id)->update([
