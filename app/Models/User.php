@@ -6,6 +6,7 @@ use App\Models\Audit;
 use App\Models\Survey;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
