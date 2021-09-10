@@ -40,7 +40,7 @@ return [
         'url' => env('TRAINING_URL'),
     ],
 
-    'not_user_types' => [1, 3, 7, 8],
+    'not_user_types' => [1, 3],
 
     'user_types' => [1, 7, 8],
 
