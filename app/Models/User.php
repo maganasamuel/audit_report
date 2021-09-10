@@ -48,7 +48,8 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::addGlobalScope('admin_sadr_adr', function (Builder $builder) {
-            $builder->whereRaw('right(email_address, ' . Str::length(config('services.mail.domain')) . ') = ?', config('services.mail.domain'))
+            $builder->whereRaw('(SELECT u.id_user FROM ta_user AS u WHERE u.email_address = ta_user.email_address ORDER BY u.id_user DESC LIMIT 1) = ta_user.id_user')
+                ->whereRaw('right(email_address, ' . Str::length(config('services.mail.domain')) . ') = ?', config('services.mail.domain'))
                 ->whereIn('id_user_type', config('services.user_types'));
         });
     }
