@@ -33,6 +33,12 @@ class Index extends Component
         '1' => 'Active',
     ];
 
+    public $roles = [
+        2 => 'Adviser',
+        7 => 'ADR',
+        8 => 'SADR',
+    ];
+
     protected $paginationTheme = 'bootstrap';
 
     public function getAdviserProperty()
@@ -54,6 +60,7 @@ class Index extends Component
             DB::raw('concat(first_name, " ", last_name) as name'),
             'email_address',
             'ssf_number',
+            'id_user_type',
             'status',
         ])->when($this->search, function ($query) use ($searchColumns) {
             foreach ($searchColumns as $column) {
