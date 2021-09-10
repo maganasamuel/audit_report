@@ -66,7 +66,7 @@ class Index extends Component
         if ($this->sortColumn['name'] && $this->sortColumn['direction']) {
             $query->orderBy($this->sortColumn['name'], $this->sortColumn['direction']);
         } else {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('id_user', 'desc');
         }
 
         $advisers = $query->paginate($this->perPage);
