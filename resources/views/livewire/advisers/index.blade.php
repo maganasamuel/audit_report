@@ -38,6 +38,13 @@
               <x-sort-indicator :sort-column="$sortColumn"
                 column-name="ssf_number" />
             </a></th>
+          <th><a wire:click.prevent="sortBy('id_user_type')" href="#"
+              role="button">
+              Role
+              &nbsp;
+              <x-sort-indicator :sort-column="$sortColumn"
+                column-name="id_user_type" />
+            </a></th>
           <th class="text-left"><a wire:click.prevent="sortBy('status')" href="#"
               role="button">
               Status
@@ -57,6 +64,7 @@
             <td>{{ $adviser->name }}</td>
             <td>{{ $adviser->email_address }}</td>
             <td>{{ $adviser->ssf_number }}</td>
+            <td>{{ $roles[$adviser->id_user_type] ?? 'Adviser' }}</td>
             <td class="text-left">
               <span class="{{ $badgeClass[$adviser->status] }}">{{ $statusLabel[$adviser->status] }}</span>
             </td>
